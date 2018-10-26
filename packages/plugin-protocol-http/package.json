@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-protocol-http",
-  "version": "0.6.1",
+  "version": "0.6.3",
   "description": "Make requests using http(s) protocol",
   "main": "lib/http.js",
   "typings": "lib/http.d.ts",
@@ -18,7 +18,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-core": "^0.6.1",
+    "@tinkoff/request-core": "^0.6.3",
     "@tinkoff/utils": "^1.0.2",
     "superagent": "^3.8.3",
     "superagent-jsonp": "^0.2.1"
