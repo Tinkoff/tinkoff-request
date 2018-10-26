@@ -1,0 +1,22 @@
+{
+    "docs": {
+        "Core": [
+            "core/index"
+        ],
+        "Plugins": [
+            "plugins/index",
+            "plugins/batch",
+            "plugins/cache-deduplicate",
+            "plugins/cache-fallback",
+            "plugins/cache-memory",
+            "plugins/cache-persistent",
+            "plugins/log",
+            "plugins/protocol-http",
+            "plugins/transform-url",
+            "plugins/validate"
+        ],
+        "How to": [
+            "how-to/index"
+        ]
+    }
+}

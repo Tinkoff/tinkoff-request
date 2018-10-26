@@ -1,0 +1,28 @@
+{
+  "name": "@tinkoff/request-plugin-cache-memory",
+  "version": "1.0.0",
+  "description": "Memory cache for responses",
+  "main": "lib/memory.js",
+  "typings": "lib/memory.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "request"
+  ],
+  "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "license": "ISC",
+  "dependencies": {
+    "@tinkoff/request-cache-utils": "1.x",
+    "@tinkoff/utils": "^1.0.2",
+    "lru-cache": "^4.1.3"
+  },
+  "devDependencies": {
+    "@tinkoff/request-core": "1.x"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "1.x"
+  }
+}

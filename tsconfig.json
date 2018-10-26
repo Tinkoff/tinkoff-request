@@ -1,0 +1,14 @@
+{
+    "exclude": [
+        "node_modules",
+        "bin",
+        "lib",
+        "**/*.spec.ts"
+    ],
+    "compilerOptions": {
+        "allowJs": false,
+        "module": "commonjs",
+        "declaration": true,
+        "target": "es2015"
+    }
+}

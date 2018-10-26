@@ -1,0 +1,28 @@
+{
+  "name": "@tinkoff/request-cache-utils",
+  "version": "1.0.0",
+  "description": "Support library for @tinkoff/request",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "request"
+  ],
+  "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "license": "ISC",
+  "dependencies": {
+    "@tinkoff/utils": "^1.0.2",
+    "spark-md5": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tinkoff/request-core": "1.x",
+    "@types/spark-md5": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "1.x"
+  }
+}

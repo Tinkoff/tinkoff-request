@@ -1,0 +1,20 @@
+{
+  "name": "@tinkoff/request",
+  "version": "1.0.0",
+  "description": "Request library extendable by plugins",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bootstrap": "npm i && lerna bootstrap",
+    "build": "lerna run tsc"
+  },
+  "keywords": [
+    "request"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "lerna": "^3.4.3",
+    "typescript": "^3.1.3"
+  }
+}
