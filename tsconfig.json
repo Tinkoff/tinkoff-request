@@ -9,6 +9,11 @@
         "allowJs": false,
         "module": "commonjs",
         "declaration": true,
-        "target": "es2015"
+        "lib": [
+            "es2015",
+            "es5",
+            "dom"
+        ],
+        "target": "es5"
     }
 }
