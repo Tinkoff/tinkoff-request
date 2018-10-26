@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --coverage",
     "bootstrap": "npm i && lerna bootstrap",
-    "build": "lerna run tsc"
+    "build": "lerna run tsc",
+    "clean": "lerna exec -- git clean -Xdf . && rm -rf node_modules"
   },
   "keywords": [
     "request"
