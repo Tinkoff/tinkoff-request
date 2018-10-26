@@ -1,0 +1,30 @@
+{
+  "name": "@tinkoff/request-plugin-protocol-http",
+  "version": "0.6.0",
+  "description": "Make requests using http(s) protocol",
+  "main": "lib/http.js",
+  "typings": "lib/http.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "request"
+  ],
+  "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "license": "ISC",
+  "dependencies": {
+    "@tinkoff/request-core": "0.x",
+    "@tinkoff/utils": "^1.0.2",
+    "superagent": "^3.8.3",
+    "superagent-jsonp": "^0.2.1"
+  },
+  "devDependencies": {
+    "@types/superagent": "^3.8.4",
+    "superagent-mocker-tinkoff": "^1.0.8"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "0.x"
+  }
+}

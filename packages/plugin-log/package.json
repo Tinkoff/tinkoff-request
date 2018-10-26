@@ -1,0 +1,26 @@
+{
+  "name": "@tinkoff/request-plugin-log",
+  "version": "0.6.0",
+  "description": "Log debug info abour running requests",
+  "main": "lib/log.js",
+  "typins": "lib/log.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "request"
+  ],
+  "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "license": "ISC",
+  "dependencies": {
+    "@tinkoff/utils": "^1.0.2"
+  },
+  "devDependencies": {
+    "@tinkoff/request-core": "0.x"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "0.x"
+  }
+}

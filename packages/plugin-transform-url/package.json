@@ -1,0 +1,25 @@
+{
+  "name": "@tinkoff/request-plugin-transform-url",
+  "version": "0.6.0",
+  "description": "Transforms requested url",
+  "main": "lib/url.js",
+  "typings": "lib/url.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "request"
+  ],
+  "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@tinkoff/request-core": "0.x"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "0.x"
+  }
+}
