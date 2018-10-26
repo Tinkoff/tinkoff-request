@@ -3,6 +3,9 @@ import T from '@tinkoff/utils/function/T';
 
 import { Plugin, Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
+import md5 from './md5';
+
+const KEY_LIMIT = 100;
 
 /**
  * Hard drive cache. This cache used only if request ends with error response and returns previous success response from cache.
@@ -31,8 +34,9 @@ export default ({
         shouldExecute: shouldCacheExecute('fallback', shouldExecute),
         complete: (context, next) => {
             const cacheKey = getCacheKeyUtil(context, getCacheKey);
+            const key = cacheKey.length > KEY_LIMIT ? md5(cacheKey) : cacheKey;
 
-            fallbackFileCache.put(encodeURIComponent(cacheKey), context.getResponse(), noop);
+            fallbackFileCache.put(encodeURIComponent(key), context.getResponse(), noop);
             next();
         },
         error: (context, next) => {
@@ -41,8 +45,9 @@ export default ({
             }
 
             const cacheKey = getCacheKeyUtil(context, getCacheKey);
+            const key = cacheKey.length > KEY_LIMIT ? md5(cacheKey) : cacheKey;
 
-            fallbackFileCache.get(encodeURIComponent(cacheKey), (err, result) => {
+            fallbackFileCache.get(encodeURIComponent(key), (err, result) => {
                 if (!err && result) {
                     context.updateMeta(metaTypes.CACHE, {
                         fallbackCache: true

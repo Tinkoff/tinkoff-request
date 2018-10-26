@@ -1,6 +1,5 @@
 import { Context } from '@tinkoff/request-core';
 import getCacheKey from './getCacheKey';
-import md5 from './md5';
 import { CACHE } from './constants/metaTypes';
 
 const context = {
@@ -42,14 +41,13 @@ describe('utils/getCacheKey', () => {
         const request = { a: 1, b: 2 };
         const key = 'aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbb aaaaaaaaaaaaaaa';
         const getKey = jest.fn(() => key);
-        const mdKey = md5(key);
 
         context.getMeta.mockImplementation(() => ({}));
         context.getRequest.mockImplementation(() => request);
 
-        expect(getCacheKey(context as any as Context, getKey)).toBe(mdKey);
+        expect(getCacheKey(context as any as Context, getKey)).toBe(key);
         expect(getKey).toHaveBeenCalledWith(request);
-        expect(context.updateMeta).toHaveBeenCalledWith(CACHE, { key: mdKey });
+        expect(context.updateMeta).toHaveBeenCalledWith(CACHE, { key: key });
         expect(context.getMeta).toHaveBeenCalledWith(CACHE);
         expect(context.getRequest).toHaveBeenCalled();
     });
