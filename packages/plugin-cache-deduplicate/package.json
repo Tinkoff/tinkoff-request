@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@tinkoff/utils": "^1.0.2",
-    "@tinkoff/request-cache-utils": "0.x"
+    "@tinkoff/request-cache-utils": "^0.6.0"
   },
   "devDependencies": {
     "@tinkoff/request-core": "0.x"

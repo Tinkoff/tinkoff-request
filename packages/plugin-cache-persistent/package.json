@@ -15,7 +15,7 @@
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "0.x",
+    "@tinkoff/request-cache-utils": "^0.6.0",
     "idb-keyval": "3.0.3"
   },
   "devDependencies": {

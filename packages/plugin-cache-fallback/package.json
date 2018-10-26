@@ -16,7 +16,7 @@
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "0.x",
+    "@tinkoff/request-cache-utils": "^0.6.0",
     "@tinkoff/utils": "^1.0.2",
     "spark-md5": "^3.0.0",
     "persistent-cache": "^1.1.1"
