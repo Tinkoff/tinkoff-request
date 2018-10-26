@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-log",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "description": "Log debug info abour running requests",
   "main": "lib/log.js",
   "typins": "lib/log.d.ts",
@@ -18,9 +18,9 @@
     "@tinkoff/utils": "^1.0.2"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "1.x"
+    "@tinkoff/request-core": "0.x"
   },
   "peerDependencies": {
-    "@tinkoff/request-core": "1.x"
+    "@tinkoff/request-core": "0.x"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-fallback",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "description": "Cache your responses in file cache to use it while resources are not available",
   "main": "lib/fallback.js",
   "browser": "lib/noop",
@@ -16,15 +16,15 @@
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "1.x",
+    "@tinkoff/request-cache-utils": "0.x",
     "@tinkoff/utils": "^1.0.2",
     "persistent-cache": "^1.1.1"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "1.x",
+    "@tinkoff/request-core": "0.x",
     "@types/node": "^10.11.7"
   },
   "peerDependencies": {
-    "@tinkoff/request-core": "1.x"
+    "@tinkoff/request-core": "0.x"
   }
 }

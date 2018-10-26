@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-deduplicate",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "description": "Deduplicate identical request into single one",
   "main": "lib/deduplicate.js",
   "typings": "lib/deduplicate.d.ts",
@@ -16,12 +16,12 @@
   "license": "ISC",
   "dependencies": {
     "@tinkoff/utils": "^1.0.2",
-    "@tinkoff/request-cache-utils": "1.x"
+    "@tinkoff/request-cache-utils": "0.x"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "1.x"
+    "@tinkoff/request-core": "0.x"
   },
   "peerDependencies": {
-    "@tinkoff/request-core": "1.x"
+    "@tinkoff/request-core": "0.x"
   }
 }

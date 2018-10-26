@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-core",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "description": "Request library extendable by plugins",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
