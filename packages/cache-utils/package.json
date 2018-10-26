@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-cache-utils",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Support library for @tinkoff/request",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -18,7 +18,7 @@
     "@tinkoff/utils": "^1.0.2"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "0.x"
+    "@tinkoff/request-core": "^0.6.1"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-protocol-http",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Make requests using http(s) protocol",
   "main": "lib/http.js",
   "typings": "lib/http.d.ts",
@@ -15,7 +15,7 @@
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-core": "0.x",
+    "@tinkoff/request-core": "^0.6.1",
     "@tinkoff/utils": "^1.0.2",
     "superagent": "^3.8.3",
     "superagent-jsonp": "^0.2.1"
