@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-deduplicate",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Deduplicate identical request into single one",
   "main": "lib/deduplicate.js",
   "typings": "lib/deduplicate.d.ts",
@@ -15,7 +15,7 @@
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "^0.6.1",
+    "@tinkoff/request-cache-utils": "^0.6.2",
     "@tinkoff/utils": "^1.0.2"
   },
   "devDependencies": {
