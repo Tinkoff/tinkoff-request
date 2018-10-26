@@ -6,8 +6,7 @@ const mockStore = { store: 'test' };
 const mockIDB = {
     get: jest.fn(),
     set: jest.fn(),
-    // tslint:disable-next-line
-    Store() {
+    Store: function() {
         return mockStore;
     }
 };

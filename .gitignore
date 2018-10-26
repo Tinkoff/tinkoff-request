@@ -14,5 +14,8 @@ node_modules/
 .vscode
 .idea
 
+# Coverage
+coverage
+
 # Compiled sources
 lib

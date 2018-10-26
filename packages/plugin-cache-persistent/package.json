@@ -19,7 +19,8 @@
     "idb-keyval": "3.0.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "0.x"
+    "@tinkoff/request-core": "0.x",
+    "@types/node": "^10.12.0"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

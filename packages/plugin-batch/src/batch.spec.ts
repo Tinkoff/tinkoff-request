@@ -35,7 +35,7 @@ describe('plugins/batch', () => {
         expect(applyOrReturn([context], shouldExecute)).toBeTruthy();
     });
 
-    it('test init with batch requests', () => { // eslint-disable-line max-statements
+    it('test init with batch requests', async () => { // eslint-disable-line max-statements
         const init = batch({ makeGroupedRequest, timeout: 123 }).init;
         const next = jest.fn();
 
@@ -55,6 +55,7 @@ describe('plugins/batch', () => {
         expect(makeGroupedRequest).not.toHaveBeenCalled();
 
         jest.runAllTimers();
+        await Promise.resolve();
         expect(makeGroupedRequest).toHaveBeenCalledWith([requests[0], requests[1]]);
         expect(makeGroupedRequest).toHaveBeenCalledWith([requests[2]]);
 
@@ -64,7 +65,7 @@ describe('plugins/batch', () => {
         expect(next).toHaveBeenCalledWith({ status: Status.COMPLETE, response: 'third' });
     });
 
-    it('test init with batch requests, but grouped failed', () => {
+    it('test init with batch requests, but grouped failed', async () => {
         const error = new Error('test1213');
         const makeGroupedRequest = () => Promise.reject(error);
         const init = batch({ makeGroupedRequest, timeout: 123 }).init;
@@ -78,6 +79,7 @@ describe('plugins/batch', () => {
         init(context, next, null);
 
         jest.runAllTimers();
+        await Promise.resolve();
         expect(next).toHaveBeenCalledTimes(3);
         expect(next).toHaveBeenLastCalledWith({
             error,
