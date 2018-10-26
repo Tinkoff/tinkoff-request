@@ -3,7 +3,7 @@
   "version": "0.6.1",
   "description": "Support library for @tinkoff/request",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "tsc": "tsc",

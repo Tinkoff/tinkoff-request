@@ -3,7 +3,7 @@
   "version": "0.6.1",
   "description": "Log debug info abour running requests",
   "main": "lib/log.js",
-  "typins": "lib/log.d.ts",
+  "typings": "lib/log.d.ts",
   "sideEffects": false,
   "scripts": {
     "tsc": "tsc",
