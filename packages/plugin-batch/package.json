@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-batch",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Group requests at one batch for optimization of network usage",
   "main": "lib/batch.js",
   "typings": "lib/batch.d.ts",
@@ -13,12 +13,15 @@
     "request"
   ],
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "ISC",
   "dependencies": {
     "@tinkoff/utils": "^1.0.2"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "0.x"
+    "@tinkoff/request-core": "^0.6.3"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

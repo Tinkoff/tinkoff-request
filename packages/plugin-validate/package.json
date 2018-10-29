@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-validate",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Validate your responses",
   "main": "lib/validate.js",
   "typings": "lib/validate.d.ts",
@@ -13,12 +13,15 @@
     "request"
   ],
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "ISC",
   "dependencies": {
     "@tinkoff/utils": "^1.0.2"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "0.x"
+    "@tinkoff/request-core": "^0.6.3"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-transform-url",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Transforms requested url",
   "main": "lib/url.js",
   "typings": "lib/url.d.ts",
@@ -13,11 +13,12 @@
     "request"
   ],
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
-  "license": "ISC",
-  "dependencies": {
+  "publishConfig": {
+    "access": "public"
   },
+  "license": "ISC",
   "devDependencies": {
-    "@tinkoff/request-core": "0.x"
+    "@tinkoff/request-core": "^0.6.3"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

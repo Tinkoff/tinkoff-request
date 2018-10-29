@@ -1,9 +1,9 @@
 {
   "name": "@tinkoff/request-cache-utils",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Support library for @tinkoff/request",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "typings": "lib/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "tsc": "tsc",
@@ -13,12 +13,15 @@
     "request"
   ],
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "ISC",
   "dependencies": {
     "@tinkoff/utils": "^1.0.2"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "0.x"
+    "@tinkoff/request-core": "^0.6.3"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

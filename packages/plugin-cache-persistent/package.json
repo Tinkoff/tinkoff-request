@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-persistent",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "description": "Stores responses in IndexedDB to preserve data in browser",
   "main": "lib/persistent.js",
   "typings": "lib/persistent.d.ts",
@@ -13,13 +13,16 @@
     "request"
   ],
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "^0.6.0",
+    "@tinkoff/request-cache-utils": "^0.6.3",
     "idb-keyval": "3.0.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "0.x",
+    "@tinkoff/request-core": "^0.6.3",
     "@types/node": "^10.12.0"
   },
   "peerDependencies": {
