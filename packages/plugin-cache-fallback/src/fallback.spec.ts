@@ -9,7 +9,7 @@ const mockPersistentCache = {
     put: jest.fn()
 };
 
-jest.mock('../persistent-cache', () => ({ default: () => mockPersistentCache }));
+jest.mock('persistent-cache', () => () => mockPersistentCache );
 
 describe('plugins/cache/fallback', () => {
     beforeEach(() => {

@@ -1,6 +1,7 @@
 import noop from '@tinkoff/utils/function/noop';
 import T from '@tinkoff/utils/function/T';
 
+import * as persistentCache from 'persistent-cache';
 import { Plugin, Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 import md5 from './md5';
@@ -27,7 +28,6 @@ export default ({
     shouldFallback = T,
     getCacheKey = undefined,
 } = {}) : Plugin => {
-    const persistentCache = require('../persistent-cache').default; // eslint-disable-line global-require
     const fallbackFileCache = persistentCache({ name: 'fallback', base: './.tmp/server-cache/', memory: false });
 
     return {
