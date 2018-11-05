@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-transform-url",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "Transforms requested url",
   "main": "lib/url.js",
   "typings": "lib/url.d.ts",
@@ -18,7 +18,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@tinkoff/request-core": "^0.6.3"
+    "@tinkoff/request-core": "^0.6.4"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
