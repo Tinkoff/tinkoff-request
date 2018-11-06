@@ -29,7 +29,8 @@ const siteConfig = {
     headerLinks: [
         { doc: 'core/index', label: 'Core' },
         { doc: 'plugins/index', label: 'Plugins' },
-        { doc: 'how-to/index', label: 'How to' }
+        { doc: 'how-to/index', label: 'How to' },
+        { href: 'https://github.com/TinkoffCreditSystems/tinkoff-request', label: 'GitHub' }
     ],
 
     // If you have users set above, you add it here:
