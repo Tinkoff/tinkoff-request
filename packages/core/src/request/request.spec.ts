@@ -11,6 +11,31 @@ const createPlugin = () => ({
 });
 
 describe('request', () => {
+    it('should return promise with additional methods', () => {
+        const plugin = createPlugin();
+        const req = request([plugin]);
+        const params = { a: 1, b: 2 };
+        const res = req({ url: 'init', params });
+
+        expect(res).toMatchObject({
+            then: expect.any(Function),
+            catch: expect.any(Function),
+            getMeta: expect.any(Function),
+            getState: expect.any(Function),
+        });
+
+        expect(res.getState()).toEqual({
+            request: {
+                url: 'init',
+                params,
+            },
+            meta: {},
+            error: null,
+            response: null,
+            status: 'complete',
+        })
+    });
+
     it('should not call plugin function if shouldExecute returns false', () => {
         const plugin = createPlugin();
         const req = request([plugin]);
