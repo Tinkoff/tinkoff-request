@@ -7,6 +7,7 @@
     "test": "jest --coverage",
     "bootstrap": "npm i && lerna bootstrap",
     "build": "lerna run tsc",
+    "watch": "lerna run watch --parallel",
     "publish": "lerna publish",
     "clean": "lerna exec -- git clean -Xdf . && rm -rf node_modules"
   },
