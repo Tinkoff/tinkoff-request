@@ -2,6 +2,7 @@ import * as request from 'superagent';
 import * as requestJSONP from 'superagent-jsonp';
 import keys from '@tinkoff/utils/object/keys';
 import { Status, Plugin, HttpMethods } from '@tinkoff/request-core';
+import { PROTOCOL_HTTP } from './constants';
 
 const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;
@@ -55,7 +56,7 @@ export default () : Plugin =>  {
             } = context.getRequest();
 
             const method = httpMethod.toLowerCase();
-            const req = request[method](url);
+            const req: request.Request = request[method](url);
 
             if (headers) {
                 Object.keys(headers).forEach(key => req.set(key, headers[key]));
@@ -118,25 +119,32 @@ export default () : Plugin =>  {
                 });
             }
 
-            req.end((err, response = { body: {} }) => {
+            req.end((err, response) => {
                 if (err && isPageUnloaded) {
                     return;
                 }
+
+                context.updateMeta(PROTOCOL_HTTP, {
+                    response,
+                });
 
                 if (err) {
                     next({
                         status: Status.ERROR,
                         response: response && response.body,
-                        error: err
+                        error: err,
                     });
                 } else {
                     next({
                         status: Status.COMPLETE,
                         response: response && response.body,
-                        error: err
                     });
                 }
             });
+
+            context.updateMeta(PROTOCOL_HTTP, {
+                request: req,
+            })
         }
     };
 };

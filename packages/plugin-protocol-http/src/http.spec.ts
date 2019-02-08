@@ -37,7 +37,6 @@ describe('plugins/http', () => {
         expect(next).toHaveBeenLastCalledWith({
             response,
             status: Status.COMPLETE,
-            error: null,
         });
     });
 

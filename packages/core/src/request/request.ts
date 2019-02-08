@@ -18,11 +18,11 @@ const requestMaker: RequestMaker = function (plugins) {
         let i = -1;
         const len = plugins.length;
 
-        return new Promise((resolve, reject) => {
-            const context = new Context();
+        const context = new Context();
 
-            context.setState({ request });
+        context.setState({ request });
 
+        const promise = new Promise((resolve, reject) => {
             const cb = (statusChanged: boolean) => {
                 const state = context.getState();
                 const currentStatus = state.status;
@@ -76,6 +76,11 @@ const requestMaker: RequestMaker = function (plugins) {
             };
 
             traversePlugins(Status.INIT, FORWARD);
+        });
+
+        return Object.assign(promise, {
+            getState: context.getState.bind(context),
+            getMeta: context.getMeta.bind(context),
         });
     };
 

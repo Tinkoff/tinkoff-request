@@ -25,3 +25,23 @@ requestParams:
      abortPromise {Promise}
 ```
 
+### Get additional parameters for request
+
+Plugin provides utilities to get extra-parameters from request (like headers, status, raw-text).
+
+Example of usage:
+```typescript
+import request from '@tinkoff/request-core';
+import http, { getHeaders, getHeader, getStatus } from '@tinkoff/request-plugin-protocol-http';
+
+const makeRequest = request([
+    http(),
+]);
+
+const req = makeRequest({
+    url: 'https://config.mysite.ru/resources?name=example'
+})
+    .then(result => console.log(result, getStatus(req), getHeader(req, 'content-type')))
+    .catch(error => console.error(error, getHeaders(req)))
+```
+

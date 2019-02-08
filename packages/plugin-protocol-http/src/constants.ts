@@ -1,0 +1,1 @@
+export const PROTOCOL_HTTP = 'PROTOCOL_HTTP';

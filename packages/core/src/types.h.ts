@@ -23,8 +23,13 @@ export interface Next {
     (newState?: Partial<ContextState>) : void;
 }
 
+export interface MakeRequestResult extends Promise<Response> {
+    getState: () => ContextState;
+    getMeta: Context['getMeta'];
+}
+
 export interface MakeRequest {
-    (request: Request): Promise<Response>;
+    (request: Request): MakeRequestResult;
 }
 
 export interface Handler {
