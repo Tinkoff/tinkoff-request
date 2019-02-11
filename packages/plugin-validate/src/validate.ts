@@ -1,19 +1,28 @@
 import nothing from '@tinkoff/utils/function/nothing';
 import { Plugin, Status } from '@tinkoff/request-core';
+import { VALIDATE } from './constants';
 
 /**
- * Plugin to validate response, if `validator` returns falsy value plugin does nothing,
- * otherwise return value used as a error and requests goes to the error phase
+ * Plugin to validate response. If `validator` returns falsy value plugin does nothing,
+ * otherwise return value used as a error and requests goes to the error phase. If `errorValidator` returns truthy
+ * for request in error phase then plugin switch phase to complete.
  *
- * @param {function} validator - function to validate request, accepts single parameter: the state of current request
+ * @param {function} validator - function to validate success request, accepts single parameter: the state of current request,
+ *                               should return error if request should be treated as errored request
+ * @param {function} errorValidator - function to validate errored request, accepts single parameter: the state of current request,
+ *                                    should return `truthy` value if request should be treated as success request
  * @param {boolean} [allowFallback = true] - if false adds `fallbackCache` option to request to prevent activating fallback cache
  * @return {{complete: complete}}
  */
-export default ({ validator = nothing, allowFallback = true } = {}): Plugin => ({
+export default ({ validator = nothing, allowFallback = true, errorValidator = nothing } = {}): Plugin => ({
     complete: (context, next) => {
         const state = context.getState();
         const { request } = state;
         const error = validator(state);
+
+        context.updateMeta(VALIDATE, {
+            validated: !error,
+        });
 
         if (error) {
             return next({
@@ -26,6 +35,27 @@ export default ({ validator = nothing, allowFallback = true } = {}): Plugin => (
             });
         }
 
-        next();
-    }
+        return next();
+    },
+    error: (context, next) => {
+        const state = context.getState();
+        const isSuccess = errorValidator(state);
+
+        context.updateMeta(VALIDATE, {
+            errorValidated: !!isSuccess,
+        });
+
+        if (isSuccess) {
+            context.updateMeta(VALIDATE, {
+                error: state.error,
+            });
+
+            return next({
+                error: null,
+                status: Status.COMPLETE,
+            });
+        }
+
+        return next();
+    },
 });
