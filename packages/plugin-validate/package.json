@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-validate",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Validate your responses",
   "main": "lib/validate.js",
   "typings": "lib/validate.d.ts",
