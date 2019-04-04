@@ -2,7 +2,7 @@ import noop from '@tinkoff/utils/function/noop';
 import T from '@tinkoff/utils/function/T';
 
 import persistentCache from './persistent-cache';
-import { Plugin, Status } from '@tinkoff/request-core';
+import { Plugin, Status, ContextState } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 import md5 from './md5';
 
@@ -25,9 +25,9 @@ const KEY_LIMIT = 100;
  */
 export default ({
     shouldExecute = true,
-    shouldFallback = T,
+    shouldFallback = T as (state: ContextState) => boolean,
     getCacheKey = undefined,
-} = {}) : Plugin => {
+} = {}): Plugin => {
     const fallbackFileCache = persistentCache({ name: 'fallback', base: './.tmp/server-cache/', memory: false });
 
     return {
@@ -50,17 +50,17 @@ export default ({
             fallbackFileCache.get(encodeURIComponent(key), (err, result) => {
                 if (!err && result) {
                     context.updateMeta(metaTypes.CACHE, {
-                        fallbackCache: true
+                        fallbackCache: true,
                     });
 
                     return next({
                         status: Status.COMPLETE,
-                        response: result
+                        response: result,
                     });
                 }
 
                 next();
             });
-        }
+        },
     };
 };

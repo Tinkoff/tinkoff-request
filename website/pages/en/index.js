@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved, import/no-absolute-path */
-
 const React = require('react');
 const pt = require('prop-types');
 

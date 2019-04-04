@@ -1,4 +1,3 @@
-/* eslint-disable max-nested-callbacks */
 import request from './request';
 import Context from '../context/Context';
 import Status from '../constants/status';
@@ -7,7 +6,7 @@ const createPlugin = () => ({
     shouldExecute: jest.fn(() => true),
     init: jest.fn((_, next) => next()),
     complete: jest.fn((_, next) => next()),
-    error: jest.fn((_, next) => next())
+    error: jest.fn((_, next) => next()),
 });
 
 describe('request', () => {
@@ -17,9 +16,8 @@ describe('request', () => {
         const params = { a: 1, b: 2 };
         const res = req({ url: 'init', params });
 
+        expect(res).toBeInstanceOf(Promise);
         expect(res).toMatchObject({
-            then: expect.any(Function),
-            catch: expect.any(Function),
             getMeta: expect.any(Function),
             getState: expect.any(Function),
         });
@@ -33,7 +31,7 @@ describe('request', () => {
             error: null,
             response: null,
             status: 'complete',
-        })
+        });
     });
 
     it('should not call plugin function if shouldExecute returns false', () => {
@@ -73,7 +71,9 @@ describe('request', () => {
         plugin1.init = jest.fn((_, nxt) => {
             next = nxt;
         });
-        plugin2.init = jest.fn((_, nxt) => { nxt(); });
+        plugin2.init = jest.fn((_, nxt) => {
+            nxt();
+        });
 
         req({ url: '' });
         expect(plugin1.init).toHaveBeenCalledWith(expect.any(Context), next, expect.any(Function));
@@ -92,21 +92,22 @@ describe('request', () => {
         const req = request([plugin1, plugin2, plugin3, plugin4]);
         const response = { a: 1 };
 
-        plugin3.init = jest.fn((_, nxt) => { nxt({ response, status: Status.COMPLETE }); });
+        plugin3.init = jest.fn((_, nxt) => {
+            nxt({ response, status: Status.COMPLETE });
+        });
 
-        return req({ url: '' })
-            .then(result => {
-                expect(result).toBe(response);
-                expect(plugin1.init).toHaveBeenCalled();
-                expect(plugin2.init).toHaveBeenCalled();
-                expect(plugin3.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
-                expect(plugin4.init).not.toHaveBeenCalled(); // not called cause plugin3 changes status
+        return req({ url: '' }).then((result) => {
+            expect(result).toBe(response);
+            expect(plugin1.init).toHaveBeenCalled();
+            expect(plugin2.init).toHaveBeenCalled();
+            expect(plugin3.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
+            expect(plugin4.init).not.toHaveBeenCalled(); // not called cause plugin3 changes status
 
-                expect(plugin1.complete).toHaveBeenCalled();
-                expect(plugin2.complete).toHaveBeenCalled();
-                expect(plugin3.complete).not.toHaveBeenCalled(); // not called at all
-                expect(plugin4.complete).not.toHaveBeenCalled();
-            });
+            expect(plugin1.complete).toHaveBeenCalled();
+            expect(plugin2.complete).toHaveBeenCalled();
+            expect(plugin3.complete).not.toHaveBeenCalled(); // not called at all
+            expect(plugin4.complete).not.toHaveBeenCalled();
+        });
     });
 
     it('rejects promise if status is ERROR', () => {
@@ -115,13 +116,14 @@ describe('request', () => {
         const req = request([plugin1, plugin2]);
         const error = new Error('123');
 
-        plugin1.init = jest.fn((_, nxt) => { nxt({ error, status: Status.ERROR }); });
+        plugin1.init = jest.fn((_, nxt) => {
+            nxt({ error, status: Status.ERROR });
+        });
 
-        return req({ url: '' })
-            .catch(err => {
-                expect(err).toBe(error);
-                expect(plugin1.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
-                expect(plugin2.init).not.toHaveBeenCalled();
-            });
+        return req({ url: '' }).catch((err) => {
+            expect(err).toBe(error);
+            expect(plugin1.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
+            expect(plugin2.init).not.toHaveBeenCalled();
+        });
     });
 });

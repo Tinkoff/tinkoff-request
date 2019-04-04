@@ -3,13 +3,13 @@ import { metaTypes } from '@tinkoff/request-cache-utils';
 import fallback from './fallback';
 
 const next = jest.fn();
-const getCacheKey = jest.fn(req => req.url);
+const getCacheKey = jest.fn((req) => req.url);
 const mockPersistentCache = {
     get: jest.fn(),
-    put: jest.fn()
+    put: jest.fn(),
 };
 
-jest.mock('./persistent-cache', () => ({ default: () => mockPersistentCache }));
+jest.mock('./persistent-cache', () => () => mockPersistentCache);
 
 describe('plugins/cache/fallback', () => {
     beforeEach(() => {
@@ -27,7 +27,11 @@ describe('plugins/cache/fallback', () => {
 
         plugin.complete(context, next, null);
         expect(getCacheKey).toHaveBeenLastCalledWith(request);
-        expect(mockPersistentCache.put).toHaveBeenLastCalledWith(encodeURIComponent(request.url), response, expect.any(Function));
+        expect(mockPersistentCache.put).toHaveBeenLastCalledWith(
+            encodeURIComponent(request.url),
+            response,
+            expect.any(Function)
+        );
         expect(mockPersistentCache.get).not.toHaveBeenCalled();
     });
 

@@ -3,15 +3,10 @@ import { Context, Status } from '@tinkoff/request-core';
 import { metaTypes } from '@tinkoff/request-cache-utils';
 import deduplicate from './deduplicate';
 
-const requests = [
-    { url: 'first', r: 1 },
-    { url: 'first', r: 2 },
-    { url: 'third', r: 3 },
-    { url: 'first', r: 4 }
-];
+const requests = [{ url: 'first', r: 1 }, { url: 'first', r: 2 }, { url: 'third', r: 3 }, { url: 'first', r: 4 }];
 
 describe('plugins/cache/deduplicate', () => {
-    const deduplicateFunc = jest.fn(req => req.url);
+    const deduplicateFunc = jest.fn((req) => req.url);
 
     it('test plugin shouldExecute', () => {
         const context = new Context();
@@ -43,7 +38,7 @@ describe('plugins/cache/deduplicate', () => {
         expect(next).toHaveBeenCalledTimes(2);
         plugin.complete(new Context({ response, request: requests[0], status: Status.COMPLETE }), next, null);
         expect(next).toHaveBeenCalledTimes(5); // 4 requests init + 1 complete
-        requests.forEach(request => {
+        requests.forEach((request) => {
             expect(next).toHaveBeenCalledWith({ response, status: Status.COMPLETE, error: null });
         });
     });
@@ -67,7 +62,7 @@ describe('plugins/cache/deduplicate', () => {
         expect(next).toHaveBeenCalledTimes(2);
         plugin.error(new Context({ error, request: requests[0], status: Status.ERROR }), next, null);
         expect(next).toHaveBeenCalledTimes(5); // 4 requests init + 1 complete
-        requests.forEach(request => {
+        requests.forEach((request) => {
             expect(next).toHaveBeenCalledWith({ error, status: Status.ERROR, response: null });
         });
     });

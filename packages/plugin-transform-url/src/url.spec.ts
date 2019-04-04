@@ -19,13 +19,13 @@ describe('plugins/transform/url', () => {
 
         expect(transform).toHaveBeenCalledWith({
             ...request,
-            baseUrl
+            baseUrl,
         });
         expect(next).toHaveBeenCalledWith({
             request: {
                 ...request,
-                url: baseUrl + request.url
-            }
+                url: baseUrl + request.url,
+            },
         });
     });
 
@@ -39,8 +39,8 @@ describe('plugins/transform/url', () => {
         expect(next).toHaveBeenCalledWith({
             request: {
                 ...request,
-                url: request.baseUrl + request.url
-            }
+                url: request.baseUrl + request.url,
+            },
         });
     });
 });

@@ -6,12 +6,12 @@ const mockLru = {
     get: jest.fn(),
     set: jest.fn(),
     has: jest.fn(),
-    peek: jest.fn()
+    peek: jest.fn(),
 };
 
 jest.mock('lru-cache', () => () => mockLru);
 
-const getCacheKey = jest.fn(req => req.url);
+const getCacheKey = jest.fn((req) => req.url);
 const plugin = memoryCache({ getCacheKey });
 const next = jest.fn();
 const context = new Context({ request: { url: 'test' } });
@@ -49,7 +49,7 @@ describe('plugins/cache/memory', () => {
         expect(mockLru.get).toHaveBeenCalledWith('test');
         expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
-            memoryCacheOutdated: false
+            memoryCacheOutdated: false,
         });
         expect(next).toHaveBeenCalledWith({
             response,
@@ -88,7 +88,7 @@ describe('plugins/cache/memory', () => {
         expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheForce: true });
         expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
-            memoryCacheOutdated: true
+            memoryCacheOutdated: true,
         });
         expect(next).toHaveBeenCalledWith({
             response,
@@ -112,7 +112,7 @@ describe('plugins/cache/memory', () => {
         expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheAllowStale: true, memoryCacheForce: true });
         expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
-            memoryCacheOutdated: true
+            memoryCacheOutdated: true,
         });
         expect(next).toHaveBeenCalledWith({
             response,

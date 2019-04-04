@@ -47,7 +47,7 @@ describe('plugins/validate/validate', () => {
         expect(next).toHaveBeenCalledWith({
             request,
             status: Status.ERROR,
-            error: new Error('123')
+            error: new Error('123'),
         });
     });
 
@@ -62,7 +62,7 @@ describe('plugins/validate/validate', () => {
         expect(next).toHaveBeenCalledWith({
             request: { ...request, fallbackCache: false },
             status: Status.ERROR,
-            error: new Error('123')
+            error: new Error('123'),
         });
     });
 

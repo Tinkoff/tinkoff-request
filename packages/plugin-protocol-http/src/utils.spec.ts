@@ -26,8 +26,8 @@ describe('plugins/http/utils', () => {
                 return {
                     request,
                     response,
-                }
-            })
+                };
+            }),
         } as any;
     });
 
