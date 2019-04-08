@@ -15,6 +15,7 @@ Plugins can inject to the request flow to change its execution or adjust request
 1. `log` - logs the data of request execution
 1. `batch` - groups several request into single one
 1. `validate` - validate response
+1. `circuit-breaker` - [!server only] fault protections
 
 ## Plugin flow execution
 1. init - init phase, plugins are executed first to last, until some plugin changes flow to `complete` or `error` phase.

@@ -1,0 +1,1 @@
+export const CIRCUIT_BREAKER_META = 'CIRCUIT_BREAKER';
