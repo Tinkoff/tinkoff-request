@@ -16,11 +16,10 @@ export interface Request {
     [key: string]: any;
 }
 
-export interface Response {
-}
+export interface Response {}
 
 export interface Next {
-    (newState?: Partial<ContextState>) : void;
+    (newState?: Partial<ContextState>): void;
 }
 
 export interface MakeRequestResult extends Promise<Response> {
@@ -42,3 +41,5 @@ export interface Plugin {
     error?: Handler;
     shouldExecute?: (context: Context) => boolean;
 }
+
+export { ContextState };

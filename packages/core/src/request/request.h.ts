@@ -1,5 +1,5 @@
 import { Plugin, MakeRequest } from '../types.h';
 
 export default interface TinkoffRequest {
-    (plugins: Plugin[]) : MakeRequest;
+    (plugins: Plugin[]): MakeRequest;
 }

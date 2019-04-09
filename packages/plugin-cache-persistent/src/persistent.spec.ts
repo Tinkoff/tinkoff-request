@@ -8,7 +8,7 @@ const mockIDB = {
     set: jest.fn(),
     Store: function() {
         return mockStore;
-    }
+    },
 };
 
 jest.mock('idb-keyval', () => mockIDB);
@@ -16,7 +16,7 @@ jest.mock('idb-keyval', () => mockIDB);
 const context = new Context({ request: { url: 'test' } });
 
 context.updateMeta = jest.fn(context.updateMeta.bind(context));
-const getCacheKey = jest.fn(req => req.url);
+const getCacheKey = jest.fn((req) => req.url);
 const next = jest.fn();
 
 describe('plugins/cache/persistent', () => {
@@ -51,7 +51,7 @@ describe('plugins/cache/persistent', () => {
         expect(persistent({ shouldExecute: true })).toEqual({
             shouldExecute: expect.any(Function),
             init: expect.any(Function),
-            complete: expect.any(Function)
+            complete: expect.any(Function),
         });
     });
 
@@ -61,13 +61,12 @@ describe('plugins/cache/persistent', () => {
         plugin.init(context, next, null);
 
         expect(mockIDB.get).toHaveBeenCalledWith('test', mockStore);
-        return Promise.resolve()
-            .then(() => {
-                expect(context.updateMeta).not.toHaveBeenCalledWith(metaTypes.CACHE, {
-                    fromPersistCache: true
-                });
-                expect(next).toHaveBeenCalledWith();
+        return Promise.resolve().then(() => {
+            expect(context.updateMeta).not.toHaveBeenCalledWith(metaTypes.CACHE, {
+                fromPersistCache: true,
             });
+            expect(next).toHaveBeenCalledWith();
+        });
     });
 
     it('init, value in indexedDB', () => {
@@ -77,16 +76,15 @@ describe('plugins/cache/persistent', () => {
 
         plugin.init(context, next, null);
 
-        return Promise.resolve()
-            .then(() => {
-                expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
-                    persistentCache: true
-                });
-                expect(next).toHaveBeenCalledWith({
-                    response,
-                    status: Status.COMPLETE,
-                });
+        return Promise.resolve().then(() => {
+            expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
+                persistentCache: true,
             });
+            expect(next).toHaveBeenCalledWith({
+                response,
+                status: Status.COMPLETE,
+            });
+        });
     });
 
     it('on complete saves to cache', () => {

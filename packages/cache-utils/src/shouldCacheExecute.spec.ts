@@ -2,7 +2,7 @@ import { Context, Status } from '@tinkoff/request-core';
 import shouldCacheExecute from './shouldCacheExecute';
 
 const dflt = '12312323';
-const isActive = shouldCacheExecute('test', dflt as any as boolean);
+const isActive = shouldCacheExecute('test', (dflt as any) as boolean);
 
 const generate = (request, status = Status.INIT) => new Context({ status, request });
 
@@ -44,9 +44,17 @@ describe('utils/shouldCacheExecute', () => {
     it('test common option `cacheForce` complete state', () => {
         expect(isActive(generate({ cache: false, cacheForce: true }, Status.COMPLETE))).toBe(dflt);
         expect(isActive(generate({ cache: false, cacheForce: false }, Status.COMPLETE))).toBe(false);
-        expect(isActive(generate({ cache: false, cacheForce: false, testCacheForce: false }, Status.COMPLETE))).toBe(false);
-        expect(isActive(generate({ cache: false, cacheForce: false, testCacheForce: true }, Status.COMPLETE))).toBe(true);
-        expect(isActive(generate({ cache: false, cacheForce: true, testCacheForce: false }, Status.COMPLETE))).toBe(false);
-        expect(isActive(generate({ cache: false, cacheForce: true, testCacheForce: true }, Status.COMPLETE))).toBe(true);
+        expect(isActive(generate({ cache: false, cacheForce: false, testCacheForce: false }, Status.COMPLETE))).toBe(
+            false
+        );
+        expect(isActive(generate({ cache: false, cacheForce: false, testCacheForce: true }, Status.COMPLETE))).toBe(
+            true
+        );
+        expect(isActive(generate({ cache: false, cacheForce: true, testCacheForce: false }, Status.COMPLETE))).toBe(
+            false
+        );
+        expect(isActive(generate({ cache: false, cacheForce: true, testCacheForce: true }, Status.COMPLETE))).toBe(
+            true
+        );
     });
 });

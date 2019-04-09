@@ -1,2 +1,2 @@
 export * from './utils';
-export { default as default } from './http'
+export { default } from './http';

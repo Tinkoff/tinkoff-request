@@ -14,10 +14,10 @@ import { getCacheKey as getCacheKeyUtil, shouldCacheExecute, metaTypes } from '@
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {function} getCacheKey function used for generate cache key
  */
-export default ({ shouldExecute = true, getCacheKey = undefined } = {}) : Plugin => {
+export default ({ shouldExecute = true, getCacheKey = undefined } = {}): Plugin => {
     const activeRequests = {};
 
-    const traverseActiveRequests = context => {
+    const traverseActiveRequests = (context) => {
         const state = context.getState();
         const deduplicationKey = getCacheKeyUtil(context, getCacheKey);
 
@@ -26,11 +26,11 @@ export default ({ shouldExecute = true, getCacheKey = undefined } = {}) : Plugin
 
             delete activeRequests[deduplicationKey];
 
-            arr.forEach(next => {
+            arr.forEach((next) => {
                 next({
                     status: state.status,
                     response: state.response,
-                    error: state.error
+                    error: state.error,
                 });
             });
         }
@@ -43,7 +43,7 @@ export default ({ shouldExecute = true, getCacheKey = undefined } = {}) : Plugin
 
             if (activeRequests[deduplicationKey]) {
                 context.updateMeta(metaTypes.CACHE, {
-                    deduplicated: true
+                    deduplicated: true,
                 });
                 activeRequests[deduplicationKey].push(next);
                 return;
@@ -59,6 +59,6 @@ export default ({ shouldExecute = true, getCacheKey = undefined } = {}) : Plugin
         error: (context, next) => {
             traverseActiveRequests(context);
             next();
-        }
+        },
     };
 };

@@ -7,9 +7,9 @@ const requests = [
     { url: 'first', batchKey: 'test', batchTimeout: 25 },
     { url: 'second', batchKey: 'test' },
     { url: 'third', batchKey: 'test1231452135' },
-    { url: 'forth' }
+    { url: 'forth' },
 ];
-const makeGroupedRequest = jest.fn(r => Promise.resolve(r.map(x => x.url)));
+const makeGroupedRequest = jest.fn((r) => Promise.resolve(r.map((x) => x.url)));
 
 describe('plugins/batch', () => {
     let context;
@@ -28,14 +28,14 @@ describe('plugins/batch', () => {
 
         context.setState({
             request: {
-                batchKey: '123'
-            }
+                batchKey: '123',
+            },
         });
 
         expect(applyOrReturn([context], shouldExecute)).toBeTruthy();
     });
 
-    it('test init with batch requests', async () => { // eslint-disable-line max-statements
+    it('test init with batch requests', async () => {
         const init = batch({ makeGroupedRequest, timeout: 123 }).init;
         const next = jest.fn();
 

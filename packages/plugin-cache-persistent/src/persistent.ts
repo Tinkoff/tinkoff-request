@@ -16,12 +16,9 @@ import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {function} getCacheKey function used for generate cache key
  */
-export default ({
-    shouldExecute = true,
-    getCacheKey = undefined,
-} = {}) : Plugin => {
+export default ({ shouldExecute = true, getCacheKey = undefined } = {}): Plugin => {
     if (typeof window !== 'undefined' && window.indexedDB) {
-        const { get, set, Store } = require('idb-keyval'); // eslint-disable-line global-require
+        const { get, set, Store } = require('idb-keyval');
         const store = new Store('tinkoff-cache', 'persistent');
 
         return {
@@ -30,20 +27,20 @@ export default ({
                 const cacheKey = getCacheKeyUtil(context, getCacheKey);
 
                 get(cacheKey, store)
-                    .then(value => {
+                    .then((value) => {
                         if (value) {
                             context.updateMeta(metaTypes.CACHE, {
-                                persistentCache: true
+                                persistentCache: true,
                             });
                             return next({
                                 status: Status.COMPLETE,
-                                response: value
+                                response: value,
                             });
                         }
 
                         next();
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         next();
                     });
             },
@@ -53,7 +50,7 @@ export default ({
                 set(cacheKey, context.getResponse(), store);
 
                 next();
-            }
+            },
         };
     }
 

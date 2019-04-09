@@ -3,30 +3,50 @@ import Status from '../constants/status';
 
 describe('request/Context', () => {
     it('sets initial state', () => {
-        expect(new Context({
-            request: { a: 1, url: '' },
-            meta: { b: 2 }
-        }).getState()).toEqual({
+        expect(
+            new Context({
+                request: { a: 1, url: '' },
+                meta: { b: 2 },
+            }).getState()
+        ).toEqual({
             request: { a: 1, url: '' },
             response: null,
             status: Status.INIT,
             meta: { b: 2 },
-            error: null
+            error: null,
         });
     });
 
     it('setState updates state', () => {
         const context = new Context();
 
-        expect(context.getState()).toEqual({ status: Status.INIT, request: null, meta: {}, response: null, error: null });
+        expect(context.getState()).toEqual({
+            status: Status.INIT,
+            request: null,
+            meta: {},
+            response: null,
+            error: null,
+        });
 
         context.setState({ status: Status.COMPLETE, meta: { test: '123' } });
-        expect(context.getState()).toEqual({ status: Status.COMPLETE, request: null, meta: { test: '123' }, response: null, error: null });
+        expect(context.getState()).toEqual({
+            status: Status.COMPLETE,
+            request: null,
+            meta: { test: '123' },
+            response: null,
+            error: null,
+        });
 
         const error = new Error('pfpf');
 
         context.setState({ error, status: Status.ERROR, meta: { a: 1 } });
-        expect(context.getState()).toEqual({ error, status: Status.ERROR, request: null, meta: { a: 1 }, response: null });
+        expect(context.getState()).toEqual({
+            error,
+            status: Status.ERROR,
+            request: null,
+            meta: { a: 1 },
+            response: null,
+        });
     });
 
     it('work with meta', () => {

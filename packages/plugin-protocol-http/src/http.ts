@@ -1,5 +1,5 @@
-import * as request from 'superagent';
-import * as requestJSONP from 'superagent-jsonp';
+import request from 'superagent';
+import requestJSONP from 'superagent-jsonp';
 import keys from '@tinkoff/utils/object/keys';
 import { Status, Plugin, HttpMethods } from '@tinkoff/request-core';
 import { PROTOCOL_HTTP } from './constants';
@@ -8,7 +8,9 @@ const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;
 
 if (isBrowser) {
-    window.addEventListener('beforeunload', () => { isPageUnloaded = true; });
+    window.addEventListener('beforeunload', () => {
+        isPageUnloaded = true;
+    });
 }
 
 /**
@@ -33,9 +35,9 @@ if (isBrowser) {
  *
  * @return {{init: init}}
  */
-export default () : Plugin =>  {
+export default (): Plugin => {
     return {
-        init: (context, next) => { // eslint-disable-line max-statements, complexity
+        init: (context, next) => {
             const {
                 httpMethod = HttpMethods.GET,
                 url,
@@ -52,18 +54,18 @@ export default () : Plugin =>  {
                 onProgress,
                 resolveOnAbort = true,
                 abortPromise,
-                responseType
+                responseType,
             } = context.getRequest();
 
             const method = httpMethod.toLowerCase();
             const req: request.Request = request[method](url);
 
             if (headers) {
-                Object.keys(headers).forEach(key => req.set(key, headers[key]));
+                Object.keys(headers).forEach((key) => req.set(key, headers[key]));
             }
 
             if (attaches.length) {
-                keys(payload).forEach(key => req.field(key, payload[key]));
+                keys(payload).forEach((key) => req.field(key, payload[key]));
             } else {
                 req[method === 'get' ? 'query' : 'send'](payload);
 
@@ -77,11 +79,11 @@ export default () : Plugin =>  {
             }
 
             req.query(Object.assign({}, queryNoCache, query))
-            // для возможности обрабатывать запросы с разными форматами массивов https://github.com/visionmedia/superagent/issues/629
+                // для возможности обрабатывать запросы с разными форматами массивов https://github.com/visionmedia/superagent/issues/629
                 .query(rawQueryString)
                 .timeout({
                     response: timeout,
-                    deadline: timeout * 1.5
+                    deadline: timeout * 1.5,
                 });
 
             if (withCredentials) {
@@ -96,7 +98,7 @@ export default () : Plugin =>  {
                 req.on('progress', onProgress);
             }
 
-            attaches.forEach(file => {
+            attaches.forEach((file) => {
                 if (!isBrowser || !(file instanceof window.Blob)) {
                     return;
                 }
@@ -108,12 +110,12 @@ export default () : Plugin =>  {
             });
 
             if (abortPromise) {
-                abortPromise.then(abortOptions => {
+                abortPromise.then((abortOptions) => {
                     req.abort();
                     if (resolveOnAbort || abortOptions) {
                         next({
                             status: Status.ERROR,
-                            response: abortOptions || {}
+                            response: abortOptions || {},
                         });
                     }
                 });
@@ -144,7 +146,7 @@ export default () : Plugin =>  {
 
             context.updateMeta(PROTOCOL_HTTP, {
                 request: req,
-            })
-        }
+            });
+        },
     };
 };

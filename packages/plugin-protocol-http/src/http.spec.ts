@@ -1,13 +1,13 @@
-import * as request from 'superagent';
-import * as mocker from 'superagent-mocker-tinkoff';
+import request from 'superagent';
+import mocker from 'superagent-mocker-tinkoff';
 import { Context, Status } from '@tinkoff/request-core';
 import http from './http';
 
 const plugin = http();
 const next = jest.fn();
-const mockJsonp = jest.fn(() => () => {});
+const mockJsonp = jest.fn((arg) => () => {});
 
-jest.mock('superagent-jsonp', () => arg => mockJsonp(arg));
+jest.mock('superagent-jsonp', () => (arg) => mockJsonp(arg));
 
 describe('plugins/http', () => {
     beforeAll(() => {
@@ -46,17 +46,21 @@ describe('plugins/http', () => {
 
         mocker.post('test', mockRequest);
 
-        plugin.init(new Context({
-            request: {
-                url: 'test',
-                httpMethod: 'POST',
-                withCredentials: true,
-                jsonp: jsonpObject,
-                payload: {},
-                attaches: ['file'],
-                onProgress: () => {}
-            }
-        }), next, null);
+        plugin.init(
+            new Context({
+                request: {
+                    url: 'test',
+                    httpMethod: 'POST',
+                    withCredentials: true,
+                    jsonp: jsonpObject,
+                    payload: {},
+                    attaches: ['file'],
+                    onProgress: () => {},
+                },
+            }),
+            next,
+            null
+        );
 
         jest.runAllTimers();
 
@@ -67,7 +71,7 @@ describe('plugins/http', () => {
     it('request attaches', () => {
         const mockRequest = jest.fn();
         const payload = {
-            key: 'value'
+            key: 'value',
         };
         const attaches = [
             { name: 'file1' },
@@ -76,32 +80,40 @@ describe('plugins/http', () => {
                 on: () => {},
                 pause: () => {},
                 resume: () => {},
-                name: 'file3'
-            })
+                name: 'file3',
+            }),
         ];
 
         mocker.put('attaches', mockRequest);
         mocker.post('attaches', mockRequest);
 
-        plugin.init(new Context({
-            request: {
-                payload,
-                attaches,
-                url: 'attaches',
-                httpMethod: 'PUT',
-                jsonp: true,
-            }
-        }), next, null);
-        plugin.init(new Context({
-            request: {
-                payload,
-                attaches,
-                url: 'attaches',
-                httpMethod: 'POST',
-                jsonp: true,
-                encodeFileName: true,
-            }
-        }), next, null);
+        plugin.init(
+            new Context({
+                request: {
+                    payload,
+                    attaches,
+                    url: 'attaches',
+                    httpMethod: 'PUT',
+                    jsonp: true,
+                },
+            }),
+            next,
+            null
+        );
+        plugin.init(
+            new Context({
+                request: {
+                    payload,
+                    attaches,
+                    url: 'attaches',
+                    httpMethod: 'POST',
+                    jsonp: true,
+                    encodeFileName: true,
+                },
+            }),
+            next,
+            null
+        );
 
         jest.runAllTimers();
 
@@ -122,7 +134,7 @@ describe('plugins/http', () => {
         expect(next).toHaveBeenLastCalledWith({
             status: Status.ERROR,
             error: new Error('503'),
-            response: null
+            response: null,
         });
     });
 });

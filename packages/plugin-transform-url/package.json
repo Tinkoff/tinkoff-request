@@ -23,5 +23,8 @@
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
+  },
+  "dependencies": {
+    "tslib": "^1.9.3"
   }
 }

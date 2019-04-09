@@ -1,10 +1,15 @@
 import each from '@tinkoff/utils/array/each';
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
-import { Plugin, Status } from '@tinkoff/request-core';
+import { Plugin, Status, Request, Next } from '@tinkoff/request-core';
 import { BATCH } from './constants/metaTypes';
 
 const DEFAULT_BATCH_TIMEOUT = 100;
+
+interface BatchRequest {
+    requests: Request[];
+    nexts: Next[];
+}
 
 /**
  * Batch multiple requests into a single request
@@ -22,20 +27,20 @@ const DEFAULT_BATCH_TIMEOUT = 100;
  *  @param {boolean} shouldExecute - enable plugin
  * @return {{shouldExecute: function(*): *, init: init}}
  */
-export default ({ timeout = DEFAULT_BATCH_TIMEOUT, shouldExecute = true, makeGroupedRequest }) : Plugin => {
-    const batchRequests = {};
+export default ({ timeout = DEFAULT_BATCH_TIMEOUT, shouldExecute = true, makeGroupedRequest }): Plugin => {
+    const batchRequests: Record<string, BatchRequest> = {};
 
     return {
-        shouldExecute: context => {
+        shouldExecute: (context) => {
             return makeGroupedRequest && shouldExecute && prop('batchKey', context.getRequest());
         },
         init: (context, next) => {
             const request = context.getRequest();
-            const batchKey = prop('batchKey', request);
+            const batchKey: string = prop('batchKey', request);
             const batchTimeout = propOr('batchTimeout', timeout, request);
 
             context.updateMeta(BATCH, {
-                batched: true
+                batched: true,
             });
 
             const running = batchRequests[batchKey];
@@ -54,18 +59,20 @@ export default ({ timeout = DEFAULT_BATCH_TIMEOUT, shouldExecute = true, makeGro
                 delete batchRequests[batchKey];
 
                 makeGroupedRequest(requests)
-                    .then(each((response, i) => {
-                        nexts[i]({
-                            response,
-                            status: Status.COMPLETE,
-                        });
-                    }))
-                    .catch(error => {
+                    .then(
+                        each((response, i) => {
+                            nexts[i]({
+                                response,
+                                status: Status.COMPLETE,
+                            });
+                        })
+                    )
+                    .catch((error) => {
                         const state = { error, status: Status.ERROR };
 
-                        each(nxt => nxt(state), nexts);
+                        each((nxt) => nxt(state), nexts);
                     });
             }, batchTimeout);
-        }
+        },
     };
 };

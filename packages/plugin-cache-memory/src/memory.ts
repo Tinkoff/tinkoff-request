@@ -1,6 +1,6 @@
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
-import * as lru from 'lru-cache';
+import lru from 'lru-cache';
 
 import { Plugin, Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
@@ -33,10 +33,10 @@ export default ({
     allowStale = false,
     memoryConstructor = lru,
     getCacheKey = undefined,
-} = {}) : Plugin => {
+} = {}): Plugin => {
     const lruCache = memoryConstructor({
         ...lruOptions,
-        stale: true // should be true for the opportunity to control it for individual requests
+        stale: true, // should be true for the opportunity to control it for individual requests
     });
 
     return {
@@ -48,12 +48,12 @@ export default ({
             if (lruCache.has(cacheKey)) {
                 context.updateMeta(metaTypes.CACHE, {
                     memoryCache: true,
-                    memoryCacheOutdated: false
+                    memoryCacheOutdated: false,
                 });
 
                 return next({
                     status: Status.COMPLETE,
-                    response: lruCache.get(cacheKey)
+                    response: lruCache.get(cacheKey),
                 });
             }
 
@@ -65,18 +65,22 @@ export default ({
 
                 context.updateMeta(metaTypes.CACHE, {
                     memoryCache: true,
-                    memoryCacheOutdated: true
+                    memoryCacheOutdated: true,
                 });
 
                 lruCache.set(cacheKey, outdated, -1); // remember outdated value, to prevent losing it
-                setTimeout(() => makeRequest({
-                    ...request,
-                    memoryCacheForce: true
-                }), 15); // run background request to update cache
+                setTimeout(
+                    () =>
+                        makeRequest({
+                            ...request,
+                            memoryCacheForce: true,
+                        }),
+                    15
+                ); // run background request to update cache
 
                 return next({
                     status: Status.COMPLETE,
-                    response: outdated
+                    response: outdated,
                 });
             }
 
@@ -89,6 +93,6 @@ export default ({
             lruCache.set(cacheKey, context.getResponse(), ttl);
 
             next();
-        }
+        },
     };
 };

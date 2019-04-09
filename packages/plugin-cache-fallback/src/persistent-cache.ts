@@ -1,9 +1,9 @@
 // just simple copy of lib `persistent-cache` with removed library `rmdir` to prevent errors with
 // JSON.parse( fs.readFileSync( __dirname + ‘/../package.json’, ‘utf8’ )).version
 // which fails sometimes after build
-import * as path from 'path';
-import * as fs from 'fs';
-import * as mkdirp from 'mkdirp-no-bin';
+import path from 'path';
+import fs from 'fs';
+import mkdirp from 'mkdirp-no-bin';
 
 function exists(dir) {
     try {
@@ -16,7 +16,9 @@ function exists(dir) {
 }
 
 function safeCb(cb) {
-    if (typeof cb === 'function') { return cb; }
+    if (typeof cb === 'function') {
+        return cb;
+    }
 
     return function() {};
 }
@@ -33,9 +35,13 @@ function cache(options) {
     var ram = typeof options.memory === 'boolean' ? options.memory : true;
     var persist = typeof options.persist === 'boolean' ? options.persist : true;
 
-    if (ram) { var memoryCache = {}; }
+    if (ram) {
+        var memoryCache = {};
+    }
 
-    if (persist && !exists(cacheDir)) { mkdirp.sync(cacheDir); }
+    if (persist && !exists(cacheDir)) {
+        mkdirp.sync(cacheDir);
+    }
 
     function buildFilePath(name) {
         return path.normalize(`${cacheDir}/${name}.json`);
@@ -44,28 +50,34 @@ function cache(options) {
     function buildCacheEntry(data) {
         return {
             cacheUntil: !cacheInfinitely ? new Date().getTime() + cacheDuration : undefined,
-            data
+            data,
         };
     }
 
     function put(name, data, cb) {
         var entry = buildCacheEntry(data);
 
-        if (persist) { fs.writeFile(buildFilePath(name), JSON.stringify(entry), cb); }
+        if (persist) {
+            fs.writeFile(buildFilePath(name), JSON.stringify(entry), cb);
+        }
 
         if (ram) {
             entry.data = JSON.stringify(entry.data);
 
             memoryCache[name] = entry;
 
-            if (!persist) { return safeCb(cb)(null); }
+            if (!persist) {
+                return safeCb(cb)(null);
+            }
         }
     }
 
     function putSync(name, data) {
         var entry = buildCacheEntry(data);
 
-        if (persist) { fs.writeFileSync(buildFilePath(name), JSON.stringify(entry)); }
+        if (persist) {
+            fs.writeFileSync(buildFilePath(name), JSON.stringify(entry));
+        }
 
         if (ram) {
             memoryCache[name] = entry;
@@ -118,7 +130,9 @@ function cache(options) {
             return undefined;
         }
 
-        if (data.cacheUntil && new Date().getTime() > data.cacheUntil) { return undefined; }
+        if (data.cacheUntil && new Date().getTime() > data.cacheUntil) {
+            return undefined;
+        }
 
         return data.data;
     }
@@ -127,7 +141,9 @@ function cache(options) {
         if (ram) {
             delete memoryCache[name];
 
-            if (!persist) { safeCb(cb)(null); }
+            if (!persist) {
+                safeCb(cb)(null);
+            }
         }
 
         fs.unlink(buildFilePath(name), cb);
@@ -137,7 +153,9 @@ function cache(options) {
         if (ram) {
             delete memoryCache[name];
 
-            if (!persist) { return; }
+            if (!persist) {
+                return;
+            }
         }
 
         fs.unlinkSync(buildFilePath(name));
@@ -157,7 +175,9 @@ function cache(options) {
     function keys(cb) {
         cb = safeCb(cb);
 
-        if (ram && !persist) { return cb(null, Object.keys(memoryCache)); }
+        if (ram && !persist) {
+            return cb(null, Object.keys(memoryCache));
+        }
 
         fs.readdir(cacheDir, onDirRead);
 
@@ -167,7 +187,9 @@ function cache(options) {
     }
 
     function keysSync() {
-        if (ram && !persist) { return Object.keys(memoryCache); }
+        if (ram && !persist) {
+            return Object.keys(memoryCache);
+        }
 
         return fs.readdirSync(cacheDir).map(transformFileNameToKey);
     }
@@ -182,7 +204,7 @@ function cache(options) {
         deleteSync: deleteEntrySync,
 
         keys,
-        keysSync
+        keysSync,
     };
 }
 

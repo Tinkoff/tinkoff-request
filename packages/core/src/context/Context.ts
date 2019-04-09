@@ -12,7 +12,7 @@ export default class Context {
             request: null,
             response: null,
             error: null,
-            ...initialState
+            ...initialState,
         };
     }
 
@@ -26,7 +26,7 @@ export default class Context {
         if (newState) {
             this.state = {
                 ...this.state,
-                ...newState
+                ...newState,
             };
         }
     }
@@ -46,9 +46,9 @@ export default class Context {
                 ...this.state.meta,
                 [metaName]: {
                     ...this.state.meta[metaName],
-                    ...meta
-                }
-            }
+                    ...meta,
+                },
+            },
         };
     }
 

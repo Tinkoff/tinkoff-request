@@ -1,9 +1,10 @@
 {
-  "name": "@tinkoff/request-plugin-validate",
-  "version": "0.7.1",
-  "description": "Validate your responses",
-  "main": "lib/validate.js",
-  "typings": "lib/validate.d.ts",
+  "name": "@tinkoff/request-plugin-circuit-breaker",
+  "version": "0.1.0",
+  "description": "Plugin implementing `Circuit breaker` design pattern",
+  "main": "lib/circuit-breaker.js",
+  "typings": "lib/circuit-breaker.d.ts",
+  "browser": "lib/noop.js",
   "sideEffects": false,
   "scripts": {
     "tsc": "tsc",
@@ -11,7 +12,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "request"
+    "@tinkoff/request",
+    "request",
+    "circuit breaker"
   ],
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "publishConfig": {
@@ -23,7 +26,8 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "^0.7.0"
+    "@tinkoff/request-core": "^0.7.0",
+    "@types/node": "^10.12.0"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

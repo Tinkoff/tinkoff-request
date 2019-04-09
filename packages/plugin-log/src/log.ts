@@ -9,7 +9,7 @@ const fillDuration = (context: Context) => {
 
     context.updateMeta(LOG, {
         end,
-        duration
+        duration,
     });
 };
 
@@ -21,7 +21,7 @@ interface Logger {
     error: LogFunction;
 }
 
-const defaultLogger = (name: string) : Logger => {
+const defaultLogger = (name: string): Logger => {
     return {
         info: (...args) => console.info(name, ...args), // tslint:disable-line:no-console
         debug: (...args) => console.debug(name, ...args), // tslint:disable-line:no-console
@@ -44,10 +44,7 @@ const defaultLogger = (name: string) : Logger => {
  * @param logger {Function} - logger factory
  * @return {{init: init, complete: complete, error: error}}
  */
-export default ({
-    name = '',
-    logger = defaultLogger
-}) : Plugin => {
+export default ({ name = '', logger = defaultLogger }): Plugin => {
     const log = logger(`request.${name}`);
 
     return {
@@ -63,7 +60,7 @@ export default ({
             log.debug('init', request);
 
             context.updateMeta(LOG, {
-                start
+                start,
             });
 
             next();
@@ -94,6 +91,6 @@ export default ({
             log.debug('error', context.getState());
 
             next();
-        }
+        },
     };
 };

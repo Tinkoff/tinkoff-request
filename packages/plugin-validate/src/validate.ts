@@ -1,6 +1,16 @@
 import nothing from '@tinkoff/utils/function/nothing';
-import { Plugin, Status } from '@tinkoff/request-core';
+import { Plugin, Status, ContextState } from '@tinkoff/request-core';
 import { VALIDATE } from './constants';
+
+interface Validator {
+    (state: ContextState): any;
+}
+
+interface Options {
+    allowFallback?: boolean;
+    validator?: Validator;
+    errorValidator?: Validator;
+}
 
 /**
  * Plugin to validate response. If `validator` returns falsy value plugin does nothing,
@@ -14,7 +24,7 @@ import { VALIDATE } from './constants';
  * @param {boolean} [allowFallback = true] - if false adds `fallbackCache` option to request to prevent activating fallback cache
  * @return {{complete: complete}}
  */
-export default ({ validator = nothing, allowFallback = true, errorValidator = nothing } = {}): Plugin => ({
+export default ({ validator = nothing, allowFallback = true, errorValidator = nothing }: Options = {}): Plugin => ({
     complete: (context, next) => {
         const state = context.getState();
         const { request } = state;
@@ -27,10 +37,12 @@ export default ({ validator = nothing, allowFallback = true, errorValidator = no
         if (error) {
             return next({
                 error,
-                request: allowFallback ? request : {
-                    ...request,
-                    fallbackCache: false
-                },
+                request: allowFallback
+                    ? request
+                    : {
+                          ...request,
+                          fallbackCache: false,
+                      },
                 status: Status.ERROR,
             });
         }

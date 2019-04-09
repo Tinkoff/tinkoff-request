@@ -7,13 +7,13 @@ import RequestMaker from './request.h';
 import { Request, Next } from '../types.h';
 
 const DEFAULT_STATUS_TRANSITION = {
-    [Status.INIT]: Status.COMPLETE
+    [Status.INIT]: Status.COMPLETE,
 };
 
 const FORWARD = 1;
 const BACKWARD = -1;
 
-const requestMaker: RequestMaker = function (plugins) {
+const requestMaker: RequestMaker = function(plugins) {
     const makeRequest = (request: Request) => {
         let i = -1;
         const len = plugins.length;
@@ -34,7 +34,7 @@ const requestMaker: RequestMaker = function (plugins) {
 
                 if (nextDefaultStatus) {
                     context.setState({
-                        status: nextDefaultStatus
+                        status: nextDefaultStatus,
                     });
                     return traversePlugins(nextDefaultStatus, BACKWARD);
                 }
@@ -49,7 +49,7 @@ const requestMaker: RequestMaker = function (plugins) {
             const traversePlugins = (event: Status, direction: number) => {
                 const initialStatus = context.getState().status;
 
-                const next: Next = newState => {
+                const next: Next = (newState) => {
                     context.setState(newState);
                     const state = context.getState();
 

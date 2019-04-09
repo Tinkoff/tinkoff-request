@@ -5,7 +5,7 @@ const mockDebug = jest.fn();
 const mockInfo = jest.fn();
 const mockError = jest.fn();
 
-const logger = name => ({
+const logger = (name) => ({
     debug: mockDebug,
     info: mockInfo,
     error: mockError,
@@ -43,8 +43,8 @@ describe('plugins/log', () => {
         expect(mockDebug).toHaveBeenCalledWith('init', request);
         expect(context.getState().meta).toEqual({
             log: {
-                start: Date.now()
-            }
+                start: Date.now(),
+            },
         });
     });
 
@@ -55,14 +55,16 @@ describe('plugins/log', () => {
         plugin.complete(context, next, null);
 
         expect(next).toHaveBeenCalled();
-        expect(mockInfo).toHaveBeenLastCalledWith('complete', 'test2', { log: { start, end: Date.now(), duration: Date.now() - start } });
+        expect(mockInfo).toHaveBeenLastCalledWith('complete', 'test2', {
+            log: { start, end: Date.now(), duration: Date.now() - start },
+        });
         expect(mockDebug).toHaveBeenCalledWith('complete', context.getState());
         expect(context.getState().meta).toEqual({
             log: {
                 start,
                 end: Date.now(),
-                duration: Date.now() - start
-            }
+                duration: Date.now() - start,
+            },
         });
     });
 
@@ -78,8 +80,8 @@ describe('plugins/log', () => {
             log: {
                 start,
                 end: Date.now(),
-                duration: Date.now() - start
-            }
+                duration: Date.now() - start,
+            },
         });
     });
 });

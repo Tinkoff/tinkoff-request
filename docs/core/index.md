@@ -15,6 +15,7 @@ import memoryCache from '@tinkoff/request-plugin-cache-memory';
 import persistentCache from '@tinkoff/request-plugin-cache-persistent';
 import fallbackCache from '@tinkoff/request-plugin-cache-fallback';
 import validate from '@tinkoff/request-plugin-validate';
+import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker'
 import http from '@tinkoff/request-plugin-protocol-http';
 
 const makeRequest = request([
@@ -30,6 +31,10 @@ const makeRequest = request([
             return new Error('NOT json format');
         }
     }), // validate is placed exactly before plugin for actual request since there is no point to validate values from caches
+    circuitBreaker({
+        failureThreshold: 60,
+        failureTimeout: 60000, 
+    }), // if 60% of requests in 1 min are failed, go to special state preventing from making new requests till service is down
     http() // on the last place the plugin to make actual request, it will be executed only if no plugin before changed the flow of request
 ]);
 
