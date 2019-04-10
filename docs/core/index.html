@@ -40,6 +40,7 @@
 <span class="hljs-keyword">import</span> persistentCache <span class="hljs-keyword">from</span> <span class="hljs-string">'@tinkoff/request-plugin-cache-persistent'</span>;
 <span class="hljs-keyword">import</span> fallbackCache <span class="hljs-keyword">from</span> <span class="hljs-string">'@tinkoff/request-plugin-cache-fallback'</span>;
 <span class="hljs-keyword">import</span> validate <span class="hljs-keyword">from</span> <span class="hljs-string">'@tinkoff/request-plugin-validate'</span>;
+<span class="hljs-keyword">import</span> circuitBreaker <span class="hljs-keyword">from</span> <span class="hljs-string">'@tinkoff/request-plugin-circuit-breaker'</span>
 <span class="hljs-keyword">import</span> http <span class="hljs-keyword">from</span> <span class="hljs-string">'@tinkoff/request-plugin-protocol-http'</span>;
 
 <span class="hljs-keyword">const</span> makeRequest = request([
@@ -55,6 +56,10 @@
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'NOT json format'</span>);
         }
     }), <span class="hljs-comment">// validate is placed exactly before plugin for actual request since there is no point to validate values from caches</span>
+    circuitBreaker({
+        <span class="hljs-attr">failureThreshold</span>: <span class="hljs-number">60</span>,
+        <span class="hljs-attr">failureTimeout</span>: <span class="hljs-number">60000</span>, 
+    }), <span class="hljs-comment">// if 60% of requests in 1 min are failed, go to special state preventing from making new requests till service is down</span>
     http() <span class="hljs-comment">// on the last place the plugin to make actual request, it will be executed only if no plugin before changed the flow of request</span>
 ]);
 
