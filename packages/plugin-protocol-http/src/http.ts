@@ -3,6 +3,7 @@ import requestJSONP from 'superagent-jsonp';
 import keys from '@tinkoff/utils/object/keys';
 import { Status, Plugin, HttpMethods } from '@tinkoff/request-core';
 import { PROTOCOL_HTTP } from './constants';
+import { Agent } from "https";
 
 const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;
@@ -33,9 +34,12 @@ if (isBrowser) {
  *      onProgress {function}
  *      abortPromise {Promise}
  *
+ * @param {agent} [agent = Agent] set custom http in node js. The browser ignores this parameter.
  * @return {{init: init}}
  */
-export default (): Plugin => {
+export default ({ agent }: { agent?: Agent } = {}): Plugin => {
+    agent = isBrowser ? undefined : agent;
+
     return {
         init: (context, next) => {
             const {
@@ -58,7 +62,7 @@ export default (): Plugin => {
             } = context.getRequest();
 
             const method = httpMethod.toLowerCase();
-            const req: request.Request = request[method](url);
+            const req: request.SuperAgentRequest = request[method](url);
 
             if (headers) {
                 Object.keys(headers).forEach((key) => req.set(key, headers[key]));
@@ -79,7 +83,7 @@ export default (): Plugin => {
             }
 
             req.query(Object.assign({}, queryNoCache, query))
-                // для возможности обрабатывать запросы с разными форматами массивов https://github.com/visionmedia/superagent/issues/629
+                // to be able to process requests with different array formats https://github.com/visionmedia/superagent/issues/629
                 .query(rawQueryString)
                 .timeout({
                     response: timeout,
@@ -88,6 +92,11 @@ export default (): Plugin => {
 
             if (withCredentials) {
                 req.withCredentials();
+            }
+
+            // Set custom agent
+            if (agent) {
+                req.agent(agent);
             }
 
             if (jsonp) {

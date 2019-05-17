@@ -137,4 +137,25 @@ describe('plugins/http', () => {
             response: null,
         });
     });
+
+    it('request with custom agent', () => {
+        const response = { a: 3 };
+        const mockRequest = jest.fn(() => ({ body: response }));
+
+        mocker.get('test', mockRequest);
+        class MockedAgent {
+            requests() {}
+            destroy() {}
+        }
+
+        http({ agent: (new MockedAgent() as any) }).init(new Context({ request: { url: 'test' } }), next, null);
+
+        jest.runAllTimers();
+
+        expect(mockRequest).toBeCalled();
+        expect(next).toHaveBeenLastCalledWith({
+            response,
+            status: Status.COMPLETE,
+        });
+    });
 });
