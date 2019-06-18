@@ -3,7 +3,7 @@ import requestJSONP from 'superagent-jsonp';
 import keys from '@tinkoff/utils/object/keys';
 import { Status, Plugin, HttpMethods } from '@tinkoff/request-core';
 import { PROTOCOL_HTTP } from './constants';
-import { Agent } from "https";
+import { Agent } from 'https';
 
 const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;
@@ -13,6 +13,9 @@ if (isBrowser) {
         isPageUnloaded = true;
     });
 }
+
+// TODO Remove then resolving https://github.com/visionmedia/superagent/issues/1496
+export const getProtocol = (url: string) => (new URL(url).protocol.indexOf('https') === 0 ? 'https' : 'http');
 
 /**
  * Makes http/https request.
@@ -37,8 +40,8 @@ if (isBrowser) {
  * @param {agent} [agent = Agent] set custom http in node js. The browser ignores this parameter.
  * @return {{init: init}}
  */
-export default ({ agent }: { agent?: Agent } = {}): Plugin => {
-    agent = isBrowser ? undefined : agent;
+export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plugin => {
+    const customAgent = isBrowser ? undefined : agent;
 
     return {
         init: (context, next) => {
@@ -95,8 +98,8 @@ export default ({ agent }: { agent?: Agent } = {}): Plugin => {
             }
 
             // Set custom agent
-            if (agent) {
-                req.agent(agent);
+            if (customAgent) {
+                req.agent(customAgent[getProtocol(url)]);
             }
 
             if (jsonp) {
