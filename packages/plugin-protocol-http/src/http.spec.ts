@@ -1,7 +1,7 @@
 import request from 'superagent';
 import mocker from 'superagent-mocker-tinkoff';
 import { Context, Status } from '@tinkoff/request-core';
-import http from './http';
+import http, { getProtocol } from './http';
 
 const plugin = http();
 const next = jest.fn();
@@ -142,13 +142,17 @@ describe('plugins/http', () => {
         const response = { a: 3 };
         const mockRequest = jest.fn(() => ({ body: response }));
 
-        mocker.get('test', mockRequest);
+        mocker.get('http://test.com/api', mockRequest);
         class MockedAgent {
             requests() {}
             destroy() {}
         }
 
-        http({ agent: (new MockedAgent() as any) }).init(new Context({ request: { url: 'test' } }), next, null);
+        http({ agent: { http: new MockedAgent() as any, https: new MockedAgent() as any } }).init(
+            new Context({ request: { url: 'http://test.com/api' } }),
+            next,
+            null
+        );
 
         jest.runAllTimers();
 
@@ -157,5 +161,10 @@ describe('plugins/http', () => {
             response,
             status: Status.COMPLETE,
         });
+    });
+
+    it('utils - getProtocol', () => {
+        expect(getProtocol('https://github.com')).toBe('https');
+        expect(getProtocol('http://github.com')).toBe('http');
     });
 });
