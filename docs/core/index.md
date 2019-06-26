@@ -12,6 +12,7 @@ import request from '@tinkoff/request-core';
 import log from '@tinkoff/request-plugin-log';
 import deduplicateCache from '@tinkoff/request-plugin-cache-deduplicate';
 import memoryCache from '@tinkoff/request-plugin-cache-memory';
+import etagCache from '@tinkoff/request-plugin-cache-etag';
 import persistentCache from '@tinkoff/request-plugin-cache-persistent';
 import fallbackCache from '@tinkoff/request-plugin-cache-fallback';
 import validate from '@tinkoff/request-plugin-validate';
@@ -25,6 +26,7 @@ const makeRequest = request([
     memoryCache({ allowStale: true }), // passing parameters for specific plugin, see plugin docs
     persistentCache(),
     fallbackCache(), // fallbackCache is the last as it executed only for errored requests
+    etagCache(),
     validate({
         validator: ({ response }) => {
             if (response.type === 'json') { return null; }

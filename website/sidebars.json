@@ -9,11 +9,13 @@
             "plugins/cache-deduplicate",
             "plugins/cache-fallback",
             "plugins/cache-memory",
+            "plugins/cache-etag",
             "plugins/cache-persistent",
             "plugins/log",
             "plugins/protocol-http",
             "plugins/transform-url",
-            "plugins/validate"
+            "plugins/validate",
+            "plugins/circuit-breaker"
         ],
         "How to": [
             "how-to/index"
