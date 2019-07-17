@@ -21,6 +21,10 @@
         "title": "Cache Plugin - Deduplicate",
         "sidebar_label": "Cache - Deduplicate"
       },
+      "plugins/cache-etag": {
+        "title": "Cache Plugin - Etag",
+        "sidebar_label": "Cache - Etag"
+      },
       "plugins/cache-fallback": {
         "title": "Cache Plugin - Fallback",
         "sidebar_label": "Cache - Fallback"
@@ -32,6 +36,10 @@
       "plugins/cache-persistent": {
         "title": "Cache Plugin - Persistent",
         "sidebar_label": "Cache - Persistent"
+      },
+      "plugins/circuit-breaker": {
+        "title": "Circuit Breaker Plugin",
+        "sidebar_label": "Circuit Breaker"
       },
       "plugins/index": {
         "title": "Plugins",
