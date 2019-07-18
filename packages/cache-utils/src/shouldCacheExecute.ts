@@ -3,12 +3,24 @@ import propOr from '@tinkoff/utils/object/propOr';
 import propEq from '@tinkoff/utils/object/propEq';
 import isUndefined from '@tinkoff/utils/is/undefined';
 import { Context, Status } from '@tinkoff/request-core';
+import { CACHE } from './constants/metaTypes';
 
 export default (name: string, dflt: boolean) => (context: Context) => {
     const request = context.getRequest();
     const forced = prop('cacheForce', request);
     const forcedSpecific = prop(`${name}CacheForce`, request);
+    const disabled = propEq('cache', false, request);
+    const enabledSpecific = propOr(`${name}Cache`, disabled ? false : dflt, request);
     const isComplete = context.getStatus() === Status.COMPLETE;
+
+    if (context.getStatus() === Status.INIT) {
+        context.updateExternalMeta(CACHE, {
+            forced,
+            enabled: !disabled,
+            [`${name}Enabled`]: enabledSpecific,
+            [`${name}Force`]: forcedSpecific,
+        });
+    }
 
     if (forcedSpecific) {
         return isComplete;
@@ -18,7 +30,5 @@ export default (name: string, dflt: boolean) => (context: Context) => {
         return isComplete && dflt;
     }
 
-    const cacheDisabled = propEq('cache', false, request);
-
-    return propOr(`${name}Cache`, cacheDisabled ? false : dflt, request);
+    return enabledSpecific;
 };

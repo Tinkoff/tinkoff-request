@@ -47,7 +47,7 @@ export default ({
                 const { key, value } = lruCache.get(cacheKey);
                 const request = context.getRequest();
 
-                context.updateMeta(ETAG, {
+                context.updateInternalMeta(ETAG, {
                     value,
                 });
 
@@ -81,10 +81,10 @@ export default ({
             const { error } = context.getState();
 
             if ((error as any).status === 304) {
-                const { value = null } = context.getMeta(ETAG) || {};
+                const { value = null } = context.getInternalMeta(ETAG) || {};
 
                 if (value) {
-                    context.updateMeta(metaTypes.CACHE, {
+                    context.updateExternalMeta(metaTypes.CACHE, {
                         etagCache: true,
                     });
 

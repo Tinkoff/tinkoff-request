@@ -18,7 +18,8 @@ describe('request', () => {
 
         expect(res).toBeInstanceOf(Promise);
         expect(res).toMatchObject({
-            getMeta: expect.any(Function),
+            getInternalMeta: expect.any(Function),
+            getExternalMeta: expect.any(Function),
             getState: expect.any(Function),
         });
 
@@ -27,7 +28,6 @@ describe('request', () => {
                 url: 'init',
                 params,
             },
-            meta: {},
             error: null,
             response: null,
             status: 'complete',

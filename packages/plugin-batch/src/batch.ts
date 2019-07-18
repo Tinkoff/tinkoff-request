@@ -39,7 +39,7 @@ export default ({ timeout = DEFAULT_BATCH_TIMEOUT, shouldExecute = true, makeGro
             const batchKey: string = prop('batchKey', request);
             const batchTimeout = propOr('batchTimeout', timeout, request);
 
-            context.updateMeta(BATCH, {
+            context.updateExternalMeta(BATCH, {
                 batched: true,
             });
 

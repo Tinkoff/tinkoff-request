@@ -80,7 +80,8 @@ const requestMaker: RequestMaker = function(plugins) {
 
         return Object.assign(promise, {
             getState: context.getState.bind(context),
-            getMeta: context.getMeta.bind(context),
+            getInternalMeta: context.getInternalMeta.bind(context),
+            getExternalMeta: context.getExternalMeta.bind(context),
         });
     };
 

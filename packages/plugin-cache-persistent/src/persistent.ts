@@ -29,7 +29,7 @@ export default ({ shouldExecute = true, getCacheKey = undefined } = {}): Plugin 
                 get(cacheKey, store)
                     .then((value) => {
                         if (value) {
-                            context.updateMeta(metaTypes.CACHE, {
+                            context.updateExternalMeta(metaTypes.CACHE, {
                                 persistentCache: true,
                             });
                             return next({

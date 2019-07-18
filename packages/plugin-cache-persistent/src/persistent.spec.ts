@@ -15,7 +15,7 @@ jest.mock('idb-keyval', () => mockIDB);
 
 const context = new Context({ request: { url: 'test' } });
 
-context.updateMeta = jest.fn(context.updateMeta.bind(context));
+context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 const getCacheKey = jest.fn((req) => req.url);
 const next = jest.fn();
 
@@ -35,8 +35,7 @@ describe('plugins/cache/persistent', () => {
         mockIDB.get.mockClear();
         mockIDB.set.mockClear();
         next.mockClear();
-        context.setState({ meta: {} });
-        (context.updateMeta as jest.Mock).mockClear();
+        (context.updateExternalMeta as jest.Mock).mockClear();
         (window as any).indexedDB = {};
         plugin = persistent({ getCacheKey, shouldExecute: true });
     });
@@ -62,7 +61,7 @@ describe('plugins/cache/persistent', () => {
 
         expect(mockIDB.get).toHaveBeenCalledWith('test', mockStore);
         return Promise.resolve().then(() => {
-            expect(context.updateMeta).not.toHaveBeenCalledWith(metaTypes.CACHE, {
+            expect(context.updateExternalMeta).not.toHaveBeenCalledWith(metaTypes.CACHE, {
                 fromPersistCache: true,
             });
             expect(next).toHaveBeenCalledWith();
@@ -77,7 +76,7 @@ describe('plugins/cache/persistent', () => {
         plugin.init(context, next, null);
 
         return Promise.resolve().then(() => {
-            expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
+            expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
                 persistentCache: true,
             });
             expect(next).toHaveBeenCalledWith({

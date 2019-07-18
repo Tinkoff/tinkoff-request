@@ -16,7 +16,6 @@ export interface Options extends Partial<CircuitBreakerOptions> {
  *
  * metaInfo:
  *      open {boolean} - is current request was block by Circuit Breaker
- *      breaker {CircuitBreaker} - instance of current Circuit Breaker
  *
  * @param {Function} [getKey=() => ''] allow to divide requests to different instances of Circuit Breaker, by default
  *              only one Circuit Breaker instance is created
@@ -76,7 +75,7 @@ export default (
             const breaker = getBreaker(state);
 
             if (breaker.shouldThrow()) {
-                context.updateMeta(CIRCUIT_BREAKER_META, {
+                context.updateExternalMeta(CIRCUIT_BREAKER_META, {
                     open: true,
                 });
 
@@ -86,19 +85,19 @@ export default (
                 });
             }
 
-            context.updateMeta(CIRCUIT_BREAKER_META, {
+            context.updateInternalMeta(CIRCUIT_BREAKER_META, {
                 breaker,
             });
             next();
         },
         complete: (context, next) => {
-            const { breaker } = context.getMeta(CIRCUIT_BREAKER_META) as { breaker: CircuitBreaker };
+            const { breaker } = context.getInternalMeta(CIRCUIT_BREAKER_META) as { breaker: CircuitBreaker };
 
             breaker.success();
             next();
         },
         error: (context, next) => {
-            const { breaker } = context.getMeta(CIRCUIT_BREAKER_META) as { breaker: CircuitBreaker };
+            const { breaker } = context.getInternalMeta(CIRCUIT_BREAKER_META) as { breaker: CircuitBreaker };
             const { error } = context.getState();
 
             breaker.failure(error);

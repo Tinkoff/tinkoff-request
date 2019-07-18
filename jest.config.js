@@ -10,6 +10,7 @@ module.exports = {
             tsConfig: "tsconfig.json"
         }
     },
+    coveragePathIgnorePatterns: ["/node_modules/", "/lib/"],
     testMatch: [
         "**/*.spec.(ts|js)"
     ],

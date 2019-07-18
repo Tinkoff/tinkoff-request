@@ -16,14 +16,14 @@ const plugin = validate({ validator, errorValidator });
 const context = new Context();
 
 context.setState = jest.fn(context.setState.bind(context));
-context.updateMeta = jest.fn(context.updateMeta.bind(context));
+context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
 describe('plugins/validate/validate', () => {
     beforeEach(() => {
         // @ts-ignore
         context.setState.mockClear();
         // @ts-ignore
-        context.updateMeta.mockClear();
+        context.updateExternalMeta.mockClear();
     });
 
     it('if validator returns undefined plugin should not return any state or call next callback', () => {
@@ -33,7 +33,7 @@ describe('plugins/validate/validate', () => {
 
         expect(plugin.complete(context, next, null)).toBeUndefined();
         expect(context.setState).not.toHaveBeenCalled();
-        expect(context.updateMeta).toHaveBeenCalledWith(VALIDATE, { validated: true });
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(VALIDATE, { validated: true });
         expect(next).toHaveBeenCalledWith();
     });
 
@@ -78,10 +78,10 @@ describe('plugins/validate/validate', () => {
             status: Status.COMPLETE,
             error: null,
         });
-        expect(context.updateMeta).toHaveBeenCalledWith(VALIDATE, {
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(VALIDATE, {
             errorValidated: true,
         });
-        expect(context.updateMeta).toHaveBeenCalledWith(VALIDATE, {
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(VALIDATE, {
             error,
         });
     });

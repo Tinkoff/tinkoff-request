@@ -30,7 +30,7 @@ export default ({ validator = nothing, allowFallback = true, errorValidator = no
         const { request } = state;
         const error = validator(state);
 
-        context.updateMeta(VALIDATE, {
+        context.updateExternalMeta(VALIDATE, {
             validated: !error,
         });
 
@@ -53,12 +53,12 @@ export default ({ validator = nothing, allowFallback = true, errorValidator = no
         const state = context.getState();
         const isSuccess = errorValidator(state);
 
-        context.updateMeta(VALIDATE, {
+        context.updateExternalMeta(VALIDATE, {
             errorValidated: !!isSuccess,
         });
 
         if (isSuccess) {
-            context.updateMeta(VALIDATE, {
+            context.updateExternalMeta(VALIDATE, {
                 error: state.error,
             });
 

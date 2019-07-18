@@ -46,7 +46,7 @@ export default ({
             const cacheKey = getCacheKeyUtil(context, getCacheKey);
 
             if (lruCache.has(cacheKey)) {
-                context.updateMeta(metaTypes.CACHE, {
+                context.updateExternalMeta(metaTypes.CACHE, {
                     memoryCache: true,
                     memoryCacheOutdated: false,
                 });
@@ -63,7 +63,7 @@ export default ({
             if (outdated) {
                 const request = context.getRequest();
 
-                context.updateMeta(metaTypes.CACHE, {
+                context.updateExternalMeta(metaTypes.CACHE, {
                     memoryCache: true,
                     memoryCacheOutdated: true,
                 });
@@ -74,6 +74,7 @@ export default ({
                         makeRequest({
                             ...request,
                             memoryCacheForce: true,
+                            memoryCacheBackground: true,
                         }),
                     15
                 ); // run background request to update cache
@@ -91,6 +92,10 @@ export default ({
             const ttl = prop('memoryCacheTtl', context.getRequest());
 
             lruCache.set(cacheKey, context.getResponse(), ttl);
+
+            context.updateExternalMeta(metaTypes.CACHE, {
+                memoryCacheBackground: prop('memoryCacheBackground', context.getRequest()),
+            });
 
             next();
         },
