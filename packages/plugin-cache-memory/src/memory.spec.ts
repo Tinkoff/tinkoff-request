@@ -73,7 +73,7 @@ describe('plugins/cache/memory', () => {
     });
 
     it('init, value in cache is outdated and allowStale is true', () => {
-        const plugin = memoryCache({ allowStale: true });
+        const plugin = memoryCache({ allowStale: true, staleTtl: 523 });
         const response = { a: 1 };
         const makeRequest = jest.fn();
 
@@ -84,6 +84,7 @@ describe('plugins/cache/memory', () => {
         jest.runAllTimers();
 
         expect(mockLru.get).not.toHaveBeenCalledWith('test');
+        expect(mockLru.set).toHaveBeenCalledWith('test', response, 523);
         expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheForce: true, memoryCacheBackground: true });
         expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,

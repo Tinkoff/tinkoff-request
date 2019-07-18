@@ -24,6 +24,8 @@ const CACHE_DEFAULT_TTL = 300000; // 5 min
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {boolean} [allowStale = false] is allowed to use outdated value from cache
  *      (if true outdated value will be returned and request to update it will be run in background)
+ * @param {number} [staleTtl = lruOptions.maxAge] time in ms while outdated value is preserved in cache while
+ *       executing background update
  * @param {function} memoryConstructor cache factory
  * @param {function} getCacheKey function used for generate cache key
  */
@@ -31,6 +33,7 @@ export default ({
     lruOptions = { max: 1000, maxAge: CACHE_DEFAULT_TTL },
     shouldExecute = true,
     allowStale = false,
+    staleTtl = lruOptions.maxAge || CACHE_DEFAULT_TTL,
     memoryConstructor = lru,
     getCacheKey = undefined,
 } = {}): Plugin => {
@@ -68,7 +71,7 @@ export default ({
                     memoryCacheOutdated: true,
                 });
 
-                lruCache.set(cacheKey, outdated, -1); // remember outdated value, to prevent losing it
+                lruCache.set(cacheKey, outdated, staleTtl); // remember outdated value, to prevent losing it
                 setTimeout(
                     () =>
                         makeRequest({
