@@ -163,6 +163,69 @@ describe('plugins/http', () => {
         });
     });
 
+    it('plugin should call next function once after aborting', async () => {
+        const response = { a: 3 };
+        const mockRequest = jest.fn(() => ({ body: response }));
+        let abort;
+
+        mocker.get('http://test.com/api', mockRequest);
+
+        plugin.init(
+            new Context({
+                request: {
+                    url: 'http://test.com/api',
+                    abortPromise: new Promise((res) => {
+                        abort = res;
+                    }),
+                },
+            }),
+            next,
+            null
+        );
+
+        abort('abort test');
+        await Promise.resolve();
+        jest.runAllTimers();
+
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenLastCalledWith({
+            response: 'abort test',
+            status: Status.ERROR,
+        });
+    });
+
+    it('abort should do nothing after request ended', async () => {
+        const response = { a: 3 };
+        const mockRequest = jest.fn(() => ({ body: response }));
+        let abort;
+
+        mocker.get('http://test.com/api', mockRequest);
+
+        plugin.init(
+            new Context({
+                request: {
+                    url: 'http://test.com/api',
+                    abortPromise: new Promise((res) => {
+                        abort = res;
+                    }),
+                },
+            }),
+            next,
+            null
+        );
+
+        jest.runAllTimers();
+        abort('abort after');
+
+        await Promise.resolve();
+
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenLastCalledWith({
+            response,
+            status: Status.COMPLETE,
+        });
+    });
+
     it('utils - getProtocol', () => {
         expect(getProtocol('https://github.com')).toBe('https');
         expect(getProtocol('http://github.com')).toBe('http');
