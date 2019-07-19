@@ -2,9 +2,7 @@ import httpMethods from './constants/httpMethods';
 import { ContextState } from './context/Context.h';
 import Context from './context/Context';
 
-export interface Meta {
-    [key: string]: any;
-}
+export type Meta = Record<string, any>;
 
 export interface Request {
     url: string;
@@ -24,7 +22,8 @@ export interface Next {
 
 export interface MakeRequestResult extends Promise<Response> {
     getState: () => ContextState;
-    getMeta: Context['getMeta'];
+    getInternalMeta: Context['getInternalMeta'];
+    getExternalMeta: Context['getExternalMeta'];
 }
 
 export interface MakeRequest {

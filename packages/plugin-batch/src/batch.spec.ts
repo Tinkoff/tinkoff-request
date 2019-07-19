@@ -16,7 +16,7 @@ describe('plugins/batch', () => {
 
     beforeEach(() => {
         context = new Context();
-        context.updateMeta = jest.fn(context.updateMeta.bind(context));
+        context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
     });
 
     it('test shouldExecute', () => {
@@ -41,7 +41,7 @@ describe('plugins/batch', () => {
 
         context.setState({ request: requests[0] });
         init(context, next, null);
-        expect(context.updateMeta).toHaveBeenLastCalledWith(BATCH, { batched: true });
+        expect(context.updateExternalMeta).toHaveBeenLastCalledWith(BATCH, { batched: true });
         expect(next).not.toHaveBeenCalled();
         expect(makeGroupedRequest).not.toHaveBeenCalled();
 

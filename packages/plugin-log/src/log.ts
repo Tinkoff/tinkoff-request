@@ -1,13 +1,14 @@
 import prop from '@tinkoff/utils/object/prop';
+import pick from '@tinkoff/utils/object/pick';
 import { Context, Plugin } from '@tinkoff/request-core';
 import { LOG } from './constants/metaTypes';
 
 const fillDuration = (context: Context) => {
-    const meta = context.getMeta(LOG);
+    const meta = context.getExternalMeta(LOG);
     const end = Date.now();
     const duration = end - meta.start;
 
-    context.updateMeta(LOG, {
+    context.updateExternalMeta(LOG, {
         end,
         duration,
     });
@@ -28,6 +29,8 @@ const defaultLogger = (name: string): Logger => {
         error: (...args) => console.error(name, ...args), // tslint:disable-line:no-console
     };
 };
+
+const getInfo = pick(['url', 'query', 'payload']);
 
 /**
  * Logs request events and timing
@@ -54,12 +57,12 @@ export default ({ name = '', logger = defaultLogger }): Plugin => {
             const silent = prop('silent', request);
 
             if (!silent) {
-                log.info('init', request.url, request.query, request.payload);
+                log.info('init', getInfo(request));
             }
 
             log.debug('init', request);
 
-            context.updateMeta(LOG, {
+            context.updateExternalMeta(LOG, {
                 start,
             });
 
@@ -68,15 +71,14 @@ export default ({ name = '', logger = defaultLogger }): Plugin => {
         complete: (context, next) => {
             fillDuration(context);
 
-            const state = context.getState();
             const request = context.getRequest();
             const silent = prop('silent', request);
 
             if (!silent) {
-                log.info('complete', request.url, state.meta);
+                log.info('complete', getInfo(request), context.getExternalMeta());
             }
 
-            log.debug('complete', state);
+            log.debug('complete', context.getState(), context.getExternalMeta(), context.getInternalMeta());
 
             next();
         },
@@ -86,9 +88,9 @@ export default ({ name = '', logger = defaultLogger }): Plugin => {
 
             fillDuration(context);
             if (!silent) {
-                log.error('error', request.url, context.getState());
+                log.error('error', getInfo(request), context.getState().error, context.getExternalMeta());
             }
-            log.debug('error', context.getState());
+            log.debug('error', context.getState(), context.getExternalMeta(), context.getInternalMeta());
 
             next();
         },

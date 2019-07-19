@@ -17,7 +17,7 @@ const KEY_LIMIT = 100;
  *      fallbackCacheForce {boolean} - plugin will only be executed on complete phase
  *
  * metaInfo:
- *      fallback {boolean} - is current request was returned from fallback
+ *      fallbackCache {boolean} - is current request was returned from fallback
  *
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {function} shouldFallback should fallback value be returned from cache
@@ -49,7 +49,7 @@ export default ({
 
             fallbackFileCache.get(encodeURIComponent(key), (err, result) => {
                 if (!err && result) {
-                    context.updateMeta(metaTypes.CACHE, {
+                    context.updateExternalMeta(metaTypes.CACHE, {
                         fallbackCache: true,
                     });
 

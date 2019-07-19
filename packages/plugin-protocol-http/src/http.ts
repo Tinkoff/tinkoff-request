@@ -17,6 +17,16 @@ if (isBrowser) {
 // TODO Remove then resolving https://github.com/visionmedia/superagent/issues/1496
 export const getProtocol = (url: string) => (new URL(url).protocol.indexOf('https') === 0 ? 'https' : 'http');
 
+const getError = (err) => {
+    const res = err.response || {};
+
+    return Object.assign(new Error(err.message), {
+        stack: err.stack,
+        status: err.status,
+        text: res.text,
+    });
+};
+
 /**
  * Makes http/https request.
  * Uses `superagent` library.
@@ -138,7 +148,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     return;
                 }
 
-                context.updateMeta(PROTOCOL_HTTP, {
+                context.updateInternalMeta(PROTOCOL_HTTP, {
                     response,
                 });
 
@@ -146,7 +156,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     next({
                         status: Status.ERROR,
                         response: response && response.body,
-                        error: err,
+                        error: getError(err),
                     });
                 } else {
                     next({
@@ -156,7 +166,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 }
             });
 
-            context.updateMeta(PROTOCOL_HTTP, {
+            context.updateInternalMeta(PROTOCOL_HTTP, {
                 request: req,
             });
         },

@@ -6,13 +6,11 @@ describe('request/Context', () => {
         expect(
             new Context({
                 request: { a: 1, url: '' },
-                meta: { b: 2 },
             }).getState()
         ).toEqual({
             request: { a: 1, url: '' },
             response: null,
             status: Status.INIT,
-            meta: { b: 2 },
             error: null,
         });
     });
@@ -23,28 +21,25 @@ describe('request/Context', () => {
         expect(context.getState()).toEqual({
             status: Status.INIT,
             request: null,
-            meta: {},
             response: null,
             error: null,
         });
 
-        context.setState({ status: Status.COMPLETE, meta: { test: '123' } });
+        context.setState({ status: Status.COMPLETE });
         expect(context.getState()).toEqual({
             status: Status.COMPLETE,
             request: null,
-            meta: { test: '123' },
             response: null,
             error: null,
         });
 
         const error = new Error('pfpf');
 
-        context.setState({ error, status: Status.ERROR, meta: { a: 1 } });
+        context.setState({ error, status: Status.ERROR });
         expect(context.getState()).toEqual({
             error,
             status: Status.ERROR,
             request: null,
-            meta: { a: 1 },
             response: null,
         });
     });
@@ -53,13 +48,20 @@ describe('request/Context', () => {
         const context = new Context();
         const name = 'test';
 
-        expect(context.getMeta(name)).toBeUndefined();
+        expect(context.getInternalMeta(name)).toBeUndefined();
+        expect(context.getExternalMeta(name)).toBeUndefined();
 
-        context.updateMeta(name, { a: 1, b: 2 });
-        expect(context.getMeta(name)).toEqual({ a: 1, b: 2 });
+        context.updateInternalMeta(name, { a: 1, b: 2 });
+        expect(context.getInternalMeta(name)).toEqual({ a: 1, b: 2 });
+        expect(context.getExternalMeta(name)).toBeUndefined();
 
-        context.updateMeta(name, { b: 3, c: 4 });
-        expect(context.getMeta(name)).toEqual({ a: 1, b: 3, c: 4 });
+        context.updateInternalMeta(name, { b: 3, c: 4 });
+        expect(context.getInternalMeta(name)).toEqual({ a: 1, b: 3, c: 4 });
+        expect(context.getExternalMeta(name)).toBeUndefined();
+
+        context.updateExternalMeta(name, { b: 5, c: 6 });
+        expect(context.getInternalMeta(name)).toEqual({ a: 1, b: 3, c: 4 });
+        expect(context.getExternalMeta(name)).toEqual({ b: 5, c: 6 });
     });
 
     it('get status', () => {

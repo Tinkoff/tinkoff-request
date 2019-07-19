@@ -47,7 +47,7 @@ describe('plugins/circuit-breaker', () => {
     it('should pass requests with no changes', () => {
         plugin.init(context, next, makeRequest);
         expect(next).toHaveBeenCalledWith();
-        expect(context.getMeta(CIRCUIT_BREAKER_META)).toMatchObject({
+        expect(context.getInternalMeta(CIRCUIT_BREAKER_META)).toMatchObject({
             breaker: expect.any(Object),
         });
 
@@ -57,14 +57,13 @@ describe('plugins/circuit-breaker', () => {
 
     it('should end requests with throw when `failureThreshold` is reached', () => {
         runFailure(6);
-        context.setState({ meta: {} });
 
         plugin.init(context, next, makeRequest);
         expect(next).toHaveBeenCalledWith({
             status: Status.ERROR,
             error: new Error('error 5'),
         });
-        expect(context.getMeta(CIRCUIT_BREAKER_META)).toEqual({
+        expect(context.getExternalMeta(CIRCUIT_BREAKER_META)).toEqual({
             open: true,
         });
     });
@@ -81,13 +80,12 @@ describe('plugins/circuit-breaker', () => {
         plugin.init(context, next, makeRequest);
         expect(next).toHaveBeenCalledWith();
 
-        context.setState({ meta: {} });
         plugin.init(context, next, makeRequest);
         expect(next).toHaveBeenCalledWith({
             status: Status.ERROR,
             error: new Error('error 5'),
         });
-        expect(context.getMeta(CIRCUIT_BREAKER_META)).toEqual({
+        expect(context.getExternalMeta(CIRCUIT_BREAKER_META)).toEqual({
             open: true,
         });
     });
@@ -98,13 +96,12 @@ describe('plugins/circuit-breaker', () => {
 
         runFailure(5, false);
         next.mockClear();
-        context.setState({ meta: {} });
 
         runFailure(10, false);
         plugin.init(context, next, makeRequest);
 
         expect(next).toHaveBeenCalledWith();
-        expect(context.getMeta(CIRCUIT_BREAKER_META)).toEqual({
+        expect(context.getInternalMeta(CIRCUIT_BREAKER_META)).toEqual({
             breaker: expect.any(CircuitBreaker),
         });
     });
@@ -122,9 +119,11 @@ describe('plugins/circuit-breaker', () => {
         plugin.init(context1, next, makeRequest);
         plugin.init(context2, next, makeRequest);
 
-        expect(getKey).toHaveBeenCalledWith({ ...context1.getState(), meta: {} });
-        expect(getKey).toHaveBeenCalledWith({ ...context2.getState(), meta: {} });
+        expect(getKey).toHaveBeenCalledWith({ ...context1.getState() });
+        expect(getKey).toHaveBeenCalledWith({ ...context2.getState() });
 
-        expect(context1.getMeta(CIRCUIT_BREAKER_META).breaker).not.toBe(context2.getMeta(CIRCUIT_BREAKER_META).breaker);
+        expect(context1.getInternalMeta(CIRCUIT_BREAKER_META).breaker).not.toBe(
+            context2.getInternalMeta(CIRCUIT_BREAKER_META).breaker
+        );
     });
 });

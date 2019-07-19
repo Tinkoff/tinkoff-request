@@ -21,6 +21,5 @@ options:
 
 metaInfo:
      open {boolean} - is current request was block by Circuit Breaker
-     breaker {CircuitBreaker} - instance of current Circuit Breaker
 ```
 

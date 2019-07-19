@@ -17,7 +17,8 @@ const plugin = etagCache({ getCacheKey });
 const next = jest.fn();
 const context = new Context({ request: { url: 'test' } });
 
-context.updateMeta = jest.fn(context.updateMeta.bind(context));
+context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
+context.updateInternalMeta = jest.fn(context.updateInternalMeta.bind(context));
 
 describe('plugins/cache/etag', () => {
     beforeEach(() => {
@@ -26,8 +27,9 @@ describe('plugins/cache/etag', () => {
         mockLru.has.mockClear();
         mockLru.peek.mockClear();
         next.mockClear();
-        context.setState({ meta: {} });
-        (context.updateMeta as any).mockClear();
+        (context as any).internalMeta = {};
+        (context.updateExternalMeta as any).mockClear();
+        (context.updateInternalMeta as any).mockClear();
     });
 
     it('init: no cache value', () => {
@@ -49,7 +51,7 @@ describe('plugins/cache/etag', () => {
         plugin.init(context, next, null);
 
         expect(mockLru.get).toHaveBeenCalledWith('test');
-        expect(context.updateMeta).toHaveBeenCalledWith(ETAG, {
+        expect(context.updateInternalMeta).toHaveBeenCalledWith(ETAG, {
             value: response,
         });
         expect(next).toHaveBeenCalledWith({
@@ -65,7 +67,7 @@ describe('plugins/cache/etag', () => {
     it('complete: should ignore responses without etag header', () => {
         const getHeader = jest.fn();
 
-        context.updateMeta('PROTOCOL_HTTP', {
+        context.updateInternalMeta('PROTOCOL_HTTP', {
             response: {
                 get: getHeader,
             },
@@ -84,7 +86,7 @@ describe('plugins/cache/etag', () => {
         const getHeader = jest.fn(() => etag);
 
         context.setState({ response });
-        context.updateMeta('PROTOCOL_HTTP', {
+        context.updateInternalMeta('PROTOCOL_HTTP', {
             response: {
                 get: getHeader,
             },
@@ -104,7 +106,7 @@ describe('plugins/cache/etag', () => {
         context.setState({ error: Object.assign(new Error(), { status: 305 }) });
 
         plugin.error(context, next, null);
-        expect(context.updateMeta).not.toHaveBeenCalled();
+        expect(context.updateInternalMeta).not.toHaveBeenCalled();
         expect(next).toHaveBeenCalledWith();
     });
 
@@ -112,19 +114,19 @@ describe('plugins/cache/etag', () => {
         context.setState({ error: Object.assign(new Error(), { status: 304 }) });
 
         plugin.error(context, next, null);
-        expect(context.updateMeta).not.toHaveBeenCalled();
+        expect(context.updateExternalMeta).not.toHaveBeenCalled();
         expect(next).toHaveBeenCalledWith();
     });
 
     it('error: if request failed with 304 status return value from cache', () => {
         const response = { a: 1 };
-        context.updateMeta(ETAG, {
+        context.updateInternalMeta(ETAG, {
             value: response,
         });
         context.setState({ error: Object.assign(new Error(), { status: 304 }) });
 
         plugin.error(context, next, null);
-        expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             etagCache: true,
         });
         expect(next).toHaveBeenCalledWith({

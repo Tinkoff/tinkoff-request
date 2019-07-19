@@ -17,6 +17,6 @@ requestParams:
     fallbackCacheForce {boolean} - plugin will only be executed on complete phase
 
 metaInfo:
-    fallback {boolean} - is current request was returned from fallback
+    fallbackCache {boolean} - is current request was returned from fallback
 ```
 

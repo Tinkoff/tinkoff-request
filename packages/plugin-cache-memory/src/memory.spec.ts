@@ -16,7 +16,7 @@ const plugin = memoryCache({ getCacheKey });
 const next = jest.fn();
 const context = new Context({ request: { url: 'test' } });
 
-context.updateMeta = jest.fn(context.updateMeta.bind(context));
+context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
 describe('plugins/cache/memory', () => {
     beforeEach(() => {
@@ -25,7 +25,6 @@ describe('plugins/cache/memory', () => {
         mockLru.has.mockClear();
         mockLru.peek.mockClear();
         next.mockClear();
-        context.setState({ meta: {} });
     });
 
     it('init, no cache value', () => {
@@ -47,7 +46,7 @@ describe('plugins/cache/memory', () => {
         plugin.init(context, next, null);
 
         expect(mockLru.get).toHaveBeenCalledWith('test');
-        expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
             memoryCacheOutdated: false,
         });
@@ -74,7 +73,7 @@ describe('plugins/cache/memory', () => {
     });
 
     it('init, value in cache is outdated and allowStale is true', () => {
-        const plugin = memoryCache({ allowStale: true });
+        const plugin = memoryCache({ allowStale: true, staleTtl: 523 });
         const response = { a: 1 };
         const makeRequest = jest.fn();
 
@@ -85,8 +84,9 @@ describe('plugins/cache/memory', () => {
         jest.runAllTimers();
 
         expect(mockLru.get).not.toHaveBeenCalledWith('test');
-        expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheForce: true });
-        expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
+        expect(mockLru.set).toHaveBeenCalledWith('test', response, 523);
+        expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheForce: true, memoryCacheBackground: true });
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
             memoryCacheOutdated: true,
         });
@@ -109,8 +109,13 @@ describe('plugins/cache/memory', () => {
         jest.runAllTimers();
 
         expect(mockLru.get).not.toHaveBeenCalledWith('test');
-        expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheAllowStale: true, memoryCacheForce: true });
-        expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
+        expect(makeRequest).toHaveBeenCalledWith({
+            url: 'test',
+            memoryCacheAllowStale: true,
+            memoryCacheForce: true,
+            memoryCacheBackground: true,
+        });
+        expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
             memoryCacheOutdated: true,
         });

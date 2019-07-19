@@ -44,13 +44,13 @@ describe('plugins/cache/fallback', () => {
         const next = jest.fn();
 
         mockPersistentCache.get.mockImplementation((_, cb) => cb(null, fromCache));
-        context.updateMeta = jest.fn(context.updateMeta.bind(context));
+        context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
         plugin.error(context, next, null);
         expect(getCacheKey).toHaveBeenLastCalledWith(request);
         expect(mockPersistentCache.put).not.toHaveBeenCalled();
         expect(mockPersistentCache.get).toHaveBeenLastCalledWith(encodeURIComponent(request.url), expect.any(Function));
-        expect(context.updateMeta).toHaveBeenLastCalledWith(metaTypes.CACHE, { fallbackCache: true });
+        expect(context.updateExternalMeta).toHaveBeenLastCalledWith(metaTypes.CACHE, { fallbackCache: true });
         expect(next).toHaveBeenLastCalledWith({ status: Status.COMPLETE, response: fromCache });
     });
 
@@ -62,13 +62,13 @@ describe('plugins/cache/fallback', () => {
         const next = jest.fn();
 
         mockPersistentCache.get.mockImplementation((_, cb) => cb(error));
-        context.updateMeta = jest.fn(context.updateMeta.bind(context));
+        context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
         plugin.error(context, next, null);
         expect(getCacheKey).toHaveBeenLastCalledWith(request);
         expect(mockPersistentCache.put).not.toHaveBeenCalled();
         expect(mockPersistentCache.get).toHaveBeenLastCalledWith(encodeURIComponent(request.url), expect.any(Function));
-        expect(context.updateMeta).not.toHaveBeenLastCalledWith(metaTypes.CACHE, { fromFallback: true });
+        expect(context.updateExternalMeta).not.toHaveBeenLastCalledWith(metaTypes.CACHE, { fromFallback: true });
         expect(next).toHaveBeenLastCalledWith();
     });
 
@@ -80,14 +80,14 @@ describe('plugins/cache/fallback', () => {
         const context = new Context({ request, error });
         const next = jest.fn();
 
-        context.updateMeta = jest.fn(context.updateMeta.bind(context));
+        context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
         plugin.error(context, next, null);
         expect(shouldFallback).toHaveBeenCalledWith(context.getState());
         expect(getCacheKey).not.toHaveBeenCalled();
         expect(mockPersistentCache.put).not.toHaveBeenCalled();
         expect(mockPersistentCache.get).not.toHaveBeenCalled();
-        expect(context.updateMeta).not.toHaveBeenCalled();
+        expect(context.updateExternalMeta).not.toHaveBeenCalled();
         expect(next).toHaveBeenLastCalledWith();
     });
 });

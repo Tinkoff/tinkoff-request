@@ -42,7 +42,7 @@ export default ({ shouldExecute = true, getCacheKey = undefined } = {}): Plugin 
             const deduplicationKey = getCacheKeyUtil(context, getCacheKey);
 
             if (activeRequests[deduplicationKey]) {
-                context.updateMeta(metaTypes.CACHE, {
+                context.updateExternalMeta(metaTypes.CACHE, {
                     deduplicated: true,
                 });
                 activeRequests[deduplicationKey].push(next);

@@ -22,7 +22,7 @@ describe('plugins/http/utils', () => {
     beforeEach(() => {
         result = {
             getState: jest.fn(),
-            getMeta: jest.fn(() => {
+            getInternalMeta: jest.fn(() => {
                 return {
                     request,
                     response,
@@ -33,7 +33,7 @@ describe('plugins/http/utils', () => {
 
     it('get headers', () => {
         expect(getHeaders(result)).toEqual(header);
-        expect(result.getMeta).toHaveBeenCalledWith(PROTOCOL_HTTP);
+        expect(result.getInternalMeta).toHaveBeenCalledWith(PROTOCOL_HTTP);
     });
 
     it('get header', () => {

@@ -4,12 +4,12 @@ import { CACHE } from './constants/metaTypes';
 import defaultCacheKey from './cacheKey';
 
 export default (context: Context, cacheKey = defaultCacheKey) => {
-    let key = prop('key', context.getMeta(CACHE));
+    let key = prop('key', context.getInternalMeta(CACHE));
 
     if (!key) {
         key = cacheKey(context.getRequest());
 
-        context.updateMeta(CACHE, {
+        context.updateInternalMeta(CACHE, {
             key,
         });
     }

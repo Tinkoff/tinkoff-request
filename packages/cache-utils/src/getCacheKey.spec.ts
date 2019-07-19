@@ -3,23 +3,23 @@ import getCacheKey from './getCacheKey';
 import { CACHE } from './constants/metaTypes';
 
 const context = {
-    getMeta: jest.fn(),
+    getInternalMeta: jest.fn(),
     getRequest: jest.fn(),
-    updateMeta: jest.fn(),
+    updateInternalMeta: jest.fn(),
 };
 
 describe('utils/getCacheKey', () => {
     beforeEach(() => {
-        context.getMeta.mockClear();
+        context.getInternalMeta.mockClear();
         context.getRequest.mockClear();
-        context.updateMeta.mockClear();
+        context.updateInternalMeta.mockClear();
     });
 
     it('if already in meta just return it', () => {
-        context.getMeta.mockImplementation(() => ({ key: 'test' }));
+        context.getInternalMeta.mockImplementation(() => ({ key: 'test' }));
 
         expect(getCacheKey((context as any) as Context)).toBe('test');
-        expect(context.getMeta).toHaveBeenCalledWith(CACHE);
+        expect(context.getInternalMeta).toHaveBeenCalledWith(CACHE);
         expect(context.getRequest).not.toHaveBeenCalled();
     });
 
@@ -27,13 +27,13 @@ describe('utils/getCacheKey', () => {
         const request = { a: 1, b: 2 };
         const getKey = jest.fn(() => 'test');
 
-        context.getMeta.mockImplementation(() => ({}));
+        context.getInternalMeta.mockImplementation(() => ({}));
         context.getRequest.mockImplementation(() => request);
 
         expect(getCacheKey((context as any) as Context, getKey)).toBe('test');
         expect(getKey).toHaveBeenCalledWith(request);
-        expect(context.updateMeta).toHaveBeenCalledWith(CACHE, { key: 'test' });
-        expect(context.getMeta).toHaveBeenCalledWith(CACHE);
+        expect(context.updateInternalMeta).toHaveBeenCalledWith(CACHE, { key: 'test' });
+        expect(context.getInternalMeta).toHaveBeenCalledWith(CACHE);
         expect(context.getRequest).toHaveBeenCalled();
     });
 
@@ -43,13 +43,13 @@ describe('utils/getCacheKey', () => {
             'aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbb aaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbb aaaaaaaaaaaaaaa';
         const getKey = jest.fn(() => key);
 
-        context.getMeta.mockImplementation(() => ({}));
+        context.getInternalMeta.mockImplementation(() => ({}));
         context.getRequest.mockImplementation(() => request);
 
         expect(getCacheKey((context as any) as Context, getKey)).toBe(key);
         expect(getKey).toHaveBeenCalledWith(request);
-        expect(context.updateMeta).toHaveBeenCalledWith(CACHE, { key: key });
-        expect(context.getMeta).toHaveBeenCalledWith(CACHE);
+        expect(context.updateInternalMeta).toHaveBeenCalledWith(CACHE, { key: key });
+        expect(context.getInternalMeta).toHaveBeenCalledWith(CACHE);
         expect(context.getRequest).toHaveBeenCalled();
     });
 });

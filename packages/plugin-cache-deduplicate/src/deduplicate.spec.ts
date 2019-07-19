@@ -27,12 +27,13 @@ describe('plugins/cache/deduplicate', () => {
         requests.forEach((request, index) => {
             const context = new Context({ request });
 
-            context.updateMeta = jest.fn(context.updateMeta.bind(context));
+            context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
+            context.updateInternalMeta = jest.fn(context.updateInternalMeta.bind(context));
 
             plugin.init(context, next, null);
-            expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, { key: request.url });
+            expect(context.updateInternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, { key: request.url });
             if (request.url === 'first' && index !== 0) {
-                expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, { deduplicated: true });
+                expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, { deduplicated: true });
             }
         });
         expect(next).toHaveBeenCalledTimes(2);
@@ -51,12 +52,13 @@ describe('plugins/cache/deduplicate', () => {
         requests.forEach((request, index) => {
             const context = new Context({ request });
 
-            context.updateMeta = jest.fn(context.updateMeta.bind(context));
+            context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
+            context.updateInternalMeta = jest.fn(context.updateInternalMeta.bind(context));
 
             plugin.init(context, next, null);
-            expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, { key: request.url });
+            expect(context.updateInternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, { key: request.url });
             if (request.url === 'first' && index !== 0) {
-                expect(context.updateMeta).toHaveBeenCalledWith(metaTypes.CACHE, { deduplicated: true });
+                expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, { deduplicated: true });
             }
         });
         expect(next).toHaveBeenCalledTimes(2);

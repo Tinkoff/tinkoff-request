@@ -5,13 +5,13 @@ import { PROTOCOL_HTTP } from './constants';
 
 // TODO: when some plugins (for example cache) break flow, plugin-http won't be called and meta will be empty
 export const _getRequest = (request: MakeRequestResult): Request | void => {
-    const meta = request.getMeta(PROTOCOL_HTTP);
+    const meta = request.getInternalMeta(PROTOCOL_HTTP);
 
     return meta && meta.request;
 };
 
 export const _getResponse = (request: MakeRequestResult): Response | void => {
-    const meta = request.getMeta(PROTOCOL_HTTP);
+    const meta = request.getInternalMeta(PROTOCOL_HTTP);
 
     return meta && meta.response;
 };
