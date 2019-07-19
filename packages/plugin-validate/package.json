@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-validate",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "Validate your responses",
   "main": "lib/validate.js",
   "typings": "lib/validate.d.ts",
@@ -23,7 +23,7 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "^0.7.1"
+    "@tinkoff/request-core": "^0.8.0"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
