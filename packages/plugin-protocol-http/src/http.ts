@@ -69,11 +69,11 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 timeout,
                 withCredentials,
                 onProgress,
-                resolveOnAbort = true,
                 abortPromise,
                 responseType,
             } = context.getRequest();
 
+            let ended = false;
             const method = httpMethod.toLowerCase();
             const req: request.SuperAgentRequest = request[method](url);
 
@@ -133,20 +133,26 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
 
             if (abortPromise) {
                 abortPromise.then((abortOptions) => {
-                    req.abort();
-                    if (resolveOnAbort || abortOptions) {
-                        next({
-                            status: Status.ERROR,
-                            response: abortOptions || {},
-                        });
+                    if (ended) {
+                        return;
                     }
+
+                    ended = true;
+                    req.abort();
+
+                    next({
+                        status: Status.ERROR,
+                        response: abortOptions || {},
+                    });
                 });
             }
 
             req.end((err, response) => {
-                if (err && isPageUnloaded) {
+                if (ended || (err && isPageUnloaded)) {
                     return;
                 }
+
+                ended = true;
 
                 context.updateInternalMeta(PROTOCOL_HTTP, {
                     response,
