@@ -189,7 +189,7 @@ describe('plugins/http', () => {
 
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenLastCalledWith({
-            response: 'abort test',
+            error: 'abort test',
             status: Status.ERROR,
         });
     });

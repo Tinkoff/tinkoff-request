@@ -142,7 +142,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
 
                     next({
                         status: Status.ERROR,
-                        response: abortOptions || {},
+                        error: abortOptions || {},
                     });
                 });
             }

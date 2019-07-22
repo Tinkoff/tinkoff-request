@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test": "jest --coverage",
-    "bootstrap": "npm i && lerna bootstrap",
+    "bootstrap": "npm i && lerna bootstrap --force-local",
     "build": "lerna run tsc",
     "watch": "lerna run watch --parallel",
     "publish": "lerna publish",
