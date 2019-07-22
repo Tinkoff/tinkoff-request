@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@tinkoff/request-core": "^0.8.0",
-    "@tinkoff/request-plugin-protocol-http": "^0.7.0",
+    "@tinkoff/request-plugin-protocol-http": "^0.9.0",
     "@types/node": "^10.11.7"
   },
   "peerDependencies": {
