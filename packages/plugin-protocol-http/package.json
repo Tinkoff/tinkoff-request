@@ -25,13 +25,14 @@
   "dependencies": {
     "@tinkoff/request-core": "^0.8.1",
     "@tinkoff/utils": "^2.0.0",
-    "superagent": "^3.8.3",
-    "superagent-jsonp": "^0.2.1",
+    "abort-controller": "^3.0.0",
+    "form-data": "^2.5.0",
+    "node-fetch": "^2.6.0",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@types/superagent": "^3.8.7",
-    "superagent-mocker-tinkoff": "^1.0.8"
+    "@types/node": "^12.7.1",
+    "jest-fetch-mock": "^2.1.2"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

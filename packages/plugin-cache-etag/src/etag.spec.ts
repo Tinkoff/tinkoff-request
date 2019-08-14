@@ -69,7 +69,7 @@ describe('plugins/cache/etag', () => {
 
         context.updateInternalMeta('PROTOCOL_HTTP', {
             response: {
-                get: getHeader,
+                headers: { get: getHeader },
             },
         });
 
@@ -88,7 +88,7 @@ describe('plugins/cache/etag', () => {
         context.setState({ response });
         context.updateInternalMeta('PROTOCOL_HTTP', {
             response: {
-                get: getHeader,
+                headers: { get: getHeader },
             },
         });
 

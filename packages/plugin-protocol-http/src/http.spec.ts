@@ -1,75 +1,60 @@
-import request from 'superagent';
-import mocker from 'superagent-mocker-tinkoff';
+import { FetchMock } from 'jest-fetch-mock';
 import { Context, Status } from '@tinkoff/request-core';
-import http, { getProtocol } from './http';
+import http from './http';
+
+const fetch: FetchMock = require('jest-fetch-mock');
+jest.mock('node-fetch', () => (...args) => fetch(...args));
 
 const plugin = http();
 const next = jest.fn();
-const mockJsonp = jest.fn((arg) => () => {});
-
-jest.mock('superagent-jsonp', () => (arg) => mockJsonp(arg));
 
 describe('plugins/http', () => {
-    beforeAll(() => {
-        mocker(request);
-    });
-
-    afterAll(() => {
-        mocker.clearRoutes();
-    });
-
     beforeEach(() => {
+        fetch.resetMocks();
         next.mockClear();
-        mocker.clearRoutes();
     });
 
-    it('request get', () => {
+    it('request get', async () => {
         const response = { a: 3 };
-        const mockRequest = jest.fn(() => ({ body: response }));
+        const mockResponse = jest.fn(() =>
+            Promise.resolve({
+                body: JSON.stringify(response),
+                init: {
+                    headers: {
+                        'Content-type': 'application/json;',
+                    },
+                },
+            })
+        );
 
-        mocker.get('test', mockRequest);
+        fetch.mockResponse(mockResponse);
 
         plugin.init(new Context({ request: { url: 'test' } }), next, null);
 
         jest.runAllTimers();
 
-        expect(mockRequest).toBeCalled();
+        expect(mockResponse).toBeCalled();
+        expect(fetch).toHaveBeenCalledWith('test', {
+            method: 'get',
+            credentials: 'same-origin',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+            },
+            signal: expect.anything(),
+        });
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
         expect(next).toHaveBeenLastCalledWith({
             response,
             status: Status.COMPLETE,
         });
     });
 
-    it('test request params', () => {
-        const mockRequest = jest.fn();
-        const jsonpObject = {};
-
-        mocker.post('test', mockRequest);
-
-        plugin.init(
-            new Context({
-                request: {
-                    url: 'test',
-                    httpMethod: 'POST',
-                    withCredentials: true,
-                    jsonp: jsonpObject,
-                    payload: {},
-                    attaches: ['file'],
-                    onProgress: () => {},
-                },
-            }),
-            next,
-            null
-        );
-
-        jest.runAllTimers();
-
-        expect(mockRequest).toBeCalled();
-        expect(mockJsonp).toBeCalledWith(jsonpObject);
-    });
-
-    it('request attaches', () => {
-        const mockRequest = jest.fn();
+    it('request attaches', async () => {
+        const mockResponse = jest.fn(() => Promise.resolve({ body: '' }));
         const payload = {
             key: 'value',
         };
@@ -84,8 +69,7 @@ describe('plugins/http', () => {
             }),
         ];
 
-        mocker.put('attaches', mockRequest);
-        mocker.post('attaches', mockRequest);
+        fetch.mockResponse(mockResponse);
 
         plugin.init(
             new Context({
@@ -94,7 +78,6 @@ describe('plugins/http', () => {
                     attaches,
                     url: 'attaches',
                     httpMethod: 'PUT',
-                    jsonp: true,
                 },
             }),
             next,
@@ -107,7 +90,6 @@ describe('plugins/http', () => {
                     attaches,
                     url: 'attaches',
                     httpMethod: 'POST',
-                    jsonp: true,
                     encodeFileName: true,
                 },
             }),
@@ -115,34 +97,46 @@ describe('plugins/http', () => {
             null
         );
 
-        jest.runAllTimers();
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
 
-        expect(mockRequest).toBeCalled();
-        expect(mockJsonp).toBeCalledWith(undefined);
+        expect(mockResponse).toBeCalled();
     });
 
-    it('error request', () => {
-        const mockRequest = jest.fn(() => ({ status: 503, body: 123 }));
+    it('error request', async () => {
+        const mockResponse = jest.fn(() => Promise.resolve({ init: { status: 503 }, body: '123' }));
 
-        mocker.get('test', mockRequest);
+        fetch.mockResponse(mockResponse);
 
         plugin.init(new Context({ request: { url: 'test' } }), next, null);
 
-        jest.runAllTimers();
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
 
-        expect(mockRequest).toBeCalled();
+        expect(mockResponse).toBeCalled();
         expect(next).toHaveBeenLastCalledWith({
             status: Status.ERROR,
-            error: new Error('503'),
-            response: null,
+            error: new Error('Service Unavailable'),
         });
     });
 
-    it('request with custom agent', () => {
+    it('request with custom agent', async () => {
         const response = { a: 3 };
-        const mockRequest = jest.fn(() => ({ body: response }));
+        const mockResponse = jest.fn(() =>
+            Promise.resolve({
+                body: JSON.stringify(response),
+                init: {
+                    headers: {
+                        'Content-type': 'application/json;',
+                    },
+                },
+            })
+        );
 
-        mocker.get('http://test.com/api', mockRequest);
+        fetch.mockResponse(mockResponse);
+
         class MockedAgent {
             requests() {}
             destroy() {}
@@ -154,9 +148,11 @@ describe('plugins/http', () => {
             null
         );
 
-        jest.runAllTimers();
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
 
-        expect(mockRequest).toBeCalled();
+        expect(mockResponse).toBeCalled();
         expect(next).toHaveBeenLastCalledWith({
             response,
             status: Status.COMPLETE,
@@ -165,10 +161,10 @@ describe('plugins/http', () => {
 
     it('plugin should call next function once after aborting', async () => {
         const response = { a: 3 };
-        const mockRequest = jest.fn(() => ({ body: response }));
+        const mockResponse = jest.fn(() => Promise.resolve({ body: JSON.stringify(response) }));
         let abort;
 
-        mocker.get('http://test.com/api', mockRequest);
+        fetch.mockResponse(mockResponse);
 
         plugin.init(
             new Context({
@@ -184,8 +180,10 @@ describe('plugins/http', () => {
         );
 
         abort('abort test');
-        await Promise.resolve();
-        jest.runAllTimers();
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
 
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenLastCalledWith({
@@ -196,10 +194,19 @@ describe('plugins/http', () => {
 
     it('abort should do nothing after request ended', async () => {
         const response = { a: 3 };
-        const mockRequest = jest.fn(() => ({ body: response }));
+        const mockResponse = jest.fn(() =>
+            Promise.resolve({
+                body: JSON.stringify(response),
+                init: {
+                    headers: {
+                        'Content-type': 'application/json;',
+                    },
+                },
+            })
+        );
         let abort;
 
-        mocker.get('http://test.com/api', mockRequest);
+        fetch.mockResponse(mockResponse);
 
         plugin.init(
             new Context({
@@ -214,20 +221,16 @@ describe('plugins/http', () => {
             null
         );
 
-        jest.runAllTimers();
-        abort('abort after');
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
 
-        await Promise.resolve();
+        abort('abort after');
 
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenLastCalledWith({
             response,
             status: Status.COMPLETE,
         });
-    });
-
-    it('utils - getProtocol', () => {
-        expect(getProtocol('https://github.com')).toBe('https');
-        expect(getProtocol('http://github.com')).toBe('http');
     });
 });
