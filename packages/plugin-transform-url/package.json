@@ -17,6 +17,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TinkoffCreditSystems/tinkoff-request/"
+  },
   "license": "ISC",
   "devDependencies": {
     "@tinkoff/request-core": "^0.7.1"
