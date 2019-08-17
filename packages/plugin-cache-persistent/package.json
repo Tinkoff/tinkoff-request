@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-persistent",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Stores responses in IndexedDB to preserve data in browser",
   "main": "lib/persistent.js",
   "typings": "lib/persistent.d.ts",
@@ -23,12 +23,12 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "^0.8.0",
+    "@tinkoff/request-cache-utils": "^0.8.1",
     "idb-keyval": "3.0.3",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "^0.8.0",
+    "@tinkoff/request-core": "^0.8.1",
     "@types/node": "^10.12.0"
   },
   "peerDependencies": {
