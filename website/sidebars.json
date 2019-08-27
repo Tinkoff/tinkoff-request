@@ -13,6 +13,7 @@
             "plugins/cache-persistent",
             "plugins/log",
             "plugins/protocol-http",
+            "plugins/protocol-jsonp",
             "plugins/transform-url",
             "plugins/validate",
             "plugins/circuit-breaker"

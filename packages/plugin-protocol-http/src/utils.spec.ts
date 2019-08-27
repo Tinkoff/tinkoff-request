@@ -1,21 +1,18 @@
 import { MakeRequestResult } from '@tinkoff/request-core';
+import { Headers } from 'node-fetch';
 import { PROTOCOL_HTTP } from './constants';
-import { abort, getHeader, getHeaders, getStatus, getText } from './utils';
+import { abort, getHeader, getHeaders, getStatus } from './utils';
 
-const header = {
+const headers = new Headers({
     a: 'aaa',
     b: 'bbb',
-};
+});
 
 describe('plugins/http/utils', () => {
-    let request = {
-        abort: jest.fn(),
-    };
-    let response = {
-        header,
-        text: 'text123',
+    const requestAbort = jest.fn();
+    const response = {
+        headers,
         status: 202,
-        get: jest.fn((name) => header[name]),
     };
     let result: MakeRequestResult;
 
@@ -24,7 +21,7 @@ describe('plugins/http/utils', () => {
             getState: jest.fn(),
             getInternalMeta: jest.fn(() => {
                 return {
-                    request,
+                    requestAbort,
                     response,
                 };
             }),
@@ -32,22 +29,14 @@ describe('plugins/http/utils', () => {
     });
 
     it('get headers', () => {
-        expect(getHeaders(result)).toEqual(header);
+        expect(getHeaders(result)).toEqual({ a: 'aaa', b: 'bbb' });
         expect(result.getInternalMeta).toHaveBeenCalledWith(PROTOCOL_HTTP);
     });
 
     it('get header', () => {
         expect(getHeader(result, 'a')).toBe('aaa');
         expect(getHeader(result, 'b')).toBe('bbb');
-        expect(getHeader(result, 'c')).toBeUndefined();
-        expect(response.get).toHaveBeenCalledWith('a');
-        expect(response.get).toHaveBeenCalledWith('b');
-        expect(response.get).toHaveBeenCalledWith('c');
-        expect(response.get).toHaveBeenCalledTimes(3);
-    });
-
-    it('get text', () => {
-        expect(getText(result)).toEqual('text123');
+        expect(getHeader(result, 'c')).toBeNull();
     });
 
     it('get status', () => {
@@ -55,8 +44,8 @@ describe('plugins/http/utils', () => {
     });
 
     it('abort request', () => {
-        expect(request.abort).not.toHaveBeenCalled();
+        expect(requestAbort).not.toHaveBeenCalled();
         abort(result);
-        expect(request.abort).toHaveBeenCalled();
+        expect(requestAbort).toHaveBeenCalled();
     });
 });

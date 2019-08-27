@@ -5,7 +5,7 @@ sidebar_label: Protocol - Http
 ---
 
 Makes http/https request.
-Uses `superagent` library.
+Uses `node-fetch` library.
 
 ```
 requestParams:
@@ -13,7 +13,6 @@ requestParams:
      url {string}
      query {object}
      queryNoCache {object} - query which wont be used in generating cache key
-     rawQueryString {string}
      headers {object}
      type {string} [='form']
      payload {object}
@@ -21,7 +20,6 @@ requestParams:
      jsonp {boolean | object}
      timeout {number}
      withCredentials {boolean}
-     onProgress {function}
      abortPromise {Promise}
 ```
 

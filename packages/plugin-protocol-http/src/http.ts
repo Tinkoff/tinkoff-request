@@ -1,10 +1,17 @@
-import request from 'superagent';
-import requestJSONP from 'superagent-jsonp';
-import keys from '@tinkoff/utils/object/keys';
-import { Status, Plugin, HttpMethods } from '@tinkoff/request-core';
-import { PROTOCOL_HTTP } from './constants';
+import nodeFetch from 'node-fetch';
+import AbortController from 'abort-controller';
+
+import noop from '@tinkoff/utils/function/noop';
+import propOr from '@tinkoff/utils/object/propOr';
+import { HttpMethods, Plugin, Status } from '@tinkoff/request-core';
 import { Agent } from 'https';
 
+import { addQuery, serialize, normalizeUrl } from './url';
+import { PROTOCOL_HTTP, REQUEST_TYPES } from './constants';
+import parse from './parse';
+import createForm from './form';
+
+const fetch = nodeFetch;
 const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;
 
@@ -14,44 +21,46 @@ if (isBrowser) {
     });
 }
 
-// TODO Remove then resolving https://github.com/visionmedia/superagent/issues/1496
-export const getProtocol = (url: string) => (new URL(url).protocol.indexOf('https') === 0 ? 'https' : 'http');
-
 const getError = (err) => {
-    const res = err.response || {};
-
     return Object.assign(new Error(err.message), {
         stack: err.stack,
         status: err.status,
-        text: res.text,
+        text: err.text,
     });
 };
 
 /**
  * Makes http/https request.
- * Uses `superagent` library.
+ * Uses `node-fetch` library.
  *
  * requestParams:
  *      httpMethod {string} [='get']
  *      url {string}
  *      query {object}
  *      queryNoCache {object} - query which wont be used in generating cache key
- *      rawQueryString {string}
  *      headers {object}
  *      type {string} [='form']
  *      payload {object}
  *      attaches {array}
- *      jsonp {boolean | object}
  *      timeout {number}
  *      withCredentials {boolean}
- *      onProgress {function}
  *      abortPromise {Promise}
  *
  * @param {agent} [agent = Agent] set custom http in node js. The browser ignores this parameter.
  * @return {{init: init}}
  */
 export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plugin => {
-    const customAgent = isBrowser ? undefined : agent;
+    let customAgent;
+
+    if (!isBrowser && agent) {
+        customAgent = (parsedUrl) => {
+            if (parsedUrl.protocol === 'http:') {
+                return agent.http;
+            }
+
+            return agent.https;
+        };
+    }
 
     return {
         init: (context, next) => {
@@ -60,121 +69,147 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 url,
                 query,
                 queryNoCache,
-                rawQueryString,
                 headers,
                 type = 'form',
                 payload,
                 attaches = [],
-                jsonp,
                 timeout,
                 withCredentials,
-                onProgress,
                 abortPromise,
                 responseType,
             } = context.getRequest();
 
             let ended = false;
             const method = httpMethod.toLowerCase();
-            const req: request.SuperAgentRequest = request[method](url);
+            const noBody = method === HttpMethods.GET || method === HttpMethods.HEAD;
 
-            if (headers) {
-                Object.keys(headers).forEach((key) => req.set(key, headers[key]));
-            }
+            let body;
+            let formHeaders;
 
             if (attaches.length) {
-                keys(payload).forEach((key) => req.field(key, payload[key]));
-            } else {
-                req[method === 'get' ? 'query' : 'send'](payload);
+                body = createForm(payload, isBrowser ? attaches : []);
 
-                if (type !== 'multipart/form-data') {
-                    req.type(type);
+                formHeaders = body.getHeaders && body.getHeaders();
+            } else if (!noBody) {
+                if (type === 'form') {
+                    body = serialize(payload);
+                } else {
+                    body = JSON.stringify(payload);
                 }
             }
 
-            if (responseType) {
-                req.responseType(responseType);
-            }
+            let timer;
+            let signal;
 
-            req.query(Object.assign({}, queryNoCache, query))
-                // to be able to process requests with different array formats https://github.com/visionmedia/superagent/issues/629
-                .query(rawQueryString)
-                .timeout({
-                    response: timeout,
-                    deadline: timeout * 1.5,
-                });
+            if (AbortController) {
+                const controller = new AbortController();
+                signal = controller.signal;
 
-            if (withCredentials) {
-                req.withCredentials();
-            }
-
-            // Set custom agent
-            if (customAgent) {
-                req.agent(customAgent[getProtocol(url)]);
-            }
-
-            if (jsonp) {
-                req.use(typeof jsonp === 'object' ? requestJSONP(jsonp) : requestJSONP());
-            }
-
-            if (onProgress) {
-                req.on('progress', onProgress);
-            }
-
-            attaches.forEach((file) => {
-                if (!isBrowser || !(file instanceof window.Blob)) {
-                    return;
-                }
-
-                const fileUploadName = (file as any).uploadName || (file as any).name;
-                const fileFieldName = (file as any).fieldName || 'file';
-
-                req.attach(fileFieldName, file, encodeURIComponent(fileUploadName));
-            });
-
-            if (abortPromise) {
-                abortPromise.then((abortOptions) => {
+                const abort = (abortOptions?) => {
                     if (ended) {
                         return;
                     }
 
                     ended = true;
-                    req.abort();
+                    controller.abort();
 
                     next({
                         status: Status.ERROR,
                         error: abortOptions || {},
                     });
-                });
-            }
+                };
 
-            req.end((err, response) => {
-                if (ended || (err && isPageUnloaded)) {
-                    return;
+                if (abortPromise) {
+                    abortPromise.then(abort);
                 }
 
-                ended = true;
+                if (isBrowser && timeout) {
+                    // node-fetch has timeout option, so add check only for browser
+                    timer = setTimeout(() => {
+                        abort();
+                    }, timeout);
+                }
 
                 context.updateInternalMeta(PROTOCOL_HTTP, {
-                    response,
+                    requestAbort: abort,
                 });
+            } else {
+                if (isBrowser && timeout) {
+                    // node-fetch has timeout option, so add check only for browser
+                    timer = setTimeout(() => {
+                        next({
+                            status: Status.ERROR,
+                            error: new Error('Request timed out'),
+                        });
 
-                if (err) {
-                    next({
-                        status: Status.ERROR,
-                        response: response && response.body,
-                        error: getError(err),
+                        ended = true;
+                    }, timeout);
+                }
+            }
+
+            fetch(
+                addQuery(normalizeUrl(url), {
+                    ...(noBody ? payload : {}),
+                    ...queryNoCache,
+                    ...query,
+                }),
+                {
+                    signal,
+                    method,
+                    headers: { 'Content-type': propOr(type, type, REQUEST_TYPES), ...formHeaders, ...headers },
+                    agent: customAgent,
+                    credentials: withCredentials ? 'include' : 'same-origin',
+                    body,
+                    timeout,
+                }
+            )
+                .then((response: Response) => {
+                    context.updateInternalMeta(PROTOCOL_HTTP, {
+                        response,
                     });
-                } else {
+
+                    if (response.ok) {
+                        if (response[responseType]) {
+                            return response[responseType]();
+                        }
+
+                        return parse(response);
+                    } else {
+                        return response
+                            .text()
+                            .catch(noop)
+                            .then((text) => {
+                                throw Object.assign(new Error(response.statusText), {
+                                    text,
+                                    status: response.status,
+                                });
+                            });
+                    }
+                })
+                .then((response) => {
+                    if (ended) {
+                        return;
+                    }
+
                     next({
                         status: Status.COMPLETE,
-                        response: response && response.body,
+                        response: response,
                     });
-                }
-            });
+                })
+                .catch((err) => {
+                    if (ended || (err && isPageUnloaded)) {
+                        return;
+                    }
 
-            context.updateInternalMeta(PROTOCOL_HTTP, {
-                request: req,
-            });
+                    next({
+                        status: Status.ERROR,
+                        error: getError(err),
+                    });
+                })
+                .then(() => {
+                    ended = true;
+                    timer && clearTimeout(timer);
+                });
         },
     };
 };
