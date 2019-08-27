@@ -7,7 +7,7 @@ sidebar_label: Plugins
 Plugins can inject to the request flow to change its execution or adjust request\response data.
 
 ## List of plugins
-1. `protocol/http` - base plugin to make request, based on [superagent](https://www.npmjs.com/package/superagent)
+1. `protocol/http` - base plugin to make request, based on [node-fetch](https://github.com/bitinn/node-fetch)
 1. `cache/deduplicate` - deduplicate identical requests
 1. `cache/memory` - caches responses into memory
 1. `cache/etag` - [!server only] cache based on etag http-header

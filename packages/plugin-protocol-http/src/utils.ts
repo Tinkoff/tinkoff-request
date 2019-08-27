@@ -1,10 +1,9 @@
 import { MakeRequestResult } from '@tinkoff/request-core';
 import prop from '@tinkoff/utils/object/prop';
-import { Response } from 'superagent';
 import { PROTOCOL_HTTP } from './constants';
 
 // TODO: when some plugins (for example cache) break flow, plugin-http won't be called and meta will be empty
-export const _getResponse = (request: MakeRequestResult): Response | void => {
+export const _getResponse = (request: MakeRequestResult): Response => {
     const meta = request.getInternalMeta(PROTOCOL_HTTP);
 
     return meta && meta.response;
