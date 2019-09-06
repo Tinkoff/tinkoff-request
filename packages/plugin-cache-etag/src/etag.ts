@@ -1,5 +1,3 @@
-import lru from 'lru-cache';
-
 import { Plugin, Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 import { getHeader } from '@tinkoff/request-plugin-protocol-http';
@@ -29,7 +27,7 @@ import { ETAG } from './constants';
 export default ({
     lruOptions = { max: 1000 },
     shouldExecute = true,
-    memoryConstructor = lru,
+    memoryConstructor = (options) => new (require('lru-cache'))(options),
     getCacheKey = undefined,
 } = {}): Plugin => {
     const lruCache = memoryConstructor({
