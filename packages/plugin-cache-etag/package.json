@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-etag",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Caching based on etag http-header",
   "main": "lib/etag.js",
   "browser": "lib/noop",
