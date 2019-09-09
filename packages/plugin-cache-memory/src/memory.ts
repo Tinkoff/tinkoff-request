@@ -1,6 +1,5 @@
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
-import lru from 'lru-cache';
 
 import { Plugin, Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
@@ -34,7 +33,7 @@ export default ({
     shouldExecute = true,
     allowStale = false,
     staleTtl = lruOptions.maxAge || CACHE_DEFAULT_TTL,
-    memoryConstructor = lru,
+    memoryConstructor = (options) => new (require('lru-cache'))(options),
     getCacheKey = undefined,
 } = {}): Plugin => {
     const lruCache = memoryConstructor({
