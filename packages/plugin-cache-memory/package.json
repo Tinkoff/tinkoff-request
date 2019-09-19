@@ -1,14 +1,13 @@
 {
   "name": "@tinkoff/request-plugin-cache-memory",
   "version": "0.8.2",
-  "description": "Memory cache for responses",
+  "description": "Memory cache for tinkoff request",
   "main": "lib/memory.js",
   "typings": "lib/memory.d.ts",
   "sideEffects": false,
   "scripts": {
     "tsc": "tsc",
-    "watch": "tsc -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "tsc -w"
   },
   "keywords": [
     "request"
