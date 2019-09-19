@@ -10,7 +10,8 @@
     "watch": "tsc -w"
   },
   "keywords": [
-    "request"
+    "request",
+    "memory"
   ],
   "repository": {
     "type": "git",
