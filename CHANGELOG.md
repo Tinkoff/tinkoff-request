@@ -1,5 +1,8 @@
 # Change Log
 
+## protocol-http@0.10.1
+- fix empty query parameters
+
 ## protocol-jsonp@0.1.0
 - added new plugin
 
