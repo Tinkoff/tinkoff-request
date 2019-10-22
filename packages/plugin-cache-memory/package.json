@@ -6,6 +6,7 @@
   "typings": "lib/memory.d.ts",
   "sideEffects": false,
   "scripts": {
+    "prepack": "tsc",
     "tsc": "tsc",
     "watch": "tsc -w"
   },

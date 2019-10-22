@@ -7,6 +7,7 @@
   "browser": "lib/noop.js",
   "sideEffects": false,
   "scripts": {
+    "prepack": "tsc",
     "tsc": "tsc",
     "watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
