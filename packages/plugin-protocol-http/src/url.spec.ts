@@ -12,11 +12,12 @@ describe('plugins/http/url', () => {
         expect(addQuery('https://domain.abv/api/v2/?a=1', { b: '2', c: '3' })).toBe(
             'https://domain.abv/api/v2/?a=1&b=2&c=3'
         );
-        expect(addQuery('/api/some/?a=1', { a: '2' })).toBe('/api/some/?a=2');
+        expect(addQuery('/api/some/?a=1', { a: '2', b: undefined })).toBe('/api/some/?a=2');
     });
 
     it('should serialize passed object', () => {
         expect(serialize({ a: '1', b: '2', c: 'test' })).toBe('a=1&b=2&c=test');
+        expect(serialize({ a: '', b: undefined, c: null, d: 0 } as any)).toBe('a=&d=0');
     });
 
     it('should add default http protocol for requests on server', () => {
