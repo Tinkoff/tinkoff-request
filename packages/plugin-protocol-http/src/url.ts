@@ -1,10 +1,13 @@
 import eachObj from '@tinkoff/utils/object/each';
+import isNil from '@tinkoff/utils/is/nil';
 
 export const serialize = (obj: Record<string, string>, init = '') => {
     const searchParams = new URLSearchParams(init);
 
     eachObj((v, k) => {
-        searchParams.set(k, v || '');
+        if (!isNil(v)) {
+            searchParams.set(k, v);
+        }
     }, obj);
 
     return searchParams.toString();

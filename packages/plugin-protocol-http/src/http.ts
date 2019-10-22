@@ -126,7 +126,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 if (isBrowser && timeout) {
                     // node-fetch has timeout option, so add check only for browser
                     timer = setTimeout(() => {
-                        abort();
+                        abort(new Error('Request timed out'));
                     }, timeout);
                 }
 
