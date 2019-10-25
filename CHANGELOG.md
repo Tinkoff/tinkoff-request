@@ -1,5 +1,8 @@
 # Change Log
 
+## protocol-http@0.10.3
+- fix usage of set-cookie header
+
 ## protocol-http@0.10.1
 - fix empty query parameters
 
