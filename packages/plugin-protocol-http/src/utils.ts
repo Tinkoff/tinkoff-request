@@ -2,6 +2,14 @@ import { MakeRequestResult } from '@tinkoff/request-core';
 import prop from '@tinkoff/utils/object/prop';
 import { PROTOCOL_HTTP } from './constants';
 
+const getSetCookieHeader = (headers) => {
+    if (typeof window !== 'undefined') {
+        return headers.raw()['set-cookie']; // node-fetch specific api, see https://github.com/bitinn/node-fetch#extract-set-cookie-header
+    }
+
+    return []; // browser doesn't provide set-cookie header, just return empty array for compatibility
+};
+
 // TODO: when some plugins (for example cache) break flow, plugin-http won't be called and meta will be empty
 export const _getResponse = (request: MakeRequestResult): Response => {
     const meta = request.getInternalMeta(PROTOCOL_HTTP);
@@ -19,7 +27,11 @@ export const getHeaders = (request: MakeRequestResult) => {
 
     if (headers) {
         headers.forEach((v, k) => {
-            result[k] = v;
+            if (k === 'set-cookie') {
+                result[k] = getSetCookieHeader(headers);
+            } else {
+                result[k] = v;
+            }
         });
     }
 
@@ -29,7 +41,13 @@ export const getHeaders = (request: MakeRequestResult) => {
 export const getHeader = (request: MakeRequestResult, header: string) => {
     const headers = _getHeaders(request);
 
-    return headers && headers.get(header);
+    if (headers) {
+        if (header === 'set-cookie') {
+            return getSetCookieHeader(headers);
+        }
+
+        return headers.get(header);
+    }
 };
 
 export const getStatus = (request: MakeRequestResult) => {

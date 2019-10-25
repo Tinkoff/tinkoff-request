@@ -8,6 +8,9 @@ const headers = new Headers({
     b: 'bbb',
 });
 
+headers.append('set-cookie', 'cookie1');
+headers.append('set-cookie', 'cookie2');
+
 describe('plugins/http/utils', () => {
     const requestAbort = jest.fn();
     const response = {
@@ -29,7 +32,7 @@ describe('plugins/http/utils', () => {
     });
 
     it('get headers', () => {
-        expect(getHeaders(result)).toEqual({ a: 'aaa', b: 'bbb' });
+        expect(getHeaders(result)).toEqual({ a: 'aaa', b: 'bbb', 'set-cookie': ['cookie1', 'cookie2'] });
         expect(result.getInternalMeta).toHaveBeenCalledWith(PROTOCOL_HTTP);
     });
 
@@ -37,6 +40,7 @@ describe('plugins/http/utils', () => {
         expect(getHeader(result, 'a')).toBe('aaa');
         expect(getHeader(result, 'b')).toBe('bbb');
         expect(getHeader(result, 'c')).toBeNull();
+        expect(getHeader(result, 'set-cookie')).toEqual(['cookie1', 'cookie2']);
     });
 
     it('get status', () => {
