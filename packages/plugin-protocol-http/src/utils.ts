@@ -3,7 +3,7 @@ import prop from '@tinkoff/utils/object/prop';
 import { PROTOCOL_HTTP } from './constants';
 
 const getSetCookieHeader = (headers) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window === 'undefined') {
         return headers.raw()['set-cookie']; // node-fetch specific api, see https://github.com/bitinn/node-fetch#extract-set-cookie-header
     }
 
