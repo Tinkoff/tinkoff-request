@@ -105,7 +105,17 @@ describe('plugins/http', () => {
     });
 
     it('error request', async () => {
-        const mockResponse = jest.fn(() => Promise.resolve({ init: { status: 503 }, body: '123' }));
+        const mockResponse = jest.fn(() =>
+            Promise.resolve({
+                init: {
+                    status: 503,
+                    headers: {
+                        'Content-type': 'application/json;',
+                    },
+                },
+                body: JSON.stringify({ a: '1', b: 2 }),
+            })
+        );
 
         fetch.mockResponse(mockResponse);
 
@@ -119,6 +129,7 @@ describe('plugins/http', () => {
         expect(next).toHaveBeenLastCalledWith({
             status: Status.ERROR,
             error: new Error('Service Unavailable'),
+            response: { a: '1', b: 2 },
         });
     });
 

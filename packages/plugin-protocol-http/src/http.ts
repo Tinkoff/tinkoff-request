@@ -1,7 +1,6 @@
 import nodeFetch from 'node-fetch';
 import AbortController from 'abort-controller';
 
-import noop from '@tinkoff/utils/function/noop';
 import propOr from '@tinkoff/utils/object/propOr';
 import { HttpMethods, Plugin, Status } from '@tinkoff/request-core';
 import { Agent } from 'https';
@@ -20,14 +19,6 @@ if (isBrowser) {
         isPageUnloaded = true;
     });
 }
-
-const getError = (err) => {
-    return Object.assign(new Error(err.message), {
-        stack: err.stack,
-        status: err.status,
-        text: err.text,
-    });
-};
 
 /**
  * Makes http/https request.
@@ -147,6 +138,9 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 }
             }
 
+            let response: Response;
+            let responseBody;
+
             fetch(
                 addQuery(normalizeUrl(url), {
                     ...(noBody ? payload : {}),
@@ -163,37 +157,33 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     timeout,
                 }
             )
-                .then((response: Response) => {
+                .then((resp: Response) => {
+                    response = resp;
+
                     context.updateInternalMeta(PROTOCOL_HTTP, {
                         response,
                     });
 
-                    if (response.ok) {
-                        if (response[responseType]) {
-                            return response[responseType]();
-                        }
-
-                        return parse(response);
-                    } else {
-                        return response
-                            .text()
-                            .catch(noop)
-                            .then((text) => {
-                                throw Object.assign(new Error(response.statusText), {
-                                    text,
-                                    status: response.status,
-                                });
-                            });
+                    if (response[responseType]) {
+                        return response[responseType]();
                     }
+
+                    return parse(response);
                 })
-                .then((response) => {
+                .then((body) => {
                     if (ended) {
                         return;
                     }
 
+                    responseBody = body;
+
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+
                     next({
                         status: Status.COMPLETE,
-                        response: response,
+                        response: responseBody,
                     });
                 })
                 .catch((err) => {
@@ -203,7 +193,10 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
 
                     next({
                         status: Status.ERROR,
-                        error: getError(err),
+                        error: Object.assign(err, {
+                            status: response.status,
+                        }),
+                        response: responseBody,
                     });
                 })
                 .then(() => {
