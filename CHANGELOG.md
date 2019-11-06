@@ -1,5 +1,8 @@
 # Change Log
 
+## protocol-http@0.10.5
+- add parsed response despite response status
+
 ## protocol-http@0.10.3
 - fix usage of set-cookie header
 
