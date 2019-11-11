@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-etag",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Caching based on etag http-header",
   "main": "lib/etag.js",
   "browser": "lib/noop",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@tinkoff/request-core": "^0.8.2",
-    "@tinkoff/request-plugin-protocol-http": "^0.10.5",
+    "@tinkoff/request-plugin-protocol-http": "^0.10.6",
     "@types/node": "^10.11.7"
   },
   "peerDependencies": {
