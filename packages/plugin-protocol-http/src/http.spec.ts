@@ -133,6 +133,24 @@ describe('plugins/http', () => {
         });
     });
 
+    it('request unknown error', async () => {
+        const mockResponse = jest.fn(() => Promise.reject(new TypeError('Failed to fetch')));
+
+        fetch.mockResponse(mockResponse);
+
+        plugin.init(new Context({ request: { url: 'test' } }), next, null);
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
+        expect(mockResponse).toBeCalled();
+        expect(next).toHaveBeenLastCalledWith({
+            status: Status.ERROR,
+            error: new TypeError('Failed to fetch'),
+        });
+    });
+
     it('request with custom agent', async () => {
         const response = { a: 3 };
         const mockResponse = jest.fn(() =>

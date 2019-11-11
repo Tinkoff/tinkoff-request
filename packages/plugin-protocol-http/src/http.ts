@@ -194,7 +194,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     next({
                         status: Status.ERROR,
                         error: Object.assign(err, {
-                            status: response.status,
+                            status: response && response.status,
                         }),
                         response: responseBody,
                     });
