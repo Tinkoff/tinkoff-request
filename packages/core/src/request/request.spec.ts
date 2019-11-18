@@ -10,6 +10,8 @@ const createPlugin = () => ({
 });
 
 describe('request', () => {
+    jest.useRealTimers();
+
     it('should return promise with additional methods', () => {
         const plugin = createPlugin();
         const req = request([plugin]);
@@ -76,12 +78,12 @@ describe('request', () => {
         });
 
         req({ url: '' });
-        expect(plugin1.init).toHaveBeenCalledWith(expect.any(Context), next, expect.any(Function));
+        expect(plugin1.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
         expect(plugin2.init).not.toHaveBeenCalled();
 
         next();
         expect(plugin1.init).toHaveBeenCalledTimes(1);
-        expect(plugin2.init).toHaveBeenCalledWith(expect.any(Context), next, expect.any(Function));
+        expect(plugin2.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
     });
 
     it('if some plugin change status do not call other plugins', () => {
@@ -116,14 +118,110 @@ describe('request', () => {
         const req = request([plugin1, plugin2]);
         const error = new Error('123');
 
-        plugin1.init = jest.fn((_, nxt) => {
+        plugin2.init = jest.fn((_, nxt) => {
             nxt({ error, status: Status.ERROR });
         });
 
         return req({ url: '' }).catch((err) => {
             expect(err).toBe(error);
-            expect(plugin1.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
-            expect(plugin2.init).not.toHaveBeenCalled();
+            expect(plugin2.init).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
+            expect(plugin1.error).toHaveBeenCalledWith(expect.any(Context), expect.any(Function), expect.any(Function));
+            expect(plugin2.error).not.toHaveBeenCalled();
         });
+    });
+
+    it('should handle case when plugin calls next several times', () => {
+        const plugin1 = createPlugin();
+        const plugin2 = createPlugin();
+        const req = request([plugin1, plugin2]);
+        const error = new Error('123');
+
+        plugin1.complete = jest.fn((_, nxt) => {
+            setTimeout(nxt, 10);
+        });
+
+        plugin2.init = jest.fn((_, nxt) => {
+            nxt({ status: Status.COMPLETE });
+            nxt({ error, status: Status.ERROR });
+        });
+
+        return req({ url: '' }).then(() => {
+            expect(plugin1.init).toHaveBeenCalledTimes(1);
+            expect(plugin1.complete).toHaveBeenCalledTimes(1);
+            expect(plugin1.error).toHaveBeenCalledTimes(0);
+            expect(plugin2.init).toHaveBeenCalledTimes(1);
+            expect(plugin2.complete).toHaveBeenCalledTimes(0);
+            expect(plugin2.error).toHaveBeenCalledTimes(0);
+        });
+    });
+
+    it('should handle errors at plugins execution 1', () => {
+        const plugin1 = createPlugin();
+        const plugin2 = createPlugin();
+        const req = request([plugin1, plugin2]);
+        const error = new Error('123');
+        let handledError;
+
+        plugin1.error = jest.fn((context, nxt) => {
+            handledError = context.getState().error;
+            nxt();
+        });
+
+        plugin2.complete = jest.fn((_, nxt) => {
+            throw error;
+        });
+
+        return req({ url: '' })
+            .then(() => {
+                expect(true).toBe(false);
+            })
+            .catch((err) => {
+                expect(err).toBe(error);
+                expect(handledError).toBe(error);
+                expect(plugin1.complete).not.toHaveBeenCalled();
+                expect(plugin2.complete).toHaveBeenCalledWith(
+                    expect.any(Context),
+                    expect.any(Function),
+                    expect.any(Function)
+                );
+                expect(plugin1.error).toHaveBeenCalledWith(
+                    expect.any(Context),
+                    expect.any(Function),
+                    expect.any(Function)
+                );
+            });
+    });
+
+    it('should handle errors at plugins execution 2', () => {
+        const plugin1 = createPlugin();
+        const plugin2 = createPlugin();
+        const req = request([plugin1, plugin2]);
+        const error1 = new Error('123');
+        const error2 = new Error('456');
+        let handledError;
+
+        plugin1.error = jest.fn((context, _) => {
+            handledError = context.getState().error;
+            throw error2;
+        });
+
+        plugin2.complete = jest.fn((_, nxt) => {
+            setTimeout(() => nxt({ status: Status.ERROR, error: error1 }), 10);
+        });
+
+        return req({ url: '' })
+            .then(() => {
+                expect(true).toBe(false);
+            })
+            .catch((err) => {
+                expect(err).toBe(error2);
+                expect(handledError).toBe(error1);
+                expect(plugin1.error).toHaveBeenCalledWith(
+                    expect.any(Context),
+                    expect.any(Function),
+                    expect.any(Function)
+                );
+                expect(plugin2.error).not.toHaveBeenCalled();
+            });
     });
 });
