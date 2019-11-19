@@ -1,5 +1,8 @@
 # Change Log
 
+## core@0.8.3
+- add error handling for plugin execution
+
 ## protocol-http@0.10.5
 - add parsed response despite response status
 
