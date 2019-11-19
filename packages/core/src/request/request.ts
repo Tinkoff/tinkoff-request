@@ -1,10 +1,11 @@
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
+import once from '@tinkoff/utils/function/once';
 import propOr from '@tinkoff/utils/object/propOr';
 
 import Status from '../constants/status';
 import Context from '../context/Context';
 import RequestMaker from './request.h';
-import { Request, Next } from '../types.h';
+import { Next, Request } from '../types.h';
 
 const DEFAULT_STATUS_TRANSITION = {
     [Status.INIT]: Status.COMPLETE,
@@ -69,7 +70,11 @@ const requestMaker: RequestMaker = function(plugins) {
                         return next();
                     }
 
-                    pluginAction(context, next, makeRequest);
+                    try {
+                        pluginAction(context, once(next), makeRequest);
+                    } catch (err) {
+                        return next({ status: Status.ERROR, error: err });
+                    }
                 };
 
                 next(); // with no state
