@@ -7,4 +7,5 @@ export const REQUEST_TYPES = {
     urlencoded: 'application/x-www-form-urlencoded',
     form: 'application/x-www-form-urlencoded',
     'form-data': 'application/x-www-form-urlencoded',
+    'multipart/form-data': '',
 };
