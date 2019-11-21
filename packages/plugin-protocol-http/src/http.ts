@@ -5,7 +5,8 @@ import propOr from '@tinkoff/utils/object/propOr';
 import { HttpMethods, Plugin, Status } from '@tinkoff/request-core';
 import { Agent } from 'https';
 
-import { addQuery, serialize, normalizeUrl } from './url';
+import { addQuery, normalizeUrl } from './url';
+import { serialize } from './serialize';
 import { PROTOCOL_HTTP, REQUEST_TYPES } from './constants';
 import parse from './parse';
 import createForm from './form';
@@ -81,11 +82,12 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 body = createForm(payload, isBrowser ? attaches : []);
 
                 formHeaders = body.getHeaders && body.getHeaders();
-            } else if (!noBody) {
-                if (type === 'form') {
-                    body = serialize(payload);
-                } else {
-                    body = JSON.stringify(payload);
+            } else {
+                const contentType = propOr(type, type, REQUEST_TYPES);
+                formHeaders = contentType ? { 'Content-type': contentType } : {};
+
+                if (!noBody) {
+                    body = serialize(type, payload);
                 }
             }
 
@@ -150,7 +152,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 {
                     signal,
                     method,
-                    headers: { 'Content-type': propOr(type, type, REQUEST_TYPES), ...formHeaders, ...headers },
+                    headers: { ...formHeaders, ...headers },
                     agent: customAgent,
                     credentials: withCredentials ? 'include' : 'same-origin',
                     body,
