@@ -1,5 +1,8 @@
 # Change Log
 
+## protocol-http@0.10.8
+- fix usage of formData in browser
+
 ## core@0.8.3
 - add error handling for plugin execution
 
