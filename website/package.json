@@ -1,4 +1,7 @@
 {
+  "name": "@tinkoff/request-docs",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "examples": "docusaurus-examples",
     "start": "docusaurus-start",
@@ -9,6 +12,6 @@
     "rename-version": "docusaurus-rename-version"
   },
   "devDependencies": {
-    "docusaurus": "^1.5.0"
+    "docusaurus": "^1.14.2"
   }
 }

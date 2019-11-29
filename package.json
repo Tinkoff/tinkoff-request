@@ -3,13 +3,20 @@
   "version": "0.6.0",
   "description": "Request library extendable by plugins",
   "private": true,
+  "workspaces": [
+    "packages/**/*",
+    "website"
+  ],
   "scripts": {
     "test": "jest --coverage",
-    "bootstrap": "npm i && lerna bootstrap --force-local",
+    "bootstrap": "yarn --frozen-lockfile",
     "build": "lerna run tsc",
     "watch": "lerna run watch --parallel",
     "publish": "lerna publish",
-    "clean": "lerna exec -- git clean -Xdf . && rm -rf node_modules"
+    "clean": "git clean -Xdf .",
+    "docs:build": "yarn --cwd ./website build",
+    "docs:start": "yarn --cwd ./website start",
+    "docs:publish": "yarn --cwd ./website publish-gh-pages"
   },
   "keywords": [
     "request"
