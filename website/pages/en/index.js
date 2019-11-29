@@ -89,14 +89,14 @@ class HomeSplash extends React.Component {
                 <div className='inner'>
                     <ProjectTitle />
                     <PromoSection>
-                        <Button href={docUrl('core/index')}>
-                            About
+                        <Button href={docUrl('how-to/index')}>
+                            How to
                         </Button>
                         <Button href={docUrl('plugins/index')}>
                             Plugins
                         </Button>
-                        <Button href={docUrl('how-to/index')}>
-                            How to
+                        <Button href={docUrl('core/index')}>
+                            Internals
                         </Button>
                     </PromoSection>
                 </div>
@@ -121,6 +121,7 @@ const TldrSection = props => (
                         <li>Lightweight</li>
                         <li>Plugins</li>
                         <li>Customizable</li>
+                        <li>Typescript</li>
                     </ul>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>

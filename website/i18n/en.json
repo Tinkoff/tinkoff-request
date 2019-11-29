@@ -5,9 +5,21 @@
     "previous": "Previous",
     "tagline": "Construct your own request library",
     "docs": {
+      "core/context": {
+        "title": "@tinkoff/request-core - Context",
+        "sidebar_label": "Context"
+      },
+      "core/execution": {
+        "title": "@tinkoff/request-core - Request Execution flow",
+        "sidebar_label": "Request execution"
+      },
       "core/index": {
         "title": "@tinkoff/request-core",
         "sidebar_label": "Core"
+      },
+      "core/plugin": {
+        "title": "Plugin definition",
+        "sidebar_label": "Plugin"
       },
       "how-to/index": {
         "title": "How to",
@@ -53,6 +65,10 @@
         "title": "Protocol Plugin - Http",
         "sidebar_label": "Protocol - Http"
       },
+      "plugins/protocol-jsonp": {
+        "title": "Protocol Plugin - Jsonp",
+        "sidebar_label": "Protocol - Jsonp"
+      },
       "plugins/transform-url": {
         "title": "Transform Plugin - Url",
         "sidebar_label": "Transform - Url"
@@ -63,9 +79,9 @@
       }
     },
     "links": {
-      "Core": "Core",
-      "Plugins": "Plugins",
       "How to": "How to",
+      "Plugins": "Plugins",
+      "Internals": "Internals",
       "GitHub": "GitHub"
     },
     "categories": {

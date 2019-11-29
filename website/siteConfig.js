@@ -27,9 +27,9 @@ const siteConfig = {
 
     // For no header links in the top nav bar -> headerLinks: [],
     headerLinks: [
-        { doc: 'core/index', label: 'Core' },
-        { doc: 'plugins/index', label: 'Plugins' },
         { doc: 'how-to/index', label: 'How to' },
+        { doc: 'plugins/index', label: 'Plugins' },
+        { doc: 'core/index', label: 'Internals' },
         { href: 'https://github.com/TinkoffCreditSystems/tinkoff-request', label: 'GitHub' }
     ],
 

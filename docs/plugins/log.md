@@ -6,17 +6,28 @@ sidebar_label: Log
 
 Logs request events and timing
 
+## Parameters
+
+### Create options 
+- `name`: string [=''] - string used as logger name, passed to logger
+- `logger`: function [() => console] - logger factory
+
+### Request params
+- `silent`: boolean [=false] - if set info and error level logs will be ignored and only debug level enabled. 
+
+### External meta
+- `log.start`: number - request start Date.now()
+- `log.end`: number - request end Date.now()
+- `log.duration`: number - request duration (end - start)
+
+## Example
+```typescript
+import request from '@tinkoff/request-core';
+import log from '@tinkoff/request-plugin-log';
+
+const req = request([
+    // should be set first at most cases to enable logging for every requests, despite caching or other plugins logic
+    log(),
+    // ...other plugins
+]);
 ```
-options:
-     name {string} - name of log
-     logger {Function} - logger factory
-
-requestParams:
-     silent {boolean}
-
-metaInfo:
-     log.start {number} - request start Date.now()
-     log.end {number} - request end Date.now()
-     log.duration {number} - request duration (end - start)
-```
-
