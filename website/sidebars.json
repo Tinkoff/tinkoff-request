@@ -1,7 +1,10 @@
 {
     "docs": {
         "Core": [
-            "core/index"
+            "core/index",
+            "core/context",
+            "core/execution",
+            "core/plugin"
         ],
         "Plugins": [
             "plugins/index",
