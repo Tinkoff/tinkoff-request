@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>@tinkoff/request-core - Context · @tinkoff/request</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Special class for storing state of the request. The instance of this class created by @tinkof/request-core for every request and get passed to each plugin."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="@tinkoff/request-core - Context · @tinkoff/request"/><meta property="og:type" content="website"/><meta property="og:url" content="undefined/tinkoff-request/index.html"/><meta property="og:description" content="Special class for storing state of the request. The instance of this class created by @tinkof/request-core for every request and get passed to each plugin."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/tinkoff-request/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="stylesheet" href="/css/custom.css"/><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><script src="/tinkoff-request/js/scrollSpy.js"></script><link rel="stylesheet" href="/tinkoff-request/css/main.css"/><script src="/tinkoff-request/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/tinkoff-request/"><img class="logo" src="/tinkoff-request/img/logo-tinkoff.svg" alt="@tinkoff/request"/><h2 class="headerTitleWithLogo">@tinkoff/request</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/tinkoff-request/docs/how-to/index.html" target="_self">How to</a></li><li class="siteNavGroupActive"><a href="/tinkoff-request/docs/plugins/index.html" target="_self">Plugins</a></li><li class="siteNavGroupActive"><a href="/tinkoff-request/docs/core/index.html" target="_self">Internals</a></li><li class=""><a href="https://github.com/TinkoffCreditSystems/tinkoff-request" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Core</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Core</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/core/index.html">Core</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/tinkoff-request/docs/core/context.html">Context</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/core/execution.html">Request execution</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/core/plugin.html">Plugin</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Plugins</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/index.html">Plugins</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/batch.html">Batch</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/cache-deduplicate.html">Cache - Deduplicate</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/cache-fallback.html">Cache - Fallback</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/cache-memory.html">Cache - Memory</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/cache-etag.html">Cache - Etag</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/cache-persistent.html">Cache - Persistent</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/log.html">Log</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/protocol-http.html">Protocol - Http</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/protocol-jsonp.html">Protocol - Jsonp</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/transform-url.html">Transform - Url</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/validate.html">Validate</a></li><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/plugins/circuit-breaker.html">Circuit Breaker</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">How to</h3><ul class=""><li class="navListItem"><a class="navItem" href="/tinkoff-request/docs/how-to/index.html">How to</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">@tinkoff/request-core - Context</h1></header><article><div><span><p>Special class for storing state of the request. The instance of this class created by @tinkof/request-core for every request and get passed to each plugin.
+It is contains current state (e.g. status, request, response, error) and meta data for plugins.</p>
+<p>Meta data for plugins might be either internal or external and only used by plugins (purpose of that division is that external meta usually logged by @tinkoff/request-plugin-log for debbugging purpose, while internal meta is not).</p>
+<h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<h3><a class="anchor" aria-hidden="true" id="getstate"></a><a href="#getstate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getState()</h3>
+<p>Return current state of the request, with following properties:</p>
+<ul>
+<li><code>status</code> - status of the current request execution, either 'init', 'complete' or 'error'</li>
+<li><code>request</code> - property is set by @tinkoff/request-core, and equal to options passed while making request</li>
+<li><code>response</code> - property is set by plugins and will be used as the result of the request if execution has succeeded (might be null if request in progress, on not succeeded)</li>
+<li><code>error</code> - property is set either by plugins or by @tinkoff/request-core if plugin execution failed, and contains current error (equal to null for success requests)</li>
+<li>any additional properties set by plugins</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="setstateobj"></a><a href="#setstateobj" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>setState(obj)</h3>
+<p>Current state of the context will be shallow merged with passed argument and the result will be set as new state.</p>
+<h3><a class="anchor" aria-hidden="true" id="getstatus"></a><a href="#getstatus" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getStatus()</h3>
+<p>Alias for <code>context.getState().status</code></p>
+<h3><a class="anchor" aria-hidden="true" id="getrequest"></a><a href="#getrequest" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getRequest()</h3>
+<p>Alias for <code>context.getState().request</code></p>
+<h3><a class="anchor" aria-hidden="true" id="getresponse"></a><a href="#getresponse" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getResponse()</h3>
+<p>Alias for <code>context.getState().response</code></p>
+<h3><a class="anchor" aria-hidden="true" id="getinternalmetametaname"></a><a href="#getinternalmetametaname" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getInternalMeta(metaName?)</h3>
+<p>Get the internal meta data by specific name, if name is not defined return all internal meta;</p>
+<h3><a class="anchor" aria-hidden="true" id="getexternalmetametaname"></a><a href="#getexternalmetametaname" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getExternalMeta(metaName?)</h3>
+<p>Get the external meta data by specific name, if name is not defined return all external meta;</p>
+<h3><a class="anchor" aria-hidden="true" id="updateinternalmetaname-obj"></a><a href="#updateinternalmetaname-obj" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>updateInternalMeta(name, obj)</h3>
+<p>Extend internal meta for specific name by passed obj.</p>
+<h3><a class="anchor" aria-hidden="true" id="updateexternalmeta"></a><a href="#updateexternalmeta" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>updateExternalMeta</h3>
+<p>Extend external meta for specific name by passed obj.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/tinkoff-request/docs/core/index.html"><span class="arrow-prev">← </span><span>Core</span></a><a class="docs-next button" href="/tinkoff-request/docs/core/execution.html"><span>Request execution</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#methods">Methods</a><ul class="toc-headings"><li><a href="#getstate">getState()</a></li><li><a href="#setstateobj">setState(obj)</a></li><li><a href="#getstatus">getStatus()</a></li><li><a href="#getrequest">getRequest()</a></li><li><a href="#getresponse">getResponse()</a></li><li><a href="#getinternalmetametaname">getInternalMeta(metaName?)</a></li><li><a href="#getexternalmetametaname">getExternalMeta(metaName?)</a></li><li><a href="#updateinternalmetaname-obj">updateInternalMeta(name, obj)</a></li><li><a href="#updateexternalmeta">updateExternalMeta</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 tinkoff.ru</section></footer></div></body></html>
