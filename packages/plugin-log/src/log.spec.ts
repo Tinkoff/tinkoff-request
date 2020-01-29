@@ -41,8 +41,8 @@ describe('plugins/log', () => {
         plugin.init(context, next, null);
 
         expect(next).toHaveBeenCalled();
-        expect(mockInfo).toHaveBeenLastCalledWith('init', { url, query, payload });
-        expect(mockDebug).toHaveBeenCalledWith('init', request);
+        expect(mockInfo).toHaveBeenLastCalledWith({ event: 'init', info: { url, query, payload } });
+        expect(mockDebug).toHaveBeenCalledWith({ event: 'init', request });
         expect(context.getExternalMeta(LOG)).toEqual({
             start: Date.now(),
         });
@@ -60,8 +60,13 @@ describe('plugins/log', () => {
         };
 
         expect(next).toHaveBeenCalled();
-        expect(mockInfo).toHaveBeenLastCalledWith('complete', { url: 'test2' }, meta);
-        expect(mockDebug).toHaveBeenCalledWith('complete', context.getState(), meta, {});
+        expect(mockInfo).toHaveBeenLastCalledWith({ event: 'complete', info: { url: 'test2' }, meta });
+        expect(mockDebug).toHaveBeenCalledWith({
+            event: 'complete',
+            state: context.getState(),
+            meta,
+            internalMeta: {},
+        });
         expect(context.getExternalMeta(LOG)).toEqual({
             start,
             end: Date.now(),
@@ -84,7 +89,7 @@ describe('plugins/log', () => {
         };
 
         expect(next).toHaveBeenCalled();
-        expect(mockError).toHaveBeenCalledWith('error', { url: 'test3' }, error, { log: meta });
+        expect(mockError).toHaveBeenCalledWith({ event: 'error', info: { url: 'test3' }, error, meta: { log: meta } });
         expect(context.getExternalMeta(LOG)).toEqual(meta);
     });
 });

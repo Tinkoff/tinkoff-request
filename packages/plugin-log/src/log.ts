@@ -57,10 +57,16 @@ export default ({ name = '', logger = defaultLogger }): Plugin => {
             const silent = prop('silent', request);
 
             if (!silent) {
-                log.info('init', getInfo(request));
+                log.info({
+                    event: 'init',
+                    info: getInfo(request),
+                });
             }
 
-            log.debug('init', request);
+            log.debug({
+                event: 'init',
+                request,
+            });
 
             context.updateExternalMeta(LOG, {
                 start,
@@ -75,10 +81,19 @@ export default ({ name = '', logger = defaultLogger }): Plugin => {
             const silent = prop('silent', request);
 
             if (!silent) {
-                log.info('complete', getInfo(request), context.getExternalMeta());
+                log.info({
+                    event: 'complete',
+                    info: getInfo(request),
+                    meta: context.getExternalMeta(),
+                });
             }
 
-            log.debug('complete', context.getState(), context.getExternalMeta(), context.getInternalMeta());
+            log.debug({
+                event: 'complete',
+                state: context.getState(),
+                meta: context.getExternalMeta(),
+                internalMeta: context.getInternalMeta(),
+            });
 
             next();
         },
@@ -88,9 +103,20 @@ export default ({ name = '', logger = defaultLogger }): Plugin => {
 
             fillDuration(context);
             if (!silent) {
-                log.error('error', getInfo(request), context.getState().error, context.getExternalMeta());
+                log.error({
+                    event: 'error',
+                    info: getInfo(request),
+                    error: context.getState().error,
+                    meta: context.getExternalMeta(),
+                });
             }
-            log.debug('error', context.getState(), context.getExternalMeta(), context.getInternalMeta());
+
+            log.debug({
+                event: 'error',
+                state: context.getState(),
+                meta: context.getExternalMeta(),
+                internalMeta: context.getInternalMeta(),
+            });
 
             next();
         },
