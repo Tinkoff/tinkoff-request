@@ -43,7 +43,13 @@ const requestMaker: RequestMaker = function(plugins) {
                 if (currentStatus === Status.COMPLETE) {
                     resolve(state.response);
                 } else {
-                    reject(state.error);
+                    reject(
+                        Object.assign(state.error || {}, {
+                            url: state.request.url,
+                            query: state.request.query,
+                            payload: state.request.payload,
+                        })
+                    );
                 }
             };
 
