@@ -1,0 +1,37 @@
+{
+  "name": "@tinkoff/request-plugin-prom-red-metrics",
+  "version": "0.1.0",
+  "description": "Collect RED metrics for prometheus",
+  "main": "lib/metrics.js",
+  "typings": "lib/metrics.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "prepack": "tsc",
+    "tsc": "tsc",
+    "watch": "tsc -w"
+  },
+  "keywords": [
+    "request",
+    "prometheus"
+  ],
+  "author": "Boris Chernysh <b.chernysh@tinkoff.ru>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TinkoffCreditSystems/tinkoff-request/"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@tinkoff/request-core": "^0.8.3",
+    "@tinkoff/request-plugin-protocol-http": "^0.10.8"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "0.x",
+    "@tinkoff/request-plugin-protocol-http": "^0.7.0"
+  }
+}
