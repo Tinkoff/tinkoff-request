@@ -8,10 +8,11 @@ Adds RED request metrics for prometheus.
 
 ## Parameters
 
-### Create options 
+### Create options
 - `metrics`: object [={counter, histogram}] - factories for creating [prom-client](https://www.npmjs.com/package/prom-client) instances;
 - `labelNames`: array - list of labels for metrics;
 - `getLabelsValuesFromContext`: function - function for extracting label values from context.
+- `prefix`: string - prefix for metric names, used to add metrics for more than one request instance
 
 ### Internal meta
 - `TIMER_DONE`: function - function created at the time of sending and called at the end of the request to calculate its duration.
@@ -31,6 +32,7 @@ const req = request([
             counter: (options) => new promClient.Counter(options), // here you can mix any of your own parameters
             histogram: (options) => new promClient.Histogram(options),
         },
+        prefix: 'api',
         labelNames: ['host', 'port'],
         getLabelsValuesFromContext: (context) => {
             const { host, port } = context.getRequest()
