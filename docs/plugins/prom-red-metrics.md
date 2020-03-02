@@ -4,17 +4,17 @@ title: Prom RED metrics
 sidebar_label: Prom RED metrics
 ---
 
-Adds RED request metrics for prometheus
+Adds RED request metrics for prometheus.
 
 ## Parameters
 
 ### Create options 
-- `metrics`: object [={counter, histogram}] - factories for creating [prom-client](https://www.npmjs.com/package/prom-client) instances
-- `labelNames`: array - list of labels for metrics
-- `getLabelsValuesFromContext`: function - function for extracting label values from context
+- `metrics`: object [={counter, histogram}] - factories for creating [prom-client](https://www.npmjs.com/package/prom-client) instances;
+- `labelNames`: array - list of labels for metrics;
+- `getLabelsValuesFromContext`: function - function for extracting label values from context.
 
 ### Internal meta
-- `TIMER_DONE`: function - function created at the time of sending and called at the end of the request to calculate its duration
+- `TIMER_DONE`: function - function created at the time of sending and called at the end of the request to calculate its duration.
 
 ## Example
 
@@ -31,8 +31,12 @@ const req = request([
             counter: (options) => new promClient.Counter(options), // here you can mix any of your own parameters
             histogram: (options) => new promClient.Histogram(options),
         },
-        labelNames: ['protocol', 'host', 'port'],
-        getLabelsValuesFromContext: (context) => context.getRequest()
+        labelNames: ['host', 'port'],
+        getLabelsValuesFromContext: (context) => {
+            const { host, port } = context.getRequest()
+
+            return { host, port };
+        },
     }),
     // ...other plugins
 ]);
