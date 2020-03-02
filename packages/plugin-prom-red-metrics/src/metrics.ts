@@ -26,8 +26,6 @@ export default ({
 
   return {
     init: (context, next) => {
-      if (!metrics) return;
-
       context.updateInternalMeta(TIMER_DONE, {
         timerDone: durationHistogram.startTimer(),
       });
@@ -43,8 +41,8 @@ export default ({
     error: (context, next) => {
       const labels = getLabelsValuesFromContext(context);
 
-      requestsCounter.inc(labels);
       errorsCounter.inc(labels);
+      requestsCounter.inc(labels);
       context.getInternalMeta(TIMER_DONE).timerDone(labels);
       next();
     },

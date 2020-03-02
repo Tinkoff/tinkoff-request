@@ -19,7 +19,8 @@
             "plugins/protocol-jsonp",
             "plugins/transform-url",
             "plugins/validate",
-            "plugins/circuit-breaker"
+            "plugins/circuit-breaker",
+            "plugins/prom-red-metrics"
         ],
         "How to": [
             "how-to/index"
