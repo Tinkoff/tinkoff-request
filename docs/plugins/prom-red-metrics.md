@@ -48,12 +48,12 @@ const req = request([
 
 ```typescript
 import request from '@tinkoff/request-core';
-import promRedHttpMetrics from '@tinkoff/request-plugin-prom-red-metrics/lib/httpMetrics';
+import { httpMetrics } from '@tinkoff/request-plugin-prom-red-metrics';
 import http from '@tinkoff/request-plugin-protocol-http';
 import promClient from 'prom-client';
 
 const req = request([
-    promRedHttpMetrics({
+    httpMetrics({
         metrics: {
             counter: (options) => new promClient.Counter(options), // here you can mix any of your own parameters
             histogram: (options) => new promClient.Histogram(options),
