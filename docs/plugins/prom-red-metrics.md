@@ -12,7 +12,7 @@ Adds RED request metrics for prometheus.
 - `metrics`: object [={counter, histogram}] - factories for creating [prom-client](https://www.npmjs.com/package/prom-client) instances;
 - `labelNames`: array - list of labels for metrics;
 - `getLabelsValuesFromContext`: function - function for extracting label values from context.
-- `prefix`: string - prefix for metric names, used to add metrics for more than one request instance
+- `prefix`: string - prefix for metric names, used to add metrics for more than one plugin instance
 
 ### Internal meta
 - `TIMER_DONE`: function - function created at the time of sending and called at the end of the request to calculate its duration.
