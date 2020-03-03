@@ -61,6 +61,10 @@
         "title": "Log Plugin",
         "sidebar_label": "Log"
       },
+      "plugins/prom-red-metrics": {
+        "title": "Prom RED metrics",
+        "sidebar_label": "Prom RED metrics"
+      },
       "plugins/protocol-http": {
         "title": "Protocol Plugin - Http",
         "sidebar_label": "Protocol - Http"
