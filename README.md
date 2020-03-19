@@ -15,10 +15,10 @@ import http from '@tinkoff/request-plugin-protocol-http';
 const makeRequest = request([
     // The order of plugins is important
     log(), // log-plugin is first as we want it always execute
-    deduplicateCache(), // plugins for cache are coming from simple one to complex as if simple cache has cached value - it will be returned and the others plugins won't be called
     memoryCache({ allowStale: true }), // passing parameters for specific plugin, see plugin docs
     persistentCache(),
     fallbackCache(), // fallbackCache is the last as it executed only for errored requests
+    deduplicateCache(), // plugins for cache are coming from simple one to complex as if simple cache has cached value - it will be returned and the others plugins won't be called
     validate({
         validator: ({ response }) => {
             if (response.type === 'json') { return null; }
