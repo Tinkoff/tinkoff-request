@@ -105,6 +105,7 @@ describe('plugins/http', () => {
     });
 
     it('error request', async () => {
+        const response = { a: '1', b: 2 };
         const mockResponse = jest.fn(() =>
             Promise.resolve({
                 init: {
@@ -113,7 +114,7 @@ describe('plugins/http', () => {
                         'Content-type': 'application/json;',
                     },
                 },
-                body: JSON.stringify({ a: '1', b: 2 }),
+                body: JSON.stringify(response),
             })
         );
 
@@ -128,8 +129,12 @@ describe('plugins/http', () => {
         expect(mockResponse).toBeCalled();
         expect(next).toHaveBeenLastCalledWith({
             status: Status.ERROR,
-            error: new Error('Service Unavailable'),
-            response: { a: '1', b: 2 },
+            error: expect.objectContaining({
+                message: 'Service Unavailable',
+                status: 503,
+                body: response,
+            }),
+            response,
         });
     });
 
