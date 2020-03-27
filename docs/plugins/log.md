@@ -11,9 +11,13 @@ Logs request events and timing
 ### Create options 
 - `name`: string [=''] - string used as logger name, passed to logger
 - `logger`: function [() => console] - logger factory
+- `showQueryFields`: boolean | string[] [=false] - whether the plugin should show request query values.
+- `showPayloadFields`: boolean | string[] [=false] - whether the plugin should show request payload values.
 
 ### Request params
 - `silent`: boolean [=false] - if set info and error level logs will be ignored and only debug level enabled. 
+- `showQueryFields`: boolean | string[] [=false] - whether the plugin should show request query values.
+- `showPayloadFields`: boolean | string[] [=false] - whether the plugin should show request payload values.
 
 ### External meta
 - `log.start`: number - request start Date.now()
