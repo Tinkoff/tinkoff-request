@@ -14,7 +14,7 @@ const DEFAULT_STATUS_TRANSITION = {
 const FORWARD = 1;
 const BACKWARD = -1;
 
-const requestMaker: RequestMaker = function(plugins) {
+const requestMaker: RequestMaker = function (plugins) {
     const makeRequest = (request: Request) => {
         let i = -1;
         const len = plugins.length;
@@ -46,8 +46,6 @@ const requestMaker: RequestMaker = function(plugins) {
                     reject(
                         Object.assign(state.error || {}, {
                             url: state.request.url,
-                            query: state.request.query,
-                            payload: state.request.payload,
                         })
                     );
                 }
