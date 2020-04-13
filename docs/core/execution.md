@@ -26,7 +26,7 @@ At any status plugins can change the inner state of request or switch current st
 import request from '@tinkoff/request-core'
 // ... other plugins imports
 
-const makeRequest = require([
+const makeRequest = request([
     plugin1, // changes status to `complete` if request is executed with option example === 'second'
     plugin2, // changes status to `error` if requests is executed with options example === 'third'
     plugin3, // changes status to `complete` any way (otherwise execution will hang if no plugin does it)
