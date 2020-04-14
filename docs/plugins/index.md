@@ -20,3 +20,4 @@ Plugins can inject to the request flow to change its execution or adjust request
 1. `transform-url` - transforms url string for every request
 1. `circuit-breaker` - [!server only] fault protections
 1. `prom-red-metrics` - red metrics about sent requests for prometheus
+1. `retry` - retry plugin for failed request

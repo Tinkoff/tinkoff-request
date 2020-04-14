@@ -1,0 +1,36 @@
+{
+  "name": "@tinkoff/request-plugin-retry",
+  "version": "0.1.0",
+  "description": "Retries failed requests",
+  "main": "lib/retry.js",
+  "typings": "lib/retry.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "prepack": "tsc",
+    "tsc": "tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "request"
+  ],
+  "author": "Kirill Meleshko <k.meleshko@andersenlab.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TinkoffCreditSystems/tinkoff-request/"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@tinkoff/utils": "^2.0.0",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@tinkoff/request-core": "^0.8.6"
+  },
+  "peerDependencies": {
+    "@tinkoff/request-core": "0.x"
+  }
+}

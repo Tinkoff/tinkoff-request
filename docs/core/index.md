@@ -17,6 +17,7 @@ import persistentCache from '@tinkoff/request-plugin-cache-persistent';
 import fallbackCache from '@tinkoff/request-plugin-cache-fallback';
 import validate from '@tinkoff/request-plugin-validate';
 import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker'
+import retry from '@tinkoff/request-plugin-retry'
 import http from '@tinkoff/request-plugin-protocol-http';
 
 const makeRequest = request([
@@ -37,6 +38,7 @@ const makeRequest = request([
         failureThreshold: 60,
         failureTimeout: 60000, 
     }), // if 60% of requests in 1 min are failed, go to special state preventing from making new requests till service is down
+    retry({ retry: 3, retryDelay: 100 }), // try to retry failed request, should be placed before making actual request
     http() // on the last place the plugin to make actual request, it will be executed only if no plugin before changed the flow of request
 ]);
 

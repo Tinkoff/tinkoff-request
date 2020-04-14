@@ -20,7 +20,8 @@
             "plugins/transform-url",
             "plugins/validate",
             "plugins/circuit-breaker",
-            "plugins/prom-red-metrics"
+            "plugins/prom-red-metrics",
+            "plugins/retry"
         ],
         "How to": [
             "how-to/index"
