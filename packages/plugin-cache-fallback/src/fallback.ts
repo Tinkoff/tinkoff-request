@@ -1,16 +1,14 @@
 import noop from '@tinkoff/utils/function/noop';
 import T from '@tinkoff/utils/function/T';
 
-import persistentCache from './persistent-cache';
-import { Plugin, Status, ContextState } from '@tinkoff/request-core';
+import { Plugin, Status, ContextState, Request } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
-import md5 from './md5';
-
-const KEY_LIMIT = 100;
+import { CacheDriver } from './types';
+import { fsCacheDriver } from './drivers';
 
 /**
- * Hard drive cache. This cache used only if request ends with error response and returns previous success response from cache.
- * Works only on server-side, in browser does nothing.
+ * Fallback cache plugin. This cache used only if request ends with error response and returns previous success response from cache.
+ * Actual place to store cache data depends on passed driver (file system by default).
  *
  * requestParams:
  *      fallbackCache {boolean} - disable this plugin at all
@@ -22,22 +20,32 @@ const KEY_LIMIT = 100;
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {function} shouldFallback should fallback value be returned from cache
  * @param {function} getCacheKey function used for generate cache key
+ * @param {CacheDriver} [driver = fsCacheDriver] driver used to store fallback data
  */
 export default ({
     shouldExecute = true,
-    shouldFallback = T as (state: ContextState) => boolean,
-    getCacheKey = undefined,
+    shouldFallback = T,
+    getCacheKey,
+    driver = fsCacheDriver(),
+}: {
+    shouldExecute?: boolean;
+    shouldFallback?: (state: ContextState) => boolean;
+    getCacheKey?: (request: Request) => string;
+    driver?: CacheDriver;
 } = {}): Plugin => {
-    const fallbackFileCache = persistentCache({ name: 'fallback', base: './.tmp/server-cache/', memory: false });
+    if (!driver) {
+        return {};
+    }
 
     return {
         shouldExecute: shouldCacheExecute('fallback', shouldExecute),
         complete: (context, next) => {
             const cacheKey = getCacheKeyUtil(context, getCacheKey);
-            const key = cacheKey.length > KEY_LIMIT ? md5(cacheKey) : cacheKey;
 
-            fallbackFileCache.put(encodeURIComponent(key), context.getResponse(), noop);
-            next();
+            Promise.resolve()
+                .then(() => driver.set(cacheKey, context.getResponse()))
+                .catch(noop)
+                .then(() => next());
         },
         error: (context, next) => {
             if (!shouldFallback(context.getState())) {
@@ -45,22 +53,24 @@ export default ({
             }
 
             const cacheKey = getCacheKeyUtil(context, getCacheKey);
-            const key = cacheKey.length > KEY_LIMIT ? md5(cacheKey) : cacheKey;
 
-            fallbackFileCache.get(encodeURIComponent(key), (err, result) => {
-                if (!err && result) {
+            Promise.resolve()
+                .then(() => driver.get(cacheKey))
+                .then((response) => {
+                    if (!response) {
+                        return next();
+                    }
+
                     context.updateExternalMeta(metaTypes.CACHE, {
                         fallbackCache: true,
                     });
 
-                    return next({
+                    next({
                         status: Status.COMPLETE,
-                        response: result,
+                        response,
                     });
-                }
-
-                next();
-            });
+                })
+                .catch(() => next());
         },
     };
 };
