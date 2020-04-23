@@ -4,70 +4,75 @@ import fallback from './fallback';
 
 const next = jest.fn();
 const getCacheKey = jest.fn((req) => req.url);
-const mockPersistentCache = {
+const driver = {
     get: jest.fn(),
-    put: jest.fn(),
+    set: jest.fn(),
 };
 
-jest.mock('./persistent-cache', () => () => mockPersistentCache);
+const wait = async (n = 1) => {
+    for (let i = 0; i < n; i++) {
+        await Promise.resolve();
+    }
+};
 
 describe('plugins/cache/fallback', () => {
     beforeEach(() => {
         next.mockClear();
         getCacheKey.mockClear();
-        mockPersistentCache.put.mockClear();
-        mockPersistentCache.get.mockClear();
+        driver.get.mockClear();
+        driver.set.mockClear();
     });
 
-    it('save to cache on complete', () => {
+    it('save to cache on complete', async () => {
         const request = { url: 'test[123]//pf' };
         const response = { a: 1, b: 2 };
-        const plugin = fallback({ getCacheKey, shouldExecute: true });
+        const plugin = fallback({ getCacheKey, shouldExecute: true, driver });
         const context = new Context({ request, response });
 
         plugin.complete(context, next, null);
+        await wait();
         expect(getCacheKey).toHaveBeenLastCalledWith(request);
-        expect(mockPersistentCache.put).toHaveBeenLastCalledWith(
-            encodeURIComponent(request.url),
-            response,
-            expect.any(Function)
-        );
-        expect(mockPersistentCache.get).not.toHaveBeenCalled();
+        expect(driver.set).toHaveBeenLastCalledWith(request.url, response);
+        expect(driver.get).not.toHaveBeenCalled();
     });
 
-    it('tries return from cache on error', () => {
+    it('tries return from cache on error', async () => {
         const fromCache = { test: 'pfpf' };
         const request = { url: 'test[123]//pf' };
         const error = new Error('123');
-        const plugin = fallback({ getCacheKey, shouldExecute: true });
+        const plugin = fallback({ getCacheKey, shouldExecute: true, driver });
         const context = new Context({ request, error });
         const next = jest.fn();
 
-        mockPersistentCache.get.mockImplementation((_, cb) => cb(null, fromCache));
+        driver.get.mockImplementation(() => fromCache);
         context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
         plugin.error(context, next, null);
+        await wait(2);
         expect(getCacheKey).toHaveBeenLastCalledWith(request);
-        expect(mockPersistentCache.put).not.toHaveBeenCalled();
-        expect(mockPersistentCache.get).toHaveBeenLastCalledWith(encodeURIComponent(request.url), expect.any(Function));
+        expect(driver.set).not.toHaveBeenCalled();
+        expect(driver.get).toHaveBeenLastCalledWith(request.url);
         expect(context.updateExternalMeta).toHaveBeenLastCalledWith(metaTypes.CACHE, { fallbackCache: true });
         expect(next).toHaveBeenLastCalledWith({ status: Status.COMPLETE, response: fromCache });
     });
 
-    it('tries return from cache on error, but persist cache errors', () => {
+    it('tries return from cache on error, but persist cache errors', async () => {
         const request = { url: 'test[123]//pf' };
         const error = new Error('123');
-        const plugin = fallback({ getCacheKey, shouldExecute: true });
+        const plugin = fallback({ getCacheKey, shouldExecute: true, driver });
         const context = new Context({ request, error });
         const next = jest.fn();
 
-        mockPersistentCache.get.mockImplementation((_, cb) => cb(error));
+        driver.get.mockImplementation(() => {
+            throw error;
+        });
         context.updateExternalMeta = jest.fn(context.updateExternalMeta.bind(context));
 
         plugin.error(context, next, null);
+        await wait(2);
         expect(getCacheKey).toHaveBeenLastCalledWith(request);
-        expect(mockPersistentCache.put).not.toHaveBeenCalled();
-        expect(mockPersistentCache.get).toHaveBeenLastCalledWith(encodeURIComponent(request.url), expect.any(Function));
+        expect(driver.set).not.toHaveBeenCalled();
+        expect(driver.get).toHaveBeenLastCalledWith(request.url);
         expect(context.updateExternalMeta).not.toHaveBeenLastCalledWith(metaTypes.CACHE, { fromFallback: true });
         expect(next).toHaveBeenLastCalledWith();
     });
@@ -76,7 +81,7 @@ describe('plugins/cache/fallback', () => {
         const request = { url: 'test[123]//pf' };
         const error = new Error('123');
         const shouldFallback = jest.fn(() => false);
-        const plugin = fallback({ getCacheKey, shouldFallback, shouldExecute: true });
+        const plugin = fallback({ getCacheKey, shouldFallback, shouldExecute: true, driver });
         const context = new Context({ request, error });
         const next = jest.fn();
 
@@ -85,8 +90,8 @@ describe('plugins/cache/fallback', () => {
         plugin.error(context, next, null);
         expect(shouldFallback).toHaveBeenCalledWith(context.getState());
         expect(getCacheKey).not.toHaveBeenCalled();
-        expect(mockPersistentCache.put).not.toHaveBeenCalled();
-        expect(mockPersistentCache.get).not.toHaveBeenCalled();
+        expect(driver.set).not.toHaveBeenCalled();
+        expect(driver.get).not.toHaveBeenCalled();
         expect(context.updateExternalMeta).not.toHaveBeenCalled();
         expect(next).toHaveBeenLastCalledWith();
     });

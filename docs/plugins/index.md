@@ -12,7 +12,7 @@ Plugins can inject to the request flow to change its execution or adjust request
 1. `cache/deduplicate` - deduplicate identical requests
 1. `cache/memory` - caches responses into memory
 1. `cache/etag` - [!server only] cache based on etag http-header
-1. `cache/fallback` - [!server only] stores response data to disk and returns from cache only for errored requests
+1. `cache/fallback` - stores response data and returns it from cache only for errored requests
 1. `cache/persistent` - [!browser only] caching data at IndexedDB to keep cache among page reloads
 1. `log` - logs the data of request execution
 1. `batch` - groups several request into single one

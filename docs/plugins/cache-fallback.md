@@ -4,16 +4,16 @@ title: Cache Plugin - Fallback
 sidebar_label: Cache - Fallback
 ---
 
-!Executes only on server, for browser this plugin is noop.
-
-Hard drive cache. This cache used only if request ends with error response and returns previous success response from cache.
-
+Fallback cache plugin. This cache used only if request ends with error response and returns previous success response from cache.
+Actual place to store cache data depends on passed driver (file system by default).
+ 
 ## Parameters
 
 ### Create options 
 - `getCacheKey`: function [=see @tinkoff/request-cache-utils] - function used for generate cache key
 - `shouldExecute`: boolean [=true] - plugin enable flag
 - `shouldFallback`: function [(context) => true] - should fallback value be returned from cache
+- `driver`: CacheDriver [fsCacheDriver] - driver used to store fallback data
 
 ### Request params
 - `cache`: boolean [=true] - should any cache plugin be executed. 
@@ -26,6 +26,8 @@ Hard drive cache. This cache used only if request ends with error response and r
 
 
 ## Example
+
+By default uses fileSystem cache driver:
 ```typescript
 import request from '@tinkoff/request-core';
 import fallbackCache from '@tinkoff/request-plugin-cache-fallback';
@@ -37,6 +39,19 @@ const req = request([
     // should be set before protocol plugins
     // ...plugins for making actual request
 ]);
-
 ```
 
+To override driver:
+```typescript
+import request from '@tinkoff/request-core';
+import fallbackCache from '@tinkoff/request-plugin-cache-fallback';
+import { memoryCacheDriver } from '@tinkoff/request-plugin-cache-fallback/lib/drivers';
+
+const req = request([
+    // ...plugins for any request transforms and other cache plugins
+    // should be set after transforming plugins and after other cache plugins, as this plugin is pretty heavy for execution
+    fallbackCache({ driver: memoryCacheDriver() }),
+    // should be set before protocol plugins
+    // ...plugins for making actual request
+]);
+```
