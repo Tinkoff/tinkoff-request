@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-circuit-breaker",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Plugin implementing `Circuit breaker` design pattern",
   "main": "lib/circuit-breaker.js",
   "typings": "lib/circuit-breaker.d.ts",
