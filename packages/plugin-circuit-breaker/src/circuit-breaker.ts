@@ -19,19 +19,19 @@ export interface Options extends Partial<CircuitBreakerOptions> {
  *
  * @param {Function} [getKey=() => ''] allow to divide requests to different instances of Circuit Breaker, by default
  *              only one Circuit Breaker instance is created
- * @param {number} [failureTimeout=120000] time interval in which failed requests will considered to get state
+ * @param {number} [failureTimeout=60000] time interval in which failed requests will considered to get state
  * @param {number} [failureThreshold=50] percentage of failed requests inside `failureTimeout` interval, if that number is exceeded state changes to Open
  * @param {number} [minimumFailureCount=5] number of minimum request which should be failed to consider stats from current time interval
- * @param {number} [openTimeout=60000] time interval in which all requests will forcedly fail,
+ * @param {number} [openTimeout=30000] time interval in which all requests will forcedly fail,
  *               after that timeout `halfOpenThreshold` number of requests will be executed as usual
  * @param {number} [halfOpenThreshold=5] percentage of requests allowed to execute while state is Half-Open
  */
 export default (
     {
         getKey,
-        failureTimeout = 120000,
+        failureTimeout = 60000,
         failureThreshold = 50,
-        openTimeout = 60000,
+        openTimeout = 30000,
         halfOpenThreshold = 5,
         minimumFailureCount = 5,
     }: Options = {} as Options
