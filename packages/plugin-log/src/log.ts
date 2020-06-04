@@ -27,14 +27,12 @@ const fillDuration = (context: Context) => {
 type LogFunction = (...args) => void;
 
 interface Logger {
-    info: LogFunction;
     debug: LogFunction;
     error: LogFunction;
 }
 
 const defaultLogger = (name: string): Logger => {
     return {
-        info: (...args) => console.info(name, ...args), // tslint:disable-line:no-console
         debug: (...args) => console.debug(name, ...args), // tslint:disable-line:no-console
         error: (...args) => console.error(name, ...args), // tslint:disable-line:no-console
     };
@@ -117,16 +115,11 @@ export default ({
             const silent = prop('silent', request);
 
             if (!silent) {
-                log.info({
+                log.debug({
                     event: 'init',
                     info: getInfo(request),
                 });
             }
-
-            log.debug({
-                event: 'init',
-                request,
-            });
 
             context.updateExternalMeta(LOG, {
                 start,
@@ -141,19 +134,12 @@ export default ({
             const silent = prop('silent', request);
 
             if (!silent) {
-                log.info({
+                log.debug({
                     event: 'complete',
                     info: getInfo(request),
                     meta: context.getExternalMeta(),
                 });
             }
-
-            log.debug({
-                event: 'complete',
-                state: context.getState(),
-                meta: context.getExternalMeta(),
-                internalMeta: context.getInternalMeta(),
-            });
 
             next();
         },
@@ -170,13 +156,6 @@ export default ({
                     meta: context.getExternalMeta(),
                 });
             }
-
-            log.debug({
-                event: 'error',
-                state: context.getState(),
-                meta: context.getExternalMeta(),
-                internalMeta: context.getInternalMeta(),
-            });
 
             next();
         },
