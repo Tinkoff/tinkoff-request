@@ -10,12 +10,10 @@ Transforms request url using passed function.
 
 ### Create options 
 - `baseUrl`: string [=''] - option used in transform function
-- `transform`: function [({ baseUrl, url }) => `${baseUrl}${url}`] - function to transform url, accepts request options and should return string;
+- `transform`: function [({ baseUrl, url }: Request) => `${baseUrl}${url}`] - function to transform url, accepts request options and should return string;
 
-### Internal meta
-- `validate.validated`: boolean - is completed request has passed validation
-- `validate.errorValidated`: boolean - is errored request passed validation and switched to complete status
-- `validate.error`: Error - saved error after `errorValidator` success check
+### Request params
+- `baseUrl`: string [='''] - overwrite `baseUrl` for single request
 
 
 ## Example
@@ -26,22 +24,16 @@ import transformUrl from '@tinkoff/request-plugin-transform-url';
 const req = request([
     // should be set first at most cases to transform url as soon as possible
     transformUrl({
-        validator: ({response}) => {
-            if (response.resultCode !== 'OK') {
-                return new Error('Not valid')    
-            }
-        },
-        errorValidator: ({error}) => {
-            return error.status === 404;
+        baseUrl: '/api/',
+        transform: ({baseUrl, method, session}) => {
+            return `${baseUrl}${method}?session=${session}`
         }
     }),
     // ...other plugins
 ]);
 
-// if request was ended succesfully and response contains resultCode === 'OK' req will be resolved with response
-// if request was ended succesfully and resultCode !== 'OK' req will be reject with Not valid error
-// if success failed with status 404 then req will be resolved with response
-// otherwise req will be rejected
-req({url: 'test'}) 
+req({method: 'test'}) // request will be send to /api/test?session=
+req({method: 'test2', baseUrl: '/api2'}) // to /api2/test2?session=
+req({method: 'test3', session: '123'}) // to /api/test3?session=123
 ```
 
