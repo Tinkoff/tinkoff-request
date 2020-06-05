@@ -6,21 +6,21 @@ describe('utils/cacheKey', () => {
             cacheKey({
                 httpMethod: 'GET',
                 url: '/test123',
-                payload: { a: 1, b: 2 },
-                query: { q: 1, q2: 3 },
+                payload: { a: '1', b: '2' },
+                query: { q: '1', q2: '3' },
                 rawQueryString: 'a=b&b=3',
             })
-        ).toBe('get/test123{"a":1,"b":2}{"q":1,"q2":3}a=b&b=3""');
+        ).toBe('get/test123{"a":"1","b":"2"}{"q":"1","q2":"3"}a=b&b=3""');
 
         expect(
             cacheKey({
                 httpMethod: 'POST',
                 url: '/test',
                 payload: {},
-                query: { q: 6 },
+                query: { q: '6' },
                 rawQueryString: 'a=b',
             })
-        ).toBe('post/test{}{"q":6}a=b""');
+        ).toBe('post/test{}{"q":"6"}a=b""');
 
         expect(
             cacheKey({

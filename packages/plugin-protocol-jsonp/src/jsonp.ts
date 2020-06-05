@@ -4,6 +4,15 @@ import { Plugin, Status } from '@tinkoff/request-core';
 
 import { addQuery } from './url';
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        url?: string;
+        query?: Record<string, string>;
+        queryNoCache?: Record<string, string>;
+        jsonp?: fetchJsonp.Options;
+    }
+}
+
 let isPageUnloaded = false;
 
 window.addEventListener('beforeunload', () => {
@@ -22,7 +31,7 @@ window.addEventListener('beforeunload', () => {
  *
  * @return {{init: init}}
  */
-export default (options = {}): Plugin => {
+export default (options: fetchJsonp.Options = {}): Plugin => {
     return {
         init: (context, next) => {
             const { url, query, queryNoCache, jsonp } = context.getRequest();

@@ -3,7 +3,12 @@ import { Context, Status } from '@tinkoff/request-core';
 import { metaTypes } from '@tinkoff/request-cache-utils';
 import deduplicate from './deduplicate';
 
-const requests = [{ url: 'first', r: 1 }, { url: 'first', r: 2 }, { url: 'third', r: 3 }, { url: 'first', r: 4 }];
+const requests = [
+    { url: 'first', r: 1 },
+    { url: 'first', r: 2 },
+    { url: 'third', r: 3 },
+    { url: 'first', r: 4 },
+];
 
 describe('plugins/cache/deduplicate', () => {
     const deduplicateFunc = jest.fn((req) => req.url);

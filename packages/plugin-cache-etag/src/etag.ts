@@ -4,6 +4,13 @@ import { getHeader } from '@tinkoff/request-plugin-protocol-http';
 
 import { ETAG } from './constants';
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        etagCache?: boolean;
+        etagCacheForce?: boolean;
+    }
+}
+
 /**
  * Caches requests response into memory.
  * Caching is based on etag http-header: for every request which contains 'etag' header response is stored in cache, on

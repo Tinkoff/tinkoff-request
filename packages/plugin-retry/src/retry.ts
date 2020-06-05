@@ -59,7 +59,7 @@ export default ({
                             context.updateExternalMeta(RETRY_META, {
                                 attempts: attempt,
                                 timeout: true,
-                            })
+                            });
 
                             return next();
                         }

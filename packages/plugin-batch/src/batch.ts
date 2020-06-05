@@ -11,6 +11,13 @@ interface BatchRequest {
     nexts: Next[];
 }
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        batchKey?: string;
+        batchTimeout?: number;
+    }
+}
+
 /**
  * Batch multiple requests into a single request
  *

@@ -5,6 +5,13 @@ import isUndefined from '@tinkoff/utils/is/undefined';
 import { Context, Status } from '@tinkoff/request-core';
 import { CACHE } from './constants/metaTypes';
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        cache?: boolean;
+        cacheForce?: boolean;
+    }
+}
+
 export default (name: string, dflt: boolean) => (context: Context) => {
     const request = context.getRequest();
     const forced = prop('cacheForce', request);

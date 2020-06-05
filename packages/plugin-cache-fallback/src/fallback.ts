@@ -6,6 +6,13 @@ import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@
 import { CacheDriver } from './types';
 import { fsCacheDriver } from './drivers';
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        fallbackCache?: boolean;
+        fallbackCacheForce?: boolean;
+    }
+}
+
 /**
  * Fallback cache plugin. This cache used only if request ends with error response and returns previous success response from cache.
  * Actual place to store cache data depends on passed driver (file system by default).

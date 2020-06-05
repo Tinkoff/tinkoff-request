@@ -1,6 +1,13 @@
 import { Status, Plugin } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        persistentCache?: boolean;
+        persistentCacheForce?: boolean;
+    }
+}
+
 /**
  * Caches requests result into IndexedDB.
  * Uses library `idb-keyval` as wrapper to IndexedDB.

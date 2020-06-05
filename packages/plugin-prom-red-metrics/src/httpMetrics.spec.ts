@@ -1,20 +1,18 @@
 import { Context } from '@tinkoff/request-core';
-import metrics from './httpMetrics'
+import metrics from './httpMetrics';
 
 describe('plugins/metrics/httpMetrics', () => {
     it('Pass http labelNames to metrics fabrics', () => {
         const counterFabric = jest.fn();
         const histogramFabric = jest.fn();
-        const labelNames = ['method', 'url', 'status']
+        const labelNames = ['method', 'url', 'status'];
 
         metrics({
             metrics: { counter: counterFabric, histogram: histogramFabric },
         });
 
-        counterFabric.mock.calls
-            .forEach(([arg]) => expect(arg.labelNames).toEqual(labelNames))
-        histogramFabric.mock.calls
-            .forEach(([arg]) => expect(arg.labelNames).toEqual(labelNames))
+        counterFabric.mock.calls.forEach(([arg]) => expect(arg.labelNames).toEqual(labelNames));
+        histogramFabric.mock.calls.forEach(([arg]) => expect(arg.labelNames).toEqual(labelNames));
     });
 
     it('Get http labels values from context', () => {
@@ -33,7 +31,7 @@ describe('plugins/metrics/httpMetrics', () => {
             request: {
                 url: 'foo',
                 httpMethod: 'POST',
-            }
+            },
         });
         context.updateInternalMeta('PROTOCOL_HTTP', {
             response: {
@@ -47,12 +45,10 @@ describe('plugins/metrics/httpMetrics', () => {
             url: 'foo',
             method: 'POST',
             status: '200',
-        }
+        };
 
-        counter.inc.mock.calls
-            .forEach(([arg]) => expect(arg).toEqual(labelsValues))
-        timerDone.mock.calls
-            .forEach(([arg]) => expect(arg).toEqual(labelsValues))
+        counter.inc.mock.calls.forEach(([arg]) => expect(arg).toEqual(labelsValues));
+        timerDone.mock.calls.forEach(([arg]) => expect(arg).toEqual(labelsValues));
     });
 
     it('Return default http labels values', () => {
@@ -74,11 +70,9 @@ describe('plugins/metrics/httpMetrics', () => {
             url: 'unknown',
             status: 'unknown',
             method: 'GET',
-        }
+        };
 
-        counter.inc.mock.calls
-            .forEach(([arg]) => expect(arg).toEqual(labelsValues))
-        timerDone.mock.calls
-            .forEach(([arg]) => expect(arg).toEqual(labelsValues))
+        counter.inc.mock.calls.forEach(([arg]) => expect(arg).toEqual(labelsValues));
+        timerDone.mock.calls.forEach(([arg]) => expect(arg).toEqual(labelsValues));
     });
 });

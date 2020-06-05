@@ -6,7 +6,7 @@ const mockStore = { store: 'test' };
 const mockIDB = {
     get: jest.fn(),
     set: jest.fn(),
-    Store: function() {
+    Store: function () {
         return mockStore;
     },
 };

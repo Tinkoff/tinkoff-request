@@ -1,6 +1,6 @@
 import { Context } from '@tinkoff/request-core';
 import { TIMER_DONE } from './constants/metaTypes';
-import metrics from './metrics'
+import metrics from './metrics';
 
 describe('plugins/metrics', () => {
     it('Returns empty object when metrics object not passed', () => {
@@ -11,18 +11,16 @@ describe('plugins/metrics', () => {
         it('Pass labelNames to metrics fabrics', () => {
             const counterFabric = jest.fn();
             const histogramFabric = jest.fn();
-            const labelNames = ['foo', 'bar', 'baz']
+            const labelNames = ['foo', 'bar', 'baz'];
 
             metrics({
                 metrics: { counter: counterFabric, histogram: histogramFabric },
                 labelNames,
-                getLabelsValuesFromContext: () => {}
+                getLabelsValuesFromContext: () => {},
             });
 
-            counterFabric.mock.calls
-                .forEach(([arg]) => expect(arg.labelNames).toBe(labelNames))
-            histogramFabric.mock.calls
-                .forEach(([arg]) => expect(arg.labelNames).toBe(labelNames))
+            counterFabric.mock.calls.forEach(([arg]) => expect(arg.labelNames).toBe(labelNames));
+            histogramFabric.mock.calls.forEach(([arg]) => expect(arg.labelNames).toBe(labelNames));
         });
 
         ['complete', 'error'].forEach((method) => {
@@ -46,14 +44,12 @@ describe('plugins/metrics', () => {
                 plugin.init(context, () => {}, null);
                 plugin[method](context, () => {}, null);
 
-                expect(getLabelsValuesFromContext).toHaveBeenCalledTimes(1)
-                counter.inc.mock.calls
-                    .forEach(([arg]) => expect(arg).toBe(labelsValues))
-                timerDone.mock.calls
-                    .forEach(([arg]) => expect(arg).toBe(labelsValues))
+                expect(getLabelsValuesFromContext).toHaveBeenCalledTimes(1);
+                counter.inc.mock.calls.forEach(([arg]) => expect(arg).toBe(labelsValues));
+                timerDone.mock.calls.forEach(([arg]) => expect(arg).toBe(labelsValues));
             });
         });
-    })
+    });
 
     describe('Lifecycle actions', () => {
         let context;
@@ -65,7 +61,7 @@ describe('plugins/metrics', () => {
 
         beforeEach(() => {
             context = new Context();
-            next = jest.fn()
+            next = jest.fn();
 
             counterInc = jest.fn();
             timerDone = jest.fn();
@@ -77,7 +73,7 @@ describe('plugins/metrics', () => {
             metricsStub = {
                 counter: counterFabric,
                 histogram: histogramFabric,
-            }
+            };
         });
 
         it('Init', () => {
@@ -86,8 +82,8 @@ describe('plugins/metrics', () => {
             plugin.init(context, next, null);
 
             expect(startTimer).toHaveBeenCalledTimes(1);
-            expect(next).toHaveBeenCalledTimes(1)
-            expect(context.getInternalMeta(TIMER_DONE)).toEqual({ timerDone })
+            expect(next).toHaveBeenCalledTimes(1);
+            expect(context.getInternalMeta(TIMER_DONE)).toEqual({ timerDone });
         });
 
         it('Complete', () => {
@@ -96,9 +92,9 @@ describe('plugins/metrics', () => {
             plugin.init(context, () => {}, null);
             plugin.complete(context, next, null);
 
-            expect(timerDone).toHaveBeenCalledTimes(1)
-            expect(counterInc).toHaveBeenCalledTimes(1)
-            expect(next).toHaveBeenCalledTimes(1)
+            expect(timerDone).toHaveBeenCalledTimes(1);
+            expect(counterInc).toHaveBeenCalledTimes(1);
+            expect(next).toHaveBeenCalledTimes(1);
         });
 
         it('Error', () => {
@@ -107,9 +103,9 @@ describe('plugins/metrics', () => {
             plugin.init(context, () => {}, null);
             plugin.error(context, next, null);
 
-            expect(timerDone).toHaveBeenCalledTimes(1)
-            expect(counterInc).toHaveBeenCalledTimes(2)
-            expect(next).toHaveBeenCalledTimes(1)
+            expect(timerDone).toHaveBeenCalledTimes(1);
+            expect(counterInc).toHaveBeenCalledTimes(2);
+            expect(next).toHaveBeenCalledTimes(1);
         });
     });
 });

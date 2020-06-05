@@ -1,6 +1,13 @@
 import { Plugin } from '@tinkoff/request-core';
 import { getCacheKey as getCacheKeyUtil, shouldCacheExecute, metaTypes } from '@tinkoff/request-cache-utils';
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        deduplicateCache?: boolean;
+        deduplicateCacheForce?: boolean;
+    }
+}
+
 /**
  * Deduplicate requests with equal cache keys before making a request
  *

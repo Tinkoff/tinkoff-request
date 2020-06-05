@@ -2,7 +2,7 @@ import prop from '@tinkoff/utils/object/prop';
 import mapObj from '@tinkoff/utils/object/map';
 import isArray from '@tinkoff/utils/is/array';
 import isObject from '@tinkoff/utils/is/object';
-import { Context, Plugin } from '@tinkoff/request-core';
+import { Context, Plugin, Request } from '@tinkoff/request-core';
 import { LOG } from './constants/metaTypes';
 
 declare module '@tinkoff/request-core/lib/types.h' {
@@ -85,19 +85,7 @@ export default ({
     showPayloadFields?: boolean | string[];
 }): Plugin => {
     const log = logger(`request.${name}`);
-    const getInfo = ({
-        url,
-        query,
-        payload,
-        showQueryFields,
-        showPayloadFields,
-    }: {
-        url: string;
-        query?: Record<string, string>;
-        payload?: any;
-        showQueryFields?: boolean | string[];
-        showPayloadFields?: boolean | string[];
-    }) => {
+    const getInfo = ({ url, query, payload, showQueryFields, showPayloadFields }: Request) => {
         const showQuery = showQueryFields ?? globalShowQueryFields;
         const showPayload = showPayloadFields ?? globalShowPayloadFields;
 
