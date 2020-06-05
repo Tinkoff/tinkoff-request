@@ -18,8 +18,9 @@ If `errorValidator` returns truthy for request in error phase then plugin switch
 - `allowFallback`: boolean [= true] - if false adds `fallbackCache`=false option to request to prevent activating fallback cache
 
 ### External meta
-- `baseUrl`: string [='''] - overwrite `baseUrl` for single request
-
+- `validate.validated`: boolean - is completed request has passed validation
+- `validate.errorValidated`: boolean - is errored request passed validation and switched to complete status
+- `validate.error`: Error - saved error after `errorValidator` success check
 
 ## Example
 ```typescript
@@ -27,14 +28,26 @@ import request from '@tinkoff/request-core';
 import validate from '@tinkoff/request-plugin-validate';
 
 const req = request([
-    // should be set first at most cases to transform url as soon as possible
+    // ...plugins for any request transforms and cache 
+    // should be set after transforming plugins and cache plugins
     validate({
+        validator: ({response}) => {
+            if (response.resultCode !== 'OK') {
+                return new Error('Not valid')    
+            }
+        },
+        errorValidator: ({error}) => {
+            return error.status === 404;
+        }
     }),
-    // ...other plugins
+    // should be set before protocol plugins
+    // ...plugins for making actual request
 ]);
 
-req({method: 'test'}) // request will be send to /api/test?session=
-req({method: 'test2', baseUrl: '/api2'}) // to /api2/test2?session=
-req({method: 'test3', session: '123'}) // to /api/test3?session=123
+// if request was ended succesfully and response contains resultCode === 'OK' req will be resolved with response
+// if request was ended succesfully and resultCode !== 'OK' req will be reject with Not valid error
+// if success failed with status 404 then req will be resolved with response
+// otherwise req will be rejected
+req({url: 'test'}) 
 ```
 
