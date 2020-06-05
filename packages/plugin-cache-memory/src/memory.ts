@@ -6,6 +6,14 @@ import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@
 
 const CACHE_DEFAULT_TTL = 300000; // 5 min
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        memoryCache?: boolean;
+        memoryCacheForce?: boolean;
+        memoryCacheTtl?: number;
+    }
+}
+
 /**
  * Caches requests response into memory.
  * Uses library `lru-cache` as memory storage.

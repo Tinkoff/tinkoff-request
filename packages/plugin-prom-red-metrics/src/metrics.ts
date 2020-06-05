@@ -1,13 +1,7 @@
 import { Plugin } from '@tinkoff/request-core';
 import { TIMER_DONE } from './constants/metaTypes';
 
-
-export default ({
-    metrics = null,
-    prefix = '',
-    labelNames,
-    getLabelsValuesFromContext,
-}): Plugin => {
+export default ({ metrics = null, prefix = '', labelNames, getLabelsValuesFromContext }): Plugin => {
     if (!metrics) return {};
 
     const addPrefix = (str) => (prefix ? `${prefix}_` : '') + str;

@@ -9,6 +9,12 @@ interface Params {
     transform?: Transform;
 }
 
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        baseUrl?: string;
+    }
+}
+
 /**
  * Transforms request url using passed function.
  *

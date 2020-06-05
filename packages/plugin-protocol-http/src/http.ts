@@ -1,15 +1,31 @@
 import AbortController from 'abort-controller';
 
 import propOr from '@tinkoff/utils/object/propOr';
-import { HttpMethods, Plugin, Status } from '@tinkoff/request-core';
+import { Plugin, Status } from '@tinkoff/request-core';
 import { Agent } from 'https';
 
 import { fetch } from './fetch';
 import { addQuery, normalizeUrl } from './url';
 import { serialize } from './serialize';
-import { PROTOCOL_HTTP, REQUEST_TYPES } from './constants';
+import { PROTOCOL_HTTP, REQUEST_TYPES, HttpMethods } from './constants';
 import parse from './parse';
 import createForm from './form';
+
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface Request {
+        httpMethod?: keyof typeof HttpMethods | typeof HttpMethods[keyof typeof HttpMethods];
+        url?: string;
+        query?: Record<string, string>;
+        queryNoCache?: Record<string, string>;
+        headers?: object;
+        type?: string;
+        payload?: any;
+        attaches?: any[];
+        timeout?: number;
+        withCredentials?: boolean;
+        abortPromise?: Promise<any>;
+    }
+}
 
 const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;

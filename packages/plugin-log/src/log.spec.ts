@@ -33,7 +33,7 @@ describe('plugins/log', () => {
 
         it('init', () => {
             const url = 'test1';
-            const query = { a: 1 };
+            const query = { a: '1' };
             const payload = { b: 2 };
             const request = { query, payload, a: 1, url };
 
@@ -53,7 +53,7 @@ describe('plugins/log', () => {
         it('complete', () => {
             const start = 1242152525;
 
-            context.setState({ request: { url: 'test2', query: { a: 1 } } });
+            context.setState({ request: { url: 'test2', query: { a: '1' } } });
             context.updateExternalMeta(LOG, { start });
             plugin.complete(context, next, null);
 
@@ -104,7 +104,7 @@ describe('plugins/log', () => {
 
         it('init', () => {
             const url = 'test1';
-            const query = { a: 1 };
+            const query = { a: '1' };
             const payload = { b: 2 };
             const request = { query, payload, a: 1, url };
 
@@ -124,7 +124,7 @@ describe('plugins/log', () => {
         it('complete', () => {
             const start = 1242152525;
 
-            context.setState({ request: { url: 'test2', query: { a: 1 }, showQueryFields: true } });
+            context.setState({ request: { url: 'test2', query: { a: '1' }, showQueryFields: true } });
             context.updateExternalMeta(LOG, { start });
             plugin.complete(context, next, null);
 
@@ -135,7 +135,7 @@ describe('plugins/log', () => {
             expect(next).toHaveBeenCalled();
             expect(mockDebug).toHaveBeenLastCalledWith({
                 event: 'complete',
-                info: { url: 'test2', query: { a: 1 } },
+                info: { url: 'test2', query: { a: '1' } },
                 meta,
             });
             expect(context.getExternalMeta(LOG)).toEqual({
@@ -175,7 +175,7 @@ describe('plugins/log', () => {
 
         it('init', () => {
             const url = 'test1';
-            const query = { a: 1, b: 2, c: 3 };
+            const query = { a: '1', b: '2', c: '3' };
             const payload = { test: 'abc' };
             const request = { query, payload, a: 1, url };
 
@@ -185,7 +185,7 @@ describe('plugins/log', () => {
             expect(next).toHaveBeenCalled();
             expect(mockDebug).toHaveBeenLastCalledWith({
                 event: 'init',
-                info: { url, query: { a: 1, b: '*', c: 3 }, payload: { test: '*' } },
+                info: { url, query: { a: '1', b: '*', c: '3' }, payload: { test: '*' } },
             });
             expect(context.getExternalMeta(LOG)).toEqual({
                 start: Date.now(),
@@ -198,7 +198,7 @@ describe('plugins/log', () => {
             context.setState({
                 request: {
                     url: 'test2',
-                    query: { a: 1 },
+                    query: { a: '1' },
                     payload: { a: 'a', b: 'b', c: 'c' },
                     showPayloadFields: ['a', 'c'],
                 },
@@ -213,7 +213,7 @@ describe('plugins/log', () => {
             expect(next).toHaveBeenCalled();
             expect(mockDebug).toHaveBeenLastCalledWith({
                 event: 'complete',
-                info: { url: 'test2', query: { a: 1 }, payload: { a: 'a', b: '*', c: 'c' } },
+                info: { url: 'test2', query: { a: '1' }, payload: { a: 'a', b: '*', c: 'c' } },
                 meta,
             });
             expect(context.getExternalMeta(LOG)).toEqual({
@@ -230,7 +230,7 @@ describe('plugins/log', () => {
             context.setState({
                 request: {
                     url: 'test3',
-                    query: { a: 1, b: 2, c: 3 },
+                    query: { a: '1', b: '2', c: '3' },
                     payload: { a: 'a', b: 'b', c: 'c' },
                     showQueryFields: ['b'],
                 },
@@ -248,7 +248,7 @@ describe('plugins/log', () => {
             expect(next).toHaveBeenCalled();
             expect(mockError).toHaveBeenCalledWith({
                 event: 'error',
-                info: { url: 'test3', query: { a: '*', b: 2, c: '*' }, payload: { a: '*', b: '*', c: '*' } },
+                info: { url: 'test3', query: { a: '*', b: '2', c: '*' }, payload: { a: '*', b: '*', c: '*' } },
                 error,
                 meta: { log: meta },
             });
@@ -261,7 +261,7 @@ describe('plugins/log', () => {
 
         it('init', () => {
             const url = 'test1';
-            const query = { a: 1 };
+            const query = { a: '1' };
             const payload = { b: 2 };
             const request = { query, payload, a: 1, url };
 
@@ -281,7 +281,7 @@ describe('plugins/log', () => {
         it('complete', () => {
             const start = 1242152525;
 
-            context.setState({ request: { url: 'test2', query: { a: 1 } } });
+            context.setState({ request: { url: 'test2', query: { a: '1' } } });
             context.updateExternalMeta(LOG, { start });
             plugin.complete(context, next, null);
 
@@ -332,7 +332,7 @@ describe('plugins/log', () => {
 
         it('init', () => {
             const url = 'test1';
-            const query = { a: 1 };
+            const query = { a: '1' };
             const payload = { b: 2 };
             const request = { query, payload, a: 1, url };
 

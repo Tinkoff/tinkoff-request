@@ -10,9 +10,15 @@ export const getHttpLabelsValues = (context) => {
         status: getStatus(context as any) || 'unknown',
     };
 };
-export const httpLabels = ['method', 'url', 'status']
+export const httpLabels = ['method', 'url', 'status'];
 
-export default (opts) => metricsPlugin(Object.assign({
-    labelNames: httpLabels,
-    getLabelsValuesFromContext:  getHttpLabelsValues,
-}, opts));
+export default (opts) =>
+    metricsPlugin(
+        Object.assign(
+            {
+                labelNames: httpLabels,
+                getLabelsValuesFromContext: getHttpLabelsValues,
+            },
+            opts
+        )
+    );

@@ -23,7 +23,7 @@ const requestMaker: RequestMaker = function (plugins) {
 
         context.setState({ request });
 
-        const promise = new Promise((resolve, reject) => {
+        const promise = new Promise<any>((resolve, reject) => {
             const cb = (statusChanged: boolean) => {
                 const state = context.getState();
                 const currentStatus = state.status;
