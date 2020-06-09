@@ -1,6 +1,8 @@
 # @tinkoff/request
 Modular lightweight request library extendable by plugins.
 
+[Documentation](https://tinkoffcreditsystems.github.io/tinkoff-request/)
+
 ## Example of usage
 ```javascript
 import request from '@tinkoff/request-core';
