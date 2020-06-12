@@ -1,4 +1,4 @@
-import { Response } from 'node-fetch';
+import { Response } from './fetch';
 import parse from './parse';
 
 describe('plugins/http/url', () => {

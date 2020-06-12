@@ -4,6 +4,9 @@
   "description": "Make requests using http(s) protocol",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "browser": {
+    "lib/fetch.js": "./lib/fetch.browser.js"
+  },
   "sideEffects": false,
   "scripts": {
     "prepack": "tsc",

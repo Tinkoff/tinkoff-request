@@ -9,12 +9,7 @@ describe('plugins/http/form', () => {
             'content-type': expect.stringContaining('multipart/form-data'),
         });
 
-        expect(
-            form
-                .getBuffer()
-                .toString()
-                .replace(/\r\n/g, '\n')
-        ).toEqual(`--${boundary}
+        expect(form.getBuffer().toString().replace(/\r\n/g, '\n')).toEqual(`--${boundary}
 Content-Disposition: form-data; name="a"
 
 1

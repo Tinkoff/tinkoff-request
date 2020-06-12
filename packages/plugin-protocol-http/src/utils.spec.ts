@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { MakeRequestResult } from '@tinkoff/request-core';
-import { Headers } from 'node-fetch';
+import { Headers } from './fetch';
 import { PROTOCOL_HTTP } from './constants';
 import { abort, getHeader, getHeaders, getStatus } from './utils';
 
