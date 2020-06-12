@@ -1,17 +1,16 @@
-import nodeFetch from 'node-fetch';
 import AbortController from 'abort-controller';
 
 import propOr from '@tinkoff/utils/object/propOr';
 import { HttpMethods, Plugin, Status } from '@tinkoff/request-core';
 import { Agent } from 'https';
 
+import { fetch } from './fetch';
 import { addQuery, normalizeUrl } from './url';
 import { serialize } from './serialize';
 import { PROTOCOL_HTTP, REQUEST_TYPES } from './constants';
 import parse from './parse';
 import createForm from './form';
 
-const fetch = nodeFetch;
 const isBrowser = typeof window !== 'undefined';
 let isPageUnloaded = false;
 
