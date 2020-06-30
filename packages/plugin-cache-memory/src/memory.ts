@@ -22,6 +22,8 @@ declare module '@tinkoff/request-core/lib/types.h' {
  *      memoryCache {boolean} - disable this plugin at all
  *      memoryCacheForce {boolean} - plugin will only be executed on complete phase
  *      memoryCacheTtl {number} - ttl of cache of the current request
+ *      memoryCacheAllowStale {boolean} - is allowed to use outdated value from cache
+ *          (if true outdated value will be returned and request to update it will be run in background)
  *
  * metaInfo:
  *      memoryCache {boolean} - is current request was returned from this cache

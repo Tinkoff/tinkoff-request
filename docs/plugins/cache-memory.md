@@ -22,6 +22,7 @@ Uses library `lru-cache` as memory storage.
 - `cacheForce`: boolean [=false] - when enabled all cache plugin will be executed only on complete status (request wont be resolved with cache value in that case and will only store result cache on completed requests)
 - `memoryCache`: boolean [=true] - should this specific cache plugin be executed
 - `memoryCacheForce`: boolean [=false] - specific case of `cacheForce` for this plugin only.
+- `memoryCacheTtl`: boolean - ttl of cache of the current request
 - `memoryCacheAllowStale`: boolean [=allowStale] - flag indicating that is it allowed to return outdated value from cache
 
 ### External meta
