@@ -73,6 +73,10 @@
         "title": "Protocol Plugin - Jsonp",
         "sidebar_label": "Protocol - Jsonp"
       },
+      "plugins/retry": {
+        "title": "Retry Plugin",
+        "sidebar_label": "Retry"
+      },
       "plugins/transform-url": {
         "title": "Transform Plugin - Url",
         "sidebar_label": "Transform - Url"
