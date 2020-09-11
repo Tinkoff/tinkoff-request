@@ -13,7 +13,15 @@ import createForm from './form';
 
 declare module '@tinkoff/request-core/lib/types.h' {
     export interface Request {
-        httpMethod?: keyof typeof HttpMethods | typeof HttpMethods[keyof typeof HttpMethods];
+        httpMethod?:
+            | keyof typeof HttpMethods
+            | typeof HttpMethods[keyof typeof HttpMethods]
+            | 'get'
+            | 'post'
+            | 'put'
+            | 'delete'
+            | 'head'
+            | 'patch';
         url?: string;
         query?: Record<string, string>;
         queryNoCache?: Record<string, string>;
@@ -87,7 +95,9 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
             } = context.getRequest();
 
             let ended = false;
-            const method = httpMethod.toLowerCase();
+            // should be uppercased by spec
+            // https://fetch.spec.whatwg.org/#concept-method-normalize
+            const method = httpMethod.toUpperCase();
             const noBody = method === HttpMethods.GET || method === HttpMethods.HEAD;
 
             let body;
