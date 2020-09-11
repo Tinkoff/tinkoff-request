@@ -1,11 +1,12 @@
 export const PROTOCOL_HTTP = 'PROTOCOL_HTTP';
 
 export const HttpMethods = {
-    GET: 'get',
-    POST: 'post',
-    PUT: 'put',
-    DELETE: 'delete',
-    HEAD: 'head',
+    GET: 'GET',
+    POST: 'POST',
+    PUT: 'PUT',
+    DELETE: 'DELETE',
+    HEAD: 'HEAD',
+    PATCH: 'PATCH',
 } as const;
 
 export const REQUEST_TYPES = {

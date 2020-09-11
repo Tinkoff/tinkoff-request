@@ -35,7 +35,7 @@ describe('plugins/http', () => {
 
         expect(mockResponse).toBeCalled();
         expect(fetch).toHaveBeenCalledWith('test', {
-            method: 'get',
+            method: 'GET',
             credentials: 'same-origin',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
@@ -262,6 +262,46 @@ describe('plugins/http', () => {
         abort('abort after');
 
         expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenLastCalledWith({
+            response,
+            status: Status.COMPLETE,
+        });
+    });
+
+    it('should convert httpMethod to uppercase', async () => {
+        const response = { a: 3 };
+        const mockResponse = jest.fn(() =>
+            Promise.resolve({
+                body: JSON.stringify(response),
+                init: {
+                    headers: {
+                        'Content-type': 'application/json;',
+                    },
+                },
+            })
+        );
+
+        fetch.mockResponse(mockResponse);
+
+        plugin.init(new Context({ request: { url: 'method-patch', httpMethod: 'patch' } }), next, null);
+
+        jest.runAllTimers();
+
+        expect(mockResponse).toBeCalled();
+        expect(fetch).toHaveBeenCalledWith('method-patch', {
+            method: 'PATCH',
+            credentials: 'same-origin',
+            body: '',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded',
+            },
+            signal: expect.anything(),
+        });
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
         expect(next).toHaveBeenLastCalledWith({
             response,
             status: Status.COMPLETE,
