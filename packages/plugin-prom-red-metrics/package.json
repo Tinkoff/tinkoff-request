@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-prom-red-metrics",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Collect RED metrics for prometheus",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@tinkoff/request-core": "^0.8.7",
-    "@tinkoff/request-plugin-protocol-http": "^0.10.13"
+    "@tinkoff/request-plugin-protocol-http": "^0.10.14"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x",
