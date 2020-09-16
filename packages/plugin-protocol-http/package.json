@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-protocol-http",
-  "version": "0.10.14",
+  "version": "0.10.15",
   "description": "Make requests using http(s) protocol",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
