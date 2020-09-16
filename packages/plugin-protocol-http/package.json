@@ -31,7 +31,7 @@
     "@tinkoff/utils": "^2.0.0",
     "abort-controller": "^3.0.0",
     "form-data": "^2.5.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
