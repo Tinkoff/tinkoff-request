@@ -141,8 +141,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     abortPromise.then(abort);
                 }
 
-                if (isBrowser && timeout) {
-                    // node-fetch has timeout option, so add check only for browser
+                if (timeout) {
                     timer = setTimeout(() => {
                         abort(new Error('Request timed out'));
                     }, timeout);
@@ -152,8 +151,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     requestAbort: abort,
                 });
             } else {
-                if (isBrowser && timeout) {
-                    // node-fetch has timeout option, so add check only for browser
+                if (timeout) {
                     timer = setTimeout(() => {
                         next({
                             status: Status.ERROR,
