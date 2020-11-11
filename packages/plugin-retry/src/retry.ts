@@ -70,6 +70,9 @@ export default ({
                             timeout: timeout - diffTime,
                             silent: true,
                             retryDelay: undefined,
+                            // to prevent deduplicating new request with the initial one
+                            // all of the caching will still be happen for initial request on complete
+                            cache: false,
                         }).then(
                             (response) => {
                                 context.updateExternalMeta(RETRY_META, {
