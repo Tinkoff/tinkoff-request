@@ -85,6 +85,8 @@ export default ({
                             ...request,
                             memoryCacheForce: true,
                             memoryCacheBackground: true,
+                        }).catch(() => {
+                            // do nothing here because sub request have all logging stuff
                         }),
                     15
                 ); // run background request to update cache
