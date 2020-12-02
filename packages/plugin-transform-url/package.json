@@ -30,6 +30,6 @@
     "@tinkoff/request-core": "0.x"
   },
   "dependencies": {
-    "tslib": "^1.9.3"
+    "tslib": "^2.0.3"
   }
 }

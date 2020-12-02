@@ -59,7 +59,7 @@ describe('plugins/cache/memory', () => {
     it('init, value from cache outdated, but allowStale is false', () => {
         const plugin = memoryCache({ allowStale: false });
         const response = { a: 1 };
-        const makeRequest = jest.fn();
+        const makeRequest: any = jest.fn(() => Promise.resolve());
 
         mockLru.has.mockImplementation(() => false);
         mockLru.peek.mockImplementation(() => response);
@@ -75,7 +75,7 @@ describe('plugins/cache/memory', () => {
     it('init, value in cache is outdated and allowStale is true', () => {
         const plugin = memoryCache({ allowStale: true, staleTtl: 523 });
         const response = { a: 1 };
-        const makeRequest = jest.fn();
+        const makeRequest: any = jest.fn(() => Promise.resolve());
 
         mockLru.has.mockImplementation(() => false);
         mockLru.peek.mockImplementation(() => response);
@@ -99,7 +99,7 @@ describe('plugins/cache/memory', () => {
     it('init, value in cache is outdated and request memoryCacheAllowStale is true', () => {
         const plugin = memoryCache({ allowStale: false });
         const response = { a: 1 };
-        const makeRequest = jest.fn();
+        const makeRequest: any = jest.fn(() => Promise.resolve());
 
         context.setState({ request: { url: 'test', memoryCacheAllowStale: true } });
         mockLru.has.mockImplementation(() => false);
