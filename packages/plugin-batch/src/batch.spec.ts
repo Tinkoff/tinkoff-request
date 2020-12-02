@@ -79,7 +79,7 @@ describe('plugins/batch', () => {
         init(context, next, null);
 
         jest.runAllTimers();
-        await Promise.resolve();
+        await Promise.resolve().catch(() => null);
         expect(next).toHaveBeenCalledTimes(3);
         expect(next).toHaveBeenLastCalledWith({
             error,

@@ -24,7 +24,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "tslib": "^1.9.3"
+    "tslib": "^2.0.3"
   },
   "devDependencies": {
     "@tinkoff/request-core": "^0.8.7",
