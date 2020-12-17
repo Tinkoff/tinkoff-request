@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-fallback",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Cache your responses in file cache to use it while resources are not available",
   "main": "lib/fallback.js",
   "browser": {
@@ -27,7 +27,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "^0.8.7",
+    "@tinkoff/request-cache-utils": "^0.8.8",
     "@tinkoff/utils": "^2.0.0",
     "fs-extra": "^9.0.0",
     "lru-cache": "^5.1.1",

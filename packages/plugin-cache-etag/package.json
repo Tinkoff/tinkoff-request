@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-etag",
-  "version": "0.2.20",
+  "version": "0.2.21",
   "description": "Caching based on etag http-header",
   "main": "lib/etag.js",
   "browser": "lib/noop",
@@ -21,7 +21,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "^0.8.7",
+    "@tinkoff/request-cache-utils": "^0.8.8",
     "@tinkoff/utils": "^2.0.0",
     "lru-cache": "^5.1.1",
     "tslib": "^2.0.3"

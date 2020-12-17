@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-cache-utils",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "description": "Support library for @tinkoff/request",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
