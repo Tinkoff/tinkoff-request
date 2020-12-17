@@ -1,7 +1,4 @@
 import prop from '@tinkoff/utils/object/prop';
-import propOr from '@tinkoff/utils/object/propOr';
-import propEq from '@tinkoff/utils/object/propEq';
-import isUndefined from '@tinkoff/utils/is/undefined';
 import { Context, Status } from '@tinkoff/request-core';
 import { CACHE } from './constants/metaTypes';
 
@@ -14,27 +11,22 @@ declare module '@tinkoff/request-core/lib/types.h' {
 
 export default (name: string, dflt: boolean) => (context: Context) => {
     const request = context.getRequest();
-    const forced = prop('cacheForce', request);
-    const forcedSpecific = prop(`${name}CacheForce`, request);
-    const disabled = propEq('cache', false, request);
-    const enabledSpecific = propOr(`${name}Cache`, disabled ? false : dflt, request);
-    const isComplete = context.getStatus() === Status.COMPLETE;
+    const forced = prop('cacheForce', request) ?? false;
+    const forcedSpecific = prop(`${name}CacheForce`, request) ?? forced;
+    const enabled = prop('cache', request) ?? dflt;
+    const enabledSpecific = prop(`${name}Cache`, request) ?? enabled;
 
     if (context.getStatus() === Status.INIT) {
         context.updateExternalMeta(CACHE, {
             forced,
-            enabled: !disabled,
+            enabled,
             [`${name}Enabled`]: enabledSpecific,
             [`${name}Force`]: forcedSpecific,
         });
     }
 
     if (forcedSpecific) {
-        return isComplete;
-    }
-
-    if (isUndefined(forcedSpecific) && forced) {
-        return isComplete && dflt;
+        return context.getStatus() === Status.COMPLETE;
     }
 
     return enabledSpecific;
