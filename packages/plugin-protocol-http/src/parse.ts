@@ -8,5 +8,9 @@ export default (res: Response) => {
         return res.json();
     }
 
+    if (includes('application/octet-stream', type)) {
+        return res.arrayBuffer();
+    }
+
     return res.text();
 };
