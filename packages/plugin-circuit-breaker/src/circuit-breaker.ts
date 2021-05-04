@@ -3,8 +3,11 @@ import { ContextState, Plugin, Status } from '@tinkoff/request-core';
 import { CIRCUIT_BREAKER_META } from './constants';
 import { CircuitBreakerOptions, CircuitBreaker } from './CircuitBreaker';
 
+export { CircuitBreaker };
+
 export interface Options extends Partial<CircuitBreakerOptions> {
     getKey?: (state: ContextState) => string;
+    circuitBreakerInstance?: CircuitBreaker;
 }
 
 /**
@@ -24,6 +27,7 @@ export interface Options extends Partial<CircuitBreakerOptions> {
  * @param {number} [minimumFailureCount=5] number of minimum request which should be failed to consider stats from current time interval
  * @param {number} [openTimeout=30000] time interval in which all requests will forcedly fail,
  *               after that timeout `halfOpenThreshold` number of requests will be executed as usual
+ * @param {CircuitBreaker} circuitBreakerInstance CircuitBreaker instance, provide it, if you need stateless plugin
  * @param {number} [halfOpenThreshold=5] percentage of requests allowed to execute while state is Half-Open
  */
 export default (
@@ -34,11 +38,14 @@ export default (
         openTimeout = 30000,
         halfOpenThreshold = 5,
         minimumFailureCount = 5,
+        circuitBreakerInstance = undefined,
     }: Options = {} as Options
 ): Plugin => {
     let getBreaker: (state: ContextState) => CircuitBreaker;
 
-    if (isFunction(getKey)) {
+    if (circuitBreakerInstance) {
+        getBreaker = () => circuitBreakerInstance;
+    } else if (isFunction(getKey)) {
         const registry = new Map<string, CircuitBreaker>();
 
         getBreaker = (state: ContextState) => {

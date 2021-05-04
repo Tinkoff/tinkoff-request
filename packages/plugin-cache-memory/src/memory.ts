@@ -36,6 +36,7 @@ declare module '@tinkoff/request-core/lib/types.h' {
  * @param {number} [staleTtl = lruOptions.maxAge] time in ms while outdated value is preserved in cache while
  *       executing background update
  * @param {function} memoryConstructor cache factory
+ * @param {object} memoryInstance cache instance, provide it, if you need stateless plugin
  * @param {function} getCacheKey function used for generate cache key
  */
 export default ({
@@ -44,9 +45,10 @@ export default ({
     allowStale = false,
     staleTtl = lruOptions.maxAge || CACHE_DEFAULT_TTL,
     memoryConstructor = (options) => new (require('lru-cache'))(options),
+    memoryInstance = undefined,
     getCacheKey = undefined,
 } = {}): Plugin => {
-    const lruCache = memoryConstructor({
+    const lruCache = memoryInstance ?? memoryConstructor({
         ...lruOptions,
         stale: true, // should be true for the opportunity to control it for individual requests
     });

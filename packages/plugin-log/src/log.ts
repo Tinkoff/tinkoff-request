@@ -69,6 +69,7 @@ const hideValues = (obj: any, showFields: Set<string> | boolean) => {
  *
  * @param name {string}
  * @param logger {Function} - logger factory
+ * @param loggerInstance {Logger} - logger instance, provide it, if you need stateless plugin
  * @param showQueryFields {boolean | string[]} - whether the plugin should show request query values
  * @param showPayloadFields {boolean | string[]} - whether the plugin should show request payload values
  * @return {{init: init, complete: complete, error: error}}
@@ -76,15 +77,17 @@ const hideValues = (obj: any, showFields: Set<string> | boolean) => {
 export default ({
     name = '',
     logger = defaultLogger,
+    loggerInstance = undefined,
     showQueryFields: globalShowQueryFields = false,
     showPayloadFields: globalShowPayloadFields = false,
 }: {
     name?: string;
     logger?: (name: string) => Logger;
+    loggerInstance?: Logger;
     showQueryFields?: boolean | string[];
     showPayloadFields?: boolean | string[];
 }): Plugin => {
-    const log = logger(`request.${name}`);
+    const log = loggerInstance ?? logger(`request.${name}`);
     const getInfo = ({ url, query, payload, showQueryFields, showPayloadFields }: Request) => {
         const showQuery = showQueryFields ?? globalShowQueryFields;
         const showPayload = showPayloadFields ?? globalShowPayloadFields;

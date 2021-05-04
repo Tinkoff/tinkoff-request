@@ -29,15 +29,17 @@ declare module '@tinkoff/request-core/lib/types.h' {
  * @param {object} [lruOptions = {max: 1000}] - options passed to lru-cache library
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {function} memoryConstructor cache factory
+ * @param {object} memoryInstance cache instance, provide it, if you need stateless plugin
  * @param {function} getCacheKey function used for generate cache key
  */
 export default ({
     lruOptions = { max: 1000 },
     shouldExecute = true,
     memoryConstructor = (options) => new (require('lru-cache'))(options),
+    memoryInstance = undefined,
     getCacheKey = undefined,
 } = {}): Plugin => {
-    const lruCache = memoryConstructor({
+    const lruCache = memoryInstance ?? memoryConstructor({
         ...lruOptions,
         stale: true, // should be true for the opportunity to control it for individual requests
     });

@@ -20,9 +20,14 @@ declare module '@tinkoff/request-core/lib/types.h' {
  *
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {function} getCacheKey function used for generate cache key
+ * @param {object} activeRequestsMemoryInstance - cache with active requests, provide it, if you need stateless plugin
  */
-export default ({ shouldExecute = true, getCacheKey = undefined } = {}): Plugin => {
-    const activeRequests = {};
+export default ({
+    shouldExecute = true,
+    getCacheKey = undefined,
+    activeRequestsMemoryInstance = undefined
+} = {}): Plugin => {
+    const activeRequests = activeRequestsMemoryInstance ?? {};
 
     const traverseActiveRequests = (context) => {
         const state = context.getState();

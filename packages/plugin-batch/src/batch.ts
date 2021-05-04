@@ -31,11 +31,17 @@ declare module '@tinkoff/request-core/lib/types.h' {
  * @param {number} [timeout = 100] - time after which plugin will initiate a grouped request
  * @param {function} makeGroupedRequest - function accepts an array of requests and returns promise
  *          which should be resolved with an array of responses
- *  @param {boolean} shouldExecute - enable plugin
+ * @param {boolean} shouldExecute - enable plugin
+ * @param {object} batchRequestsMemoryInstance - cache with batched requests, provide it, if you need stateless plugin
  * @return {{shouldExecute: function(*): *, init: init}}
  */
-export default ({ timeout = DEFAULT_BATCH_TIMEOUT, shouldExecute = true, makeGroupedRequest }): Plugin => {
-    const batchRequests: Record<string, BatchRequest> = {};
+export default ({
+    timeout = DEFAULT_BATCH_TIMEOUT,
+    shouldExecute = true,
+    batchRequestsMemoryInstance = undefined,
+    makeGroupedRequest
+}): Plugin => {
+    const batchRequests: Record<string, BatchRequest> = batchRequestsMemoryInstance ?? {};
 
     return {
         shouldExecute: (context) => {
