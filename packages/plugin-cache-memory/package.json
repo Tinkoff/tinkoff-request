@@ -26,7 +26,7 @@
   "dependencies": {
     "@tinkoff/request-cache-utils": "^0.8.8",
     "@tinkoff/utils": "^2.0.0",
-    "lru-cache": "^5.1.1",
+    "lru-cache": "^6.0.0",
     "tslib": "^2.0.3"
   },
   "devDependencies": {
