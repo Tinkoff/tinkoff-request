@@ -3,6 +3,14 @@ import Context from './context/Context';
 
 export type Meta = Record<string, any>;
 
+export interface RequestErrorCode {}
+
+export interface RequestError extends Error {
+    code?: keyof RequestErrorCode;
+    message: string;
+    [key: string]: any;
+}
+
 export interface Request {
     [key: string]: any;
 }

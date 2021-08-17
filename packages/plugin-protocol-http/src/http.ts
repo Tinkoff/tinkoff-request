@@ -10,6 +10,7 @@ import { serialize } from './serialize';
 import { PROTOCOL_HTTP, REQUEST_TYPES, HttpMethods } from './constants';
 import parse from './parse';
 import createForm from './form';
+import { TimeoutError, AbortError, HttpRequestError } from './errors';
 
 declare module '@tinkoff/request-core/lib/types.h' {
     export interface Request {
@@ -32,6 +33,14 @@ declare module '@tinkoff/request-core/lib/types.h' {
         timeout?: number;
         withCredentials?: boolean;
         abortPromise?: Promise<any>;
+    }
+
+    export interface RequestErrorCode {
+        ERR_HTTP_REQUEST_TIMEOUT: 'ERR_HTTP_REQUEST_TIMEOUT';
+
+        ERR_HTTP_ERROR: 'ERR_HTTP_ERROR';
+
+        ABORT_ERR: 'ABORT_ERR';
     }
 }
 
@@ -133,7 +142,12 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
 
                     next({
                         status: Status.ERROR,
-                        error: abortOptions || {},
+                        error:
+                            abortOptions instanceof Error
+                                ? abortOptions
+                                : Object.assign(new AbortError(), {
+                                      abortOptions: abortOptions || {},
+                                  }),
                     });
                 };
 
@@ -143,7 +157,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
 
                 if (timeout) {
                     timer = setTimeout(() => {
-                        abort(new Error('Request timed out'));
+                        abort(new TimeoutError());
                     }, timeout);
                 }
 
@@ -155,7 +169,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                     timer = setTimeout(() => {
                         next({
                             status: Status.ERROR,
-                            error: new Error('Request timed out'),
+                            error: new TimeoutError(),
                         });
 
                         ended = true;
@@ -216,12 +230,20 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                         return;
                     }
 
+                    if (err && typeof err.type === 'string' && /timeout/.test(err.type)) {
+                        return next({
+                            status: Status.ERROR,
+                            error: new TimeoutError(),
+                        });
+                    }
+
                     next({
                         status: Status.ERROR,
                         error: Object.assign(err, {
+                            code: 'ERR_HTTP_ERROR',
                             status: response && response.status,
                             body: responseBody,
-                        }),
+                        }) as HttpRequestError,
                         response: responseBody,
                     });
                 })

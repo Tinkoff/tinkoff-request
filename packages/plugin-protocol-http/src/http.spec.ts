@@ -130,6 +130,7 @@ describe('plugins/http', () => {
         expect(next).toHaveBeenLastCalledWith({
             status: Status.ERROR,
             error: expect.objectContaining({
+                code: 'ERR_HTTP_ERROR',
                 message: 'Service Unavailable',
                 status: 503,
                 body: response,
@@ -221,7 +222,10 @@ describe('plugins/http', () => {
 
         expect(next).toHaveBeenCalledTimes(1);
         expect(next).toHaveBeenLastCalledWith({
-            error: 'abort test',
+            error: expect.objectContaining({
+                code: 'ABORT_ERR',
+                abortOptions: 'abort test',
+            }),
             status: Status.ERROR,
         });
     });
@@ -305,6 +309,63 @@ describe('plugins/http', () => {
         expect(next).toHaveBeenLastCalledWith({
             response,
             status: Status.COMPLETE,
+        });
+    });
+
+    it('timeout', async () => {
+        const response = { a: 1 };
+        const mockResponse = jest.fn(() => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve(response);
+                }, 2000);
+            });
+        });
+
+        fetch.mockResponse(mockResponse);
+
+        plugin.init(new Context({ request: { url: 'timeout', timeout: 500 } }), next, null);
+
+        jest.runAllTimers();
+
+        expect(mockResponse).toBeCalled();
+
+        expect(next).toHaveBeenLastCalledWith({
+            error: expect.objectContaining({
+                code: 'ERR_HTTP_REQUEST_TIMEOUT',
+                message: 'Request timed out',
+            }),
+            status: Status.ERROR,
+        });
+    });
+
+    it('internal timeout', async () => {
+        const mockResponse = jest.fn(() => {
+            return Promise.reject(
+                Object.assign(new Error('network timeout at: timeout'), {
+                    type: 'request-timeout',
+                })
+            );
+        });
+
+        fetch.mockResponse(mockResponse);
+
+        plugin.init(new Context({ request: { url: 'timeout' } }), next, null);
+
+        jest.runAllTimers();
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
+        expect(mockResponse).toBeCalled();
+
+        expect(next).toHaveBeenLastCalledWith({
+            error: expect.objectContaining({
+                code: 'ERR_HTTP_REQUEST_TIMEOUT',
+                message: 'Request timed out',
+            }),
+            status: Status.ERROR,
         });
     });
 });
