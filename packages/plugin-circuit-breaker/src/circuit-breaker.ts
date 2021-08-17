@@ -1,10 +1,19 @@
 import isFunction from '@tinkoff/utils/is/function';
-import { ContextState, Plugin, Status } from '@tinkoff/request-core';
+import T from '@tinkoff/utils/function/T';
+import { ContextState, Plugin, Status, RequestError } from '@tinkoff/request-core';
 import { CIRCUIT_BREAKER_META } from './constants';
 import { CircuitBreakerOptions, CircuitBreaker } from './CircuitBreaker';
+import { CircuitBreakerError } from './errors';
+
+declare module '@tinkoff/request-core/lib/types.h' {
+    export interface RequestErrorCode {
+        ERR_CIRCUIT_BREAKER_OPEN: 'ERR_CIRCUIT_BREAKER_OPEN';
+    }
+}
 
 export interface Options extends Partial<CircuitBreakerOptions> {
     getKey?: (state: ContextState) => string;
+    isSystemError?: (error: RequestError) => boolean;
 }
 
 /**
@@ -19,6 +28,8 @@ export interface Options extends Partial<CircuitBreakerOptions> {
  *
  * @param {Function} [getKey=() => ''] allow to divide requests to different instances of Circuit Breaker, by default
  *              only one Circuit Breaker instance is created
+ * @param {Function} [isSystemError=() => true] specifies that error should be treated as a system error and therefore will lead to an increasing counter of failed requests in Circuit Breaker,
+ *              if the error is not a system error then error is treated as normal behavior and therefore will lead to a decreasing counter of failed requests
  * @param {number} [failureTimeout=60000] time interval in which failed requests will considered to get state
  * @param {number} [failureThreshold=50] percentage of failed requests inside `failureTimeout` interval, if that number is exceeded state changes to Open
  * @param {number} [minimumFailureCount=5] number of minimum request which should be failed to consider stats from current time interval
@@ -29,6 +40,7 @@ export interface Options extends Partial<CircuitBreakerOptions> {
 export default (
     {
         getKey,
+        isSystemError = T,
         failureTimeout = 60000,
         failureThreshold = 50,
         openTimeout = 30000,
@@ -81,7 +93,7 @@ export default (
 
                 return next({
                     status: Status.ERROR,
-                    error: breaker.getError(),
+                    error: new CircuitBreakerError(breaker.getError()),
                 });
             }
 
@@ -100,7 +112,11 @@ export default (
             const { breaker } = context.getInternalMeta(CIRCUIT_BREAKER_META) as { breaker: CircuitBreaker };
             const { error } = context.getState();
 
-            breaker.failure(error);
+            if (isSystemError(error)) {
+                breaker.failure(error);
+            } else {
+                breaker.success();
+            }
             next();
         },
     };

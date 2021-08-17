@@ -12,11 +12,11 @@ describe('plugins/circuit-breaker', () => {
     let context;
     let plugin: ReturnType<typeof circuitBreaker>;
 
-    const runFailure = (n: number, failure = true) => {
+    const runRequests = (n: number, failure = true) => {
         each((v, i) => {
             plugin.init(context, next, makeRequest);
-            context.setState({ error: new Error(`error ${i}`) });
             if (failure) {
+                context.setState({ error: new Error(`error ${i}`) });
                 plugin.error(context, next, makeRequest);
             } else {
                 plugin.complete(context, next, makeRequest);
@@ -56,12 +56,16 @@ describe('plugins/circuit-breaker', () => {
     });
 
     it('should end requests with throw when `failureThreshold` is reached', () => {
-        runFailure(6);
+        runRequests(6);
 
         plugin.init(context, next, makeRequest);
         expect(next).toHaveBeenCalledWith({
             status: Status.ERROR,
-            error: new Error('error 5'),
+            error: expect.objectContaining({
+                code: 'ERR_CIRCUIT_BREAKER_OPEN',
+                message: 'Circuit Breaker has blocked request',
+                lastError: new Error('error 5'),
+            }),
         });
         expect(context.getExternalMeta(CIRCUIT_BREAKER_META)).toEqual({
             open: true,
@@ -69,7 +73,7 @@ describe('plugins/circuit-breaker', () => {
     });
 
     it('should allow `halfOpenThreshold` requests after `openTimeout`', () => {
-        runFailure(6);
+        runRequests(6);
         currentTime += 300;
 
         next.mockClear();
@@ -83,7 +87,11 @@ describe('plugins/circuit-breaker', () => {
         plugin.init(context, next, makeRequest);
         expect(next).toHaveBeenCalledWith({
             status: Status.ERROR,
-            error: new Error('error 5'),
+            error: expect.objectContaining({
+                code: 'ERR_CIRCUIT_BREAKER_OPEN',
+                message: 'Circuit Breaker has blocked request',
+                lastError: new Error('error 5'),
+            }),
         });
         expect(context.getExternalMeta(CIRCUIT_BREAKER_META)).toEqual({
             open: true,
@@ -91,13 +99,13 @@ describe('plugins/circuit-breaker', () => {
     });
 
     it('should allow to make request after `openTimeout` and half-open requests are successful', () => {
-        runFailure(6);
+        runRequests(6);
         currentTime += 300;
 
-        runFailure(5, false);
+        runRequests(5, false);
         next.mockClear();
 
-        runFailure(10, false);
+        runRequests(10, false);
         plugin.init(context, next, makeRequest);
 
         expect(next).toHaveBeenCalledWith();
@@ -125,5 +133,21 @@ describe('plugins/circuit-breaker', () => {
         expect(context1.getInternalMeta(CIRCUIT_BREAKER_META).breaker).not.toBe(
             context2.getInternalMeta(CIRCUIT_BREAKER_META).breaker
         );
+    });
+
+    it('should only track system errors', () => {
+        plugin = circuitBreaker({
+            isSystemError: () => false,
+        });
+
+        runRequests(10);
+        next.mockClear();
+
+        plugin.init(context, next, makeRequest);
+
+        expect(next).toHaveBeenCalledWith();
+        expect(context.getInternalMeta(CIRCUIT_BREAKER_META)).toEqual({
+            breaker: expect.any(CircuitBreaker),
+        });
     });
 });

@@ -9,9 +9,9 @@ Uses `node-fetch` library.
 
 !!! Plugin requires `fetch` polyfill for browsers without support.
 
-## Parameters
+## Api
 
-### Create options 
+### Create options
 - `agent`: { http: Agent; https: Agent } - optional agent parameter used for nodejs
 
 ### Request params
@@ -42,7 +42,26 @@ For any different value payload will be passed as is.
 ## Request credentials
 If `withCredentials` set to true, then `credentials` option for fetch will be set to 'include' otherwise to 'same-origin'
 
-## Get additional parameters for request
+## Validators
+
+- `isNetworkFail` - checks that error happened due to network fails (timeout or request were blocked)
+- `isServerError` - check that error happened due to unexpected error on server (request.status = 500)
+
+## How to
+
+### Base example
+```typescript
+import request from '@tinkoff/request-core';
+import http from '@tinkoff/request-plugin-protocol-http';
+
+const req = request([
+    // ... other plugins
+    // should be set last as this plugin makes actual reqest
+    http(),
+]);
+```
+
+### Get additional parameters for request
 
 Plugin provides utilities to get extra-parameters from request (like headers, status, raw-text).
 
@@ -62,14 +81,4 @@ const req = makeRequest({
     .catch(error => console.error(error, getHeaders(req)))
 ```
 
-## Example
-```typescript
-import request from '@tinkoff/request-core';
-import http from '@tinkoff/request-plugin-protocol-http';
 
-const req = request([
-    // ... other plugins
-    // should be set last as this plugin makes actual reqest
-    http(),
-]);
-```
