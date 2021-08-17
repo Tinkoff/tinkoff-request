@@ -5,17 +5,18 @@ sidebar_label: Circuit Breaker
 ---
 
 Plugin implementing `Circuit Breaker` design pattern.
- 
+
 Request maker will have 3 states:
 - `Closed` - all requests are passing to the next plugin allowing to create requests
 - `Open` - no requests are passing to next step, every request throws error from last 'real' request
 - `Half-Open` - only limited number of requests are allowed to actually executes, if these requests were successful
 state changes to Closed, otherwise goes back to Open
 
-## Parameters
+## Api
 
-### Create options 
+### Create options
 - `getKey`: function [= () => ''] - allows to divide requests to different instances of Circuit Breaker, by default only one Circuit Breaker instance is created
+- `isSystemError`: function [=() => true] specifies that error should be treated as a system error and therefore will lead to an increasing counter of failed requests in Circuit Breaker, if the error is not a system error then error is treated as normal behavior and therefore will lead to a decreasing counter of failed requests
 - `failureTimeout`: number [=120000] - time interval in which failed requests will considered to get state
 - `failureThreshold`: number [=50] - percentage of failed requests inside `failureTimeout` interval, if that number is exceeded state changes to Open
 - `minimumFailureCount`: number [=5] - number of minimum request which should be failed to consider stats from current time interval
@@ -28,16 +29,38 @@ state changes to Closed, otherwise goes back to Open
 ### Internal meta
 - `CIRCUIT_BREAKER.breaker` - Circuit Breaker instance
 
-## Example
+## How to
+
+### Base example
+
 ```typescript
 import request from '@tinkoff/request-core';
 import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker';
 
 const req = request([
-    // ...plugins for any request transforms and cache 
+    // ...plugins for any request transforms and cache
     // should be set after transforming plugins and cache plugins
     circuitBreaker(),
     // should be set before protocol plugins
     // ...plugins for making actual request
+]);
+```
+
+### Validators
+
+```ts
+import request from '@tinkoff/request-core';
+import http, { isNetworkFail } from '@tinkoff/request-plugin-protocol-http';
+import circuitBreaker from '@tinkoff/request-plugin-circuit-breaker';
+
+const req = request([
+    // ...plugins for any request transforms and cache
+    // should be set after transforming plugins and cache plugins
+    circuitBreaker({
+        isSystemError: isNetworkFail,
+    }),
+    // should be set before protocol plugins
+    // ...plugins for making actual request
+    http(),
 ]);
 ```
