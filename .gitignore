@@ -12,6 +12,7 @@ node_modules/
 # IDE
 .DS_Store
 .vscode
+.history
 .devcontainer
 .idea
 
