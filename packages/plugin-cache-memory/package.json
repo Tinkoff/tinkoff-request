@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-memory",
-  "version": "0.8.14",
+  "version": "0.8.15",
   "description": "Memory cache for tinkoff request",
   "main": "lib/memory.js",
   "typings": "lib/memory.d.ts",
@@ -24,13 +24,13 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@tinkoff/request-cache-utils": "^0.8.8",
+    "@tinkoff/request-cache-utils": "^0.8.9",
     "@tinkoff/utils": "^2.0.0",
     "lru-cache": "^6.0.0",
     "tslib": "^2.0.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "^0.8.8"
+    "@tinkoff/request-core": "^0.8.9"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
