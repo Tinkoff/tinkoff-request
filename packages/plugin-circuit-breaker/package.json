@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/TinkoffCreditSystems/tinkoff-request/"
+    "url": "https://github.com/Tinkoff/tinkoff-request/"
   },
   "author": "Oleg Sorokotyaga <o.sorokotyaga@andersensoft.ru> (http://tinkoff.ru)",
   "publishConfig": {

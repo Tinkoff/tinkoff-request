@@ -20,7 +20,7 @@ const siteConfig = {
 
     // Used for publishing and more
     projectName: 'tinkoff-request',
-    organizationName: 'TinkoffCreditSystems',
+    organizationName: 'Tinkoff',
     // For top-level user or org sites, the organization is still the same.
     // e.g., for the https://JoelMarcey.github.io site, it would be set like...
     //   organizationName: 'JoelMarcey'
@@ -30,7 +30,7 @@ const siteConfig = {
         { doc: 'how-to/index', label: 'How to' },
         { doc: 'plugins/index', label: 'Plugins' },
         { doc: 'core/index', label: 'Internals' },
-        { href: 'https://github.com/TinkoffCreditSystems/tinkoff-request', label: 'GitHub' }
+        { href: 'https://github.com/Tinkoff/tinkoff-request', label: 'GitHub' }
     ],
 
     // If you have users set above, you add it here:
@@ -80,7 +80,7 @@ const siteConfig = {
         zIndex: 100
     },
     stylesheets: ['/css/custom.css'],
-    repoUrl: 'https://github.com/TinkoffCreditSystems/tinkoff-request'
+    repoUrl: 'https://github.com/Tinkoff/tinkoff-request'
 };
 
 module.exports = siteConfig;
