@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "test": "jest --coverage",
+    "size": "size-limit",
     "bootstrap": "yarn --frozen-lockfile",
     "build": "lerna run tsc",
     "watch": "lerna run watch --parallel",
@@ -25,6 +26,10 @@
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^12.12.31",
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "size-limit": "^7.0.8",
+    "fast-glob": "^3.2.11",
+    "fs-extra": "^10.0.0",
     "jest": "^25.2.3",
     "jest-date-mock": "^1.0.8",
     "lerna": "^3.20.2",
