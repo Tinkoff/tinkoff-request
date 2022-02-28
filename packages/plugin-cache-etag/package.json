@@ -3,7 +3,7 @@
   "version": "0.2.24",
   "description": "Caching based on etag http-header",
   "main": "lib/etag.js",
-  "browser": "lib/noop",
+  "browser": "lib/noop.js",
   "typings": "lib/etag.d.ts",
   "sideEffects": false,
   "scripts": {

@@ -3,7 +3,7 @@
   "version": "0.1.7",
   "description": "Make a jsonp request",
   "main": "lib/noop.js",
-  "browser": "lib/jsonp",
+  "browser": "lib/jsonp.js",
   "typings": "lib/jsonp.d.ts",
   "sideEffects": false,
   "scripts": {
