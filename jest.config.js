@@ -1,5 +1,5 @@
 module.exports = {
-    timers: 'fake',
+    timers: 'legacy',
     testURL: 'http://localhost/',
     transform: {
         '^.+\\.ts$': 'ts-jest',
@@ -7,7 +7,7 @@ module.exports = {
     },
     globals: {
         'ts-jest': {
-            tsConfig: 'tsconfig.json',
+            tsconfig: 'tsconfig.json',
         },
     },
     coveragePathIgnorePatterns: ['/node_modules/', '/lib/'],
