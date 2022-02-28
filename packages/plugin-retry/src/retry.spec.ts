@@ -230,7 +230,7 @@ describe('plugins/retry', () => {
                 expect(retryDelay).toHaveBeenCalledWith(0);
                 expect(retryDelay).toHaveBeenCalledWith(1);
                 expect(retryDelay).toHaveBeenCalledWith(2);
-                expect(makeRequest).toHaveBeenCalledWith({ url, retry: 0, silent: true, timeout: 50000, cache: false});
+                expect(makeRequest).toHaveBeenCalledWith({ url, retry: 0, silent: true, timeout: 50000, cache: false });
                 expect(makeRequest).toHaveBeenCalledTimes(3);
                 expect(next).toHaveBeenCalledWith({
                     status: Status.COMPLETE,

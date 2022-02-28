@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { Context, Status } from '@tinkoff/request-core';
 import { metaTypes } from '@tinkoff/request-cache-utils';
 import persistent from './persistent';
