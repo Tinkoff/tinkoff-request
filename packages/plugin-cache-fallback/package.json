@@ -4,7 +4,7 @@
   "description": "Cache your responses in file cache to use it while resources are not available",
   "main": "lib/fallback.js",
   "browser": {
-    "lib/drivers/fs.js": "./lib/drivers/noop.js"
+    "./lib/drivers/fs.js": "./lib/drivers/noop.js"
   },
   "typings": "lib/fallback.d.ts",
   "sideEffects": false,
