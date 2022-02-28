@@ -6,7 +6,7 @@ import md5 from './md5';
 
 const KEY_LIMIT = 100;
 
-const fsCacheDriver = ({
+export const driver = ({
     name = 'fallback',
     basePath = './.tmp/server-cache/',
 }: {
@@ -32,5 +32,3 @@ const fsCacheDriver = ({
         },
     };
 };
-
-export default fsCacheDriver;

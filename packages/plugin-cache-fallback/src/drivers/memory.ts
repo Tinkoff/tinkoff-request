@@ -2,7 +2,7 @@ import LRUCache, { Options } from 'lru-cache';
 import { Response } from '@tinkoff/request-core';
 import { CacheDriver } from '../types';
 
-const memoryCacheDriver = ({
+export const driver = ({
     lruOptions = { max: 1000 },
     memoryConstructor = (options) => new (require('lru-cache'))(options),
 }: {
@@ -20,5 +20,3 @@ const memoryCacheDriver = ({
         },
     };
 };
-
-export default memoryCacheDriver;

@@ -6,7 +6,8 @@
   "typings": "lib/url.d.ts",
   "sideEffects": false,
   "scripts": {
-    "prepack": "tsc",
+    "prepack": "tramvai-build --for-publish",
+    "build": "tramvai-build",
     "tsc": "tsc",
     "watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
