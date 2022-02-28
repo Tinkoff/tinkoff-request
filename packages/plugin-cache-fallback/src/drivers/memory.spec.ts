@@ -1,4 +1,4 @@
-import memoryCacheDriver from './memory';
+import { driver as memoryCacheDriver } from './memory';
 
 describe('plugins/cache/fallback/drivers/memory', () => {
     describe('default options', () => {

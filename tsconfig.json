@@ -17,6 +17,6 @@
             "es5",
             "dom"
         ],
-        "target": "es5"
+        "target": "ES2015"
     }
 }

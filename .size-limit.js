@@ -5,7 +5,7 @@ const path = require('path');
 const entries = glob.sync('packages/*/package.json')
   .map((packageJson) => {
     const config = fs.readJsonSync(packageJson);
-    let modulePath = config.main;
+    let modulePath = config.module;
 
     if (config.browser) {
       if (typeof config.browser === 'object') {

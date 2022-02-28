@@ -1,6 +1,6 @@
 import path from 'path';
 import { readJSON, writeJSON, ensureDirSync } from 'fs-extra';
-import fsCacheDriver from './fs';
+import { driver as fsCacheDriver } from './fs';
 
 jest.mock('fs-extra', () => ({
     readJSON: jest.fn(() => Promise.resolve()),
