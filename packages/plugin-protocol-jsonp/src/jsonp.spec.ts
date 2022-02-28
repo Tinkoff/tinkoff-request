@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { Context } from '@tinkoff/request-core';
 import jsonp from './jsonp';
 

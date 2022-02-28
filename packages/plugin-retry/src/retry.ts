@@ -55,6 +55,8 @@ export default ({
                     setTimeout(() => {
                         const diffTime = Date.now() - startTime;
 
+                        console.log('___', diffTime);
+
                         if (diffTime >= timeout) {
                             context.updateExternalMeta(RETRY_META, {
                                 attempts: attempt,

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { FetchMock } from 'jest-fetch-mock';
 import { Context, Status } from '@tinkoff/request-core';
 import http from './http';
