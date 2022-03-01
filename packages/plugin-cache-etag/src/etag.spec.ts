@@ -10,7 +10,13 @@ const mockLru = {
     peek: jest.fn(),
 };
 
-jest.mock('lru-cache', () => () => mockLru);
+jest.mock(
+    'lru-cache',
+    () =>
+        function () {
+            return mockLru;
+        }
+);
 
 const getCacheKey = jest.fn((req) => req.url);
 const plugin = etagCache({ getCacheKey });

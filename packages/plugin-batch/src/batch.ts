@@ -1,7 +1,8 @@
 import each from '@tinkoff/utils/array/each';
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
-import { Plugin, Status, Request, Next } from '@tinkoff/request-core';
+import type { Plugin, Request, Next } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { BATCH } from './constants/metaTypes';
 
 const DEFAULT_BATCH_TIMEOUT = 100;

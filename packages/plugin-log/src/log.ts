@@ -2,7 +2,7 @@ import prop from '@tinkoff/utils/object/prop';
 import mapObj from '@tinkoff/utils/object/map';
 import isArray from '@tinkoff/utils/is/array';
 import isObject from '@tinkoff/utils/is/object';
-import { Context, Plugin, Request } from '@tinkoff/request-core';
+import type { Context, Plugin, Request } from '@tinkoff/request-core';
 import { LOG } from './constants/metaTypes';
 
 declare module '@tinkoff/request-core/lib/types.h' {

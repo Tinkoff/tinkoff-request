@@ -1,6 +1,7 @@
 import isFunction from '@tinkoff/utils/is/function';
 import T from '@tinkoff/utils/function/T';
-import { ContextState, Plugin, Status, RequestError } from '@tinkoff/request-core';
+import type { ContextState, Plugin, RequestError } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core'
 import { CIRCUIT_BREAKER_META } from './constants';
 import { CircuitBreakerOptions, CircuitBreaker } from './CircuitBreaker';
 import { CircuitBreakerError } from './errors';

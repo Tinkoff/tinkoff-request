@@ -1,4 +1,4 @@
-import { Plugin } from '@tinkoff/request-core';
+import type { Plugin } from '@tinkoff/request-core';
 import { TIMER_DONE } from './constants/metaTypes';
 
 export default ({ metrics = null, prefix = '', labelNames, getLabelsValuesFromContext }): Plugin => {

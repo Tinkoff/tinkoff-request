@@ -1,4 +1,5 @@
-import { Status, Plugin } from '@tinkoff/request-core';
+import type { Plugin } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 
 declare module '@tinkoff/request-core/lib/types.h' {

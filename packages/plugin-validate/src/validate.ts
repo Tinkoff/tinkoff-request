@@ -1,5 +1,6 @@
 import nothing from '@tinkoff/utils/function/nothing';
-import { Plugin, Status, ContextState } from '@tinkoff/request-core';
+import type { Plugin, ContextState } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { VALIDATE } from './constants';
 
 interface Validator {

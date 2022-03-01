@@ -1,5 +1,6 @@
 import prop from '@tinkoff/utils/object/prop';
-import { Context, Status } from '@tinkoff/request-core';
+import type { Context } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { CACHE } from './constants/metaTypes';
 
 declare module '@tinkoff/request-core/lib/types.h' {

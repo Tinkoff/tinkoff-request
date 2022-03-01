@@ -1,4 +1,4 @@
-import { Plugin, Request } from '@tinkoff/request-core';
+import type { Plugin, Request } from '@tinkoff/request-core';
 
 interface Transform {
     (params: Request & { baseUrl: string }): string;

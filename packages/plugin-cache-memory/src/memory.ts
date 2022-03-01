@@ -1,7 +1,8 @@
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
 
-import { Plugin, Status } from '@tinkoff/request-core';
+import type { Plugin } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 
 import { getStaleBackgroundRequestTimeout } from './utils';

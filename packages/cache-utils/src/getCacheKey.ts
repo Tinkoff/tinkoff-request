@@ -1,5 +1,5 @@
 import prop from '@tinkoff/utils/object/prop';
-import { Context } from '@tinkoff/request-core';
+import type { Context } from '@tinkoff/request-core';
 import { CACHE } from './constants/metaTypes';
 import defaultCacheKey from './cacheKey';
 

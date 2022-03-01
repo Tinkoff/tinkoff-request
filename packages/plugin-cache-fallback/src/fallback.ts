@@ -1,7 +1,8 @@
 import noop from '@tinkoff/utils/function/noop';
 import T from '@tinkoff/utils/function/T';
 
-import { Plugin, Status, ContextState, Request } from '@tinkoff/request-core';
+import type { Plugin, ContextState, Request } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 import { CacheDriver } from './types';
 import { fsCacheDriver } from './drivers';
