@@ -1,6 +1,7 @@
 import fetchJsonp from 'fetch-jsonp';
 
-import { Plugin, Status } from '@tinkoff/request-core';
+import type { Plugin } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 
 import { addQuery } from './url';
 

@@ -1,4 +1,4 @@
-import { Request } from '@tinkoff/request-core';
+import type { Request } from '@tinkoff/request-core';
 
 declare module '@tinkoff/request-core/lib/types.h' {
     export interface Request {

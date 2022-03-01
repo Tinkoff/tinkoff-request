@@ -1,5 +1,6 @@
 import applyOrReturn from '@tinkoff/utils/function/applyOrReturn';
-import { Plugin, Status } from '@tinkoff/request-core';
+import type { Plugin } from '@tinkoff/request-core';
+import { Status } from '@tinkoff/request-core';
 import { RETRY_META } from './constants';
 
 declare module '@tinkoff/request-core/lib/types.h' {
