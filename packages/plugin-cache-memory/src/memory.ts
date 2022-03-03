@@ -1,7 +1,9 @@
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
 
-import type { Plugin } from '@tinkoff/request-core';
+import type LRUCache from 'lru-cache';
+import type { Options } from 'lru-cache';
+import type { Plugin, Response } from '@tinkoff/request-core';
 import { Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 
@@ -15,6 +17,16 @@ declare module '@tinkoff/request-core/lib/types.h' {
         memoryCacheForce?: boolean;
         memoryCacheTtl?: number;
     }
+}
+
+export interface MemoryPluginOptions {
+    lruOptions?: Options<string, Response>;
+    shouldExecute?: boolean;
+    allowStale?: boolean;
+    staleTtl?: number;
+    staleBackgroundRequestTimeout?: number;
+    memoryConstructor?: (options: Options<string, Response>) => LRUCache<string, Response>;
+    getCacheKey?: (arg) => string;
 }
 
 /**
@@ -43,17 +55,17 @@ declare module '@tinkoff/request-core/lib/types.h' {
  * @param {function} getCacheKey function used for generate cache key
  */
 export default ({
-    lruOptions = { max: 1000, maxAge: CACHE_DEFAULT_TTL },
+    lruOptions = { max: 1000, ttl: CACHE_DEFAULT_TTL } as Options<string, Response>,
     shouldExecute = true,
     allowStale = false,
-    staleTtl = lruOptions.maxAge || CACHE_DEFAULT_TTL,
+    staleTtl = lruOptions.ttl || CACHE_DEFAULT_TTL,
     staleBackgroundRequestTimeout = undefined,
-    memoryConstructor = (options) => new (require('lru-cache'))(options),
+    memoryConstructor = (options: Options<string, Response>) => new (require('lru-cache'))(options),
     getCacheKey = undefined,
-} = {}): Plugin => {
-    const lruCache = memoryConstructor({
+}: MemoryPluginOptions = {}): Plugin => {
+    const lruCache: LRUCache<string, Response> = memoryConstructor({
         ...lruOptions,
-        stale: true, // should be true for the opportunity to control it for individual requests
+        allowStale: true, // should be true for the opportunity to control it for individual requests
     });
 
     return {
@@ -85,7 +97,7 @@ export default ({
                     memoryCacheOutdated: true,
                 });
 
-                lruCache.set(cacheKey, outdated, staleTtl); // remember outdated value, to prevent losing it
+                lruCache.set(cacheKey, outdated, { ttl: staleTtl }); // remember outdated value, to prevent losing it
                 setTimeout(
                     () =>
                         makeRequest({
@@ -112,9 +124,9 @@ export default ({
         },
         complete: (context, next) => {
             const cacheKey = getCacheKeyUtil(context, getCacheKey);
-            const ttl = prop('memoryCacheTtl', context.getRequest());
+            const ttl: number = prop('memoryCacheTtl', context.getRequest());
 
-            lruCache.set(cacheKey, context.getResponse(), ttl);
+            lruCache.set(cacheKey, context.getResponse(), { ttl });
 
             context.updateExternalMeta(metaTypes.CACHE, {
                 memoryCacheBackground: prop('memoryCacheBackground', context.getRequest()),

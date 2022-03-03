@@ -3,7 +3,7 @@ import type { Context } from '@tinkoff/request-core';
 import { CACHE } from './constants/metaTypes';
 import defaultCacheKey from './cacheKey';
 
-export default (context: Context, cacheKey = defaultCacheKey) => {
+export default (context: Context, cacheKey = defaultCacheKey): string => {
     let key = prop('key', context.getInternalMeta(CACHE));
 
     if (!key) {

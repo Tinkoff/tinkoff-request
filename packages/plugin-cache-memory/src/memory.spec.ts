@@ -90,7 +90,7 @@ describe('plugins/cache/memory', () => {
         jest.runAllTimers();
 
         expect(mockLru.get).not.toHaveBeenCalledWith('test');
-        expect(mockLru.set).toHaveBeenCalledWith('test', response, 523);
+        expect(mockLru.set).toHaveBeenCalledWith('test', response, { ttl: 523 });
         expect(makeRequest).toHaveBeenCalledWith({ url: 'test', memoryCacheForce: true, memoryCacheBackground: true });
         expect(context.updateExternalMeta).toHaveBeenCalledWith(metaTypes.CACHE, {
             memoryCache: true,
@@ -138,6 +138,6 @@ describe('plugins/cache/memory', () => {
         plugin.complete(context, next, null);
 
         expect(next).toHaveBeenCalled();
-        expect(mockLru.set).toHaveBeenCalledWith('test', response, 123);
+        expect(mockLru.set).toHaveBeenCalledWith('test', response, { ttl: 123 });
     });
 });
