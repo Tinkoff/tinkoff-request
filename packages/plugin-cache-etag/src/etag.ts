@@ -1,4 +1,6 @@
-import type { Plugin } from '@tinkoff/request-core';
+import type LRUCache from 'lru-cache';
+import type { Options } from 'lru-cache';
+import type { Plugin, Response } from '@tinkoff/request-core';
 import { Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
 import { getHeader } from '@tinkoff/request-plugin-protocol-http';
@@ -10,6 +12,18 @@ declare module '@tinkoff/request-core/lib/types.h' {
         etagCache?: boolean;
         etagCacheForce?: boolean;
     }
+}
+
+interface CacheValue {
+    key: string;
+    value: Response;
+}
+
+export interface EtagPluginOptions {
+    lruOptions?: Options<string, CacheValue>;
+    shouldExecute?: boolean;
+    memoryConstructor?: (options: Options<string, CacheValue>) => LRUCache<string, CacheValue>;
+    getCacheKey?: (arg) => string;
 }
 
 /**
@@ -37,7 +51,7 @@ export default ({
     shouldExecute = true,
     memoryConstructor = (options) => new (require('lru-cache'))(options),
     getCacheKey = undefined,
-} = {}): Plugin => {
+}: EtagPluginOptions = {}): Plugin => {
     const lruCache = memoryConstructor({
         ...lruOptions,
         stale: true, // should be true for the opportunity to control it for individual requests
