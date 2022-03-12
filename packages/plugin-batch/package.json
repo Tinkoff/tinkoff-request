@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-batch",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Group requests at one batch for optimization of network usage",
   "main": "lib/batch.js",
   "typings": "lib/batch.d.ts",
@@ -29,7 +29,7 @@
     "tslib": "^2.1.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "^0.9.0"
+    "@tinkoff/request-core": "^0.9.1"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"

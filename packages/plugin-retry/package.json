@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-retry",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Retries failed requests",
   "main": "lib/retry.js",
   "typings": "lib/retry.d.ts",
@@ -29,7 +29,7 @@
     "tslib": "^2.1.3"
   },
   "devDependencies": {
-    "@tinkoff/request-core": "^0.9.0"
+    "@tinkoff/request-core": "^0.9.1"
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
