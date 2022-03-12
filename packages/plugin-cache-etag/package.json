@@ -36,5 +36,6 @@
   "peerDependencies": {
     "@tinkoff/request-core": "0.x",
     "@tinkoff/request-plugin-protocol-http": "^0.7.0"
-  }
+  },
+  "module": "lib/etag.es.js"
 }

@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "browser": {
-    "lib/fetch.js": "./lib/fetch.browser.js"
+    "lib/fetch.js": "./lib/fetch.browser.js",
+    "./lib/index.es.js": "./lib/index.browser.js"
   },
   "sideEffects": false,
   "scripts": {
@@ -41,5 +42,6 @@
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
-  }
+  },
+  "module": "lib/index.es.js"
 }

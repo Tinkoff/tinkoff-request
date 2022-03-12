@@ -34,5 +34,6 @@
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
-  }
+  },
+  "module": "lib/deduplicate.es.js"
 }

@@ -27,7 +27,7 @@
   "dependencies": {
     "@tinkoff/request-cache-utils": "^0.9.0",
     "@tinkoff/utils": "^2.0.0",
-    "lru-cache": "^7.4.0",
+    "lru-cache": "^7.4.4",
     "tslib": "^2.1.3"
   },
   "devDependencies": {
@@ -36,5 +36,6 @@
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
-  }
+  },
+  "module": "lib/memory.es.js"
 }

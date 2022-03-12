@@ -33,5 +33,6 @@
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
-  }
+  },
+  "module": "lib/retry.es.js"
 }

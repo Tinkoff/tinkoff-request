@@ -37,5 +37,6 @@
   },
   "peerDependencies": {
     "@tinkoff/request-core": "0.x"
-  }
+  },
+  "module": "lib/circuit-breaker.es.js"
 }
