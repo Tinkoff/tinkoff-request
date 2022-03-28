@@ -6,7 +6,12 @@ import { Context, Status } from '@tinkoff/request-core';
 import http from './http';
 
 const fetch: FetchMock = require('jest-fetch-mock');
-jest.mock('node-fetch', () => (...args) => fetch(...args));
+jest.mock(
+    'node-fetch',
+    () =>
+        (...args) =>
+            fetch(...args)
+);
 
 const plugin = http();
 const next = jest.fn();
@@ -228,6 +233,41 @@ describe('plugins/http', () => {
             error: expect.objectContaining({
                 code: 'ABORT_ERR',
                 abortOptions: 'abort test',
+            }),
+            status: Status.ERROR,
+        });
+    });
+
+    it('plugin should accept signal that can abort request', async () => {
+        const response = { a: 3 };
+        const mockResponse = jest.fn(() => Promise.resolve({ body: JSON.stringify(response) }));
+
+        fetch.mockResponse(mockResponse);
+
+        const abortController = new AbortController();
+
+        plugin.init(
+            new Context({
+                request: {
+                    url: 'http://test.com/api',
+                    signal: abortController.signal,
+                },
+            }),
+            next,
+            null
+        );
+        const promise = new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
+        abortController.abort();
+
+        await promise;
+
+        expect(next).toHaveBeenCalledTimes(1);
+        expect(next).toHaveBeenLastCalledWith({
+            error: expect.objectContaining({
+                code: 'ABORT_ERR',
             }),
             status: Status.ERROR,
         });

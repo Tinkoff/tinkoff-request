@@ -33,6 +33,7 @@ declare module '@tinkoff/request-core/lib/types.h' {
         timeout?: number;
         withCredentials?: boolean;
         abortPromise?: Promise<any>;
+        signal?: AbortSignal;
     }
 
     export interface RequestErrorCode {
@@ -69,6 +70,7 @@ if (isBrowser) {
  *      timeout {number}
  *      withCredentials {boolean}
  *      abortPromise {Promise}
+ *      signal {AbortSignal}
  *
  * @param {agent} [agent = Agent] set custom http in node js. The browser ignores this parameter.
  * @return {{init: init}}
@@ -101,6 +103,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 withCredentials,
                 abortPromise,
                 responseType,
+                signal: argSignal,
             } = context.getRequest();
 
             let ended = false;
@@ -164,6 +167,16 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 context.updateInternalMeta(PROTOCOL_HTTP, {
                     requestAbort: abort,
                 });
+
+                if (argSignal) {
+                    if (argSignal.aborted) {
+                        abort();
+                    } else {
+                        argSignal.addEventListener('abort', () => {
+                            abort();
+                        });
+                    }
+                }
             } else {
                 if (timeout) {
                     timer = setTimeout(() => {
