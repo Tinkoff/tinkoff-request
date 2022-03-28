@@ -27,6 +27,7 @@ Uses `node-fetch` library.
 - `timeout`: number - timeout in ms
 - `withCredentials`: boolean - configure credentials type, [see](#request-credentials)
 - `abortPromise`: Promise - if passed promise resolves, request get aborted with the result of promise
+- `signal`: AbortSignal - signal used to abort current request
 
 ## Request type
 Defines how request payload get serialized and the value for 'Content-Type' header. By default is equal to `form`.
