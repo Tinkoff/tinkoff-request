@@ -1,8 +1,8 @@
 import prop from '@tinkoff/utils/object/prop';
 import propOr from '@tinkoff/utils/object/propOr';
 
-import type LRUCache from 'lru-cache';
-import type { Options } from 'lru-cache';
+import type LRUCache from '@tinkoff/lru-cache-nano';
+import type { Options } from '@tinkoff/lru-cache-nano';
 import type { Plugin, Response } from '@tinkoff/request-core';
 import { Status } from '@tinkoff/request-core';
 import { shouldCacheExecute, getCacheKey as getCacheKeyUtil, metaTypes } from '@tinkoff/request-cache-utils';
@@ -31,7 +31,7 @@ export interface MemoryPluginOptions {
 
 /**
  * Caches requests response into memory.
- * Uses library `lru-cache` as memory storage.
+ * Uses library `@tinkoff/lru-cache-nano` as memory storage.
  *
  * requestParams:
  *      memoryCache {boolean} - disable this plugin at all
@@ -44,11 +44,11 @@ export interface MemoryPluginOptions {
  *      memoryCache {boolean} - is current request was returned from this cache
  *      memoryCacheOutdated {boolean} - is value in cache is outdated (only for plugin with allowStale = true)
  *
- * @param {object} [lruOptions = {max: 1000, maxAge: 300000}] - options passed to lru-cache library
+ * @param {object} [lruOptions = {max: 1000, ttl: 300000}] - options passed to @tinkoff/lru-cache-nano library
  * @param {boolean} [shouldExecute = true] is plugin activated by default
  * @param {boolean} [allowStale = false] is allowed to use outdated value from cache
  *      (if true outdated value will be returned and request to update it will be run in background)
- * @param {number} [staleTtl = lruOptions.maxAge] time in ms while outdated value is preserved in cache while
+ * @param {number} [staleTtl = lruOptions.ttl] time in ms while outdated value is preserved in cache while
  *       executing background update
  * @param {number} [staleBackgroundRequestTimeout] time in ms for background request timeout for the stale response
  * @param {function} memoryConstructor cache factory
@@ -58,9 +58,9 @@ export default ({
     lruOptions = { max: 1000, ttl: CACHE_DEFAULT_TTL } as Options<string, Response>,
     shouldExecute = true,
     allowStale = false,
-    staleTtl = lruOptions.ttl || CACHE_DEFAULT_TTL,
+    staleTtl = 'ttl' in lruOptions ? lruOptions.ttl : CACHE_DEFAULT_TTL,
     staleBackgroundRequestTimeout = undefined,
-    memoryConstructor = (options: Options<string, Response>) => new (require('lru-cache'))(options),
+    memoryConstructor = (options: Options<string, Response>) => new (require('@tinkoff/lru-cache-nano'))(options),
     getCacheKey = undefined,
 }: MemoryPluginOptions = {}): Plugin => {
     const lruCache: LRUCache<string, Response> = memoryConstructor({
