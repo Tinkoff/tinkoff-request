@@ -11,7 +11,7 @@ const mockLru = {
 };
 
 jest.mock(
-    'lru-cache',
+    '@tinkoff/lru-cache-nano',
     () =>
         function () {
             return mockLru;

@@ -1,10 +1,10 @@
-import LRUCache, { Options } from 'lru-cache';
+import LRUCache, { Options } from '@tinkoff/lru-cache-nano';
 import { Response } from '@tinkoff/request-core';
 import { CacheDriver } from '../types';
 
 export const driver = ({
     lruOptions = { max: 1000 },
-    memoryConstructor = (options) => new (require('lru-cache'))(options),
+    memoryConstructor = (options) => new (require('@tinkoff/lru-cache-nano'))(options),
 }: {
     lruOptions?: Options<string, Response>;
     memoryConstructor?: (options: Options<string, Response>) => LRUCache<string, Response>;

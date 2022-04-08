@@ -5,20 +5,20 @@ sidebar_label: Cache - Memory
 ---
 
 Caches requests response into memory.
-Uses library `lru-cache` as memory storage.
+Uses library `@tinkoff/lru-cache-nano` as memory storage.
 
 ## Parameters
 
-### Create options 
+### Create options
 - `getCacheKey`: function [=see @tinkoff/request-cache-utils] - function used for generate cache key
 - `shouldExecute`: boolean [=true] - plugin enable flag
-- `memoryConstructor`: function [=require('lru-cache')] - cache factory
-- `lruOptions`: object [={max: 1000, maxAge: 300000}] - options passed to `memoryConstuctor`
+- `memoryConstructor`: function [=require('@tinkoff/lru-cache-nano')] - cache factory
+- `lruOptions`: object [={max: 1000, ttl: 300000}] - options passed to `memoryConstuctor`
 - `allowStale`: boolean [=false] - is allowed to use outdated value from cache (if true outdated value will be returned and request to update it will be run in background)
-- `staleTtl`: number [=lruOptions.maxAge] - time in ms while outdated value is preserved in cache while executing background update
+- `staleTtl`: number [=lruOptions.ttl] - time in ms while outdated value is preserved in cache while executing background update
 
 ### Request params
-- `cache`: boolean [=true] - should any cache plugin be executed. 
+- `cache`: boolean [=true] - should any cache plugin be executed.
 - `cacheForce`: boolean [=false] - when enabled all cache plugin will be executed only on complete status (request wont be resolved with cache value in that case and will only store result cache on completed requests)
 - `memoryCache`: boolean [=true] - should this specific cache plugin be executed
 - `memoryCacheForce`: boolean [=false] - specific case of `cacheForce` for this plugin only.

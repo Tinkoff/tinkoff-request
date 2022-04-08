@@ -11,18 +11,18 @@ Caching is based on etag http-header: for every request which contains 'etag' he
 subsequent calls for the same requests it adds 'If-None-Match' header and checks for 304 status of response - if status
 is 304 response returns from cache.
 
-Uses library `lru-cache` as memory storage.
+Uses library `@tinkoff/lru-cache-nano` as memory storage.
 
 ## Parameters
 
-### Create options 
+### Create options
 - `getCacheKey`: function [=see @tinkoff/request-cache-utils] - function used for generate cache key
 - `shouldExecute`: boolean [=true] - plugin enable flag
-- `memoryConstructor`: function [=require('lru-cache')] - cache factory
+- `memoryConstructor`: function [=require('@tinkoff/lru-cache-nano')] - cache factory
 - `lruOptions`: object [={max: 1000}] - options passed to `memoryConstuctor`
 
 ### Request params
-- `cache`: boolean [=true] - should any cache plugin be executed. 
+- `cache`: boolean [=true] - should any cache plugin be executed.
 - `cacheForce`: boolean [=false] - when enabled all cache plugin will be executed only on complete status (request wont be resolved with cache value in that case and will only store result cache on completed requests)
 - `etagCache`: boolean [=true] - should this specific cache plugin be executed
 - `etagCacheForce`: boolean [=false] - specific case of `cacheForce` for this plugin only.
