@@ -17,7 +17,8 @@ describe('plugins/http/url', () => {
 
     it('should serialize passed object', () => {
         expect(serialize({ a: '1', b: '2', c: 'test' })).toBe('a=1&b=2&c=test');
-        expect(serialize({ a: '', b: undefined, c: null, d: 0 } as any)).toBe('a=&d=0');
+        expect(serialize({ a: '', b: undefined, c: null, d: 0 })).toBe('a=&d=0');
+        expect(serialize({ a: '1', b: { c: '2', d: null, e: { f: '3' } }, g: 'test' })).toBe('a=1&b%5Bc%5D=2&b%5Be%5D%5Bf%5D=3&g=test');
     });
 
     it('should add default http protocol for requests on server', () => {
