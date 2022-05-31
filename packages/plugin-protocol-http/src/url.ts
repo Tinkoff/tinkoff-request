@@ -1,14 +1,29 @@
 import eachObj from '@tinkoff/utils/object/each';
 import isNil from '@tinkoff/utils/is/nil';
+import isObject from '@tinkoff/utils/is/object';
+import reduceArr from '@tinkoff/utils/array/reduce';
 
-export const serialize = (obj: Record<string, string>, init = '') => {
+export const serialize = (obj: Record<string, any>, init = '') => {
     const searchParams = new URLSearchParams(init);
 
-    eachObj((v, k) => {
-        if (!isNil(v)) {
-            searchParams.set(k, v);
-        }
-    }, obj);
+    const setParams = (params: Record<string, any>, keys: string[] = []) => {
+        eachObj((v, k) => {
+            if (isNil(v)) return;
+
+            const arr = keys.length ? [...keys, k] : [k];
+
+            if (isObject(v)) {
+                setParams(v, arr);
+            } else {
+                searchParams.set(
+                    reduceArr((acc, curr, i) => (i ? `${acc}[${curr}]` : curr), '', arr),
+                    v
+                );
+            }
+        }, params);
+    };
+
+    setParams(obj);
 
     return searchParams.toString();
 };
