@@ -2,14 +2,14 @@ import fetchJsonp from 'fetch-jsonp';
 
 import type { Plugin } from '@tinkoff/request-core';
 import { Status } from '@tinkoff/request-core';
-
-import { addQuery } from './url';
+import type { Query } from '@tinkoff/request-url-utils';
+import { addQuery } from '@tinkoff/request-url-utils';
 
 declare module '@tinkoff/request-core/lib/types.h' {
     export interface Request {
         url?: string;
-        query?: Record<string, string>;
-        queryNoCache?: Record<string, string>;
+        query?: Query;
+        queryNoCache?: Query;
         jsonp?: fetchJsonp.Options;
     }
 }

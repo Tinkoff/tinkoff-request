@@ -1,11 +1,12 @@
+import { Agent } from 'https';
 import AbortController from 'abort-controller';
 
 import propOr from '@tinkoff/utils/object/propOr';
 import { Plugin, Status } from '@tinkoff/request-core';
-import { Agent } from 'https';
+import type { Query } from '@tinkoff/request-url-utils';
+import { addQuery, normalizeUrl } from '@tinkoff/request-url-utils';
 
 import { fetch } from './fetch';
-import { addQuery, normalizeUrl } from './url';
 import { serialize } from './serialize';
 import { PROTOCOL_HTTP, REQUEST_TYPES, HttpMethods } from './constants';
 import parse from './parse';
@@ -24,8 +25,8 @@ declare module '@tinkoff/request-core/lib/types.h' {
             | 'head'
             | 'patch';
         url?: string;
-        query?: Record<string, string>;
-        queryNoCache?: Record<string, string>;
+        query?: Query;
+        queryNoCache?: Query;
         headers?: object;
         type?: string;
         payload?: any;
