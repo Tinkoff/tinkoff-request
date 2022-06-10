@@ -1,4 +1,4 @@
-import { serialize as serializeQuery } from './url';
+import { serializeQuery } from '@tinkoff/request-url-utils';
 
 export const serialize = (type: string, payload) => {
     switch (type) {
