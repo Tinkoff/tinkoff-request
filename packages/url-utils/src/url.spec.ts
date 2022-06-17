@@ -15,6 +15,19 @@ describe('plugins/http/url', () => {
         expect(addQuery('/api/some/?a=1', { a: '2', b: undefined })).toBe('/api/some/?a=2');
     });
 
+    it('should use customSerializer', () => {
+        const serializer = jest.fn(() => 'query=string');
+
+        expect(addQuery('/test?initial=str', { a: '1', b: '2' }, serializer)).toBe('/test?query=string');
+        expect(serializer).toHaveBeenCalledWith(
+            {
+                a: '1',
+                b: '2',
+            },
+            'initial=str'
+        );
+    });
+
     it('should serialize query', () => {
         expect(serializeQuery({ a: '1', b: '2', c: 'test' })).toBe('a=1&b=2&c=test');
         expect(serializeQuery({ a: '', b: undefined, c: null, d: '0' })).toBe('a=&d=0');

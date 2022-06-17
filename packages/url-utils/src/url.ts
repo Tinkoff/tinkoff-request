@@ -2,9 +2,9 @@ import eachObj from '@tinkoff/utils/object/each';
 import isNil from '@tinkoff/utils/is/nil';
 import isObject from '@tinkoff/utils/is/object';
 import reduceArr from '@tinkoff/utils/array/reduce';
-import { Query } from './types';
+import type { Query, QuerySerializer } from './types';
 
-export const serializeQuery = (obj: Query, init = '') => {
+export const serializeQuery: QuerySerializer = (obj: Query, init = '') => {
     const searchParams = new URLSearchParams(init);
 
     const setParams = (params: object, keys: string[] = []) => {
@@ -29,9 +29,9 @@ export const serializeQuery = (obj: Query, init = '') => {
     return searchParams.toString();
 };
 
-export const addQuery = (url: string, query: Query) => {
+export const addQuery = (url: string, query: Query, querySerializer: QuerySerializer = serializeQuery) => {
     const [path, search] = url.split('?', 2);
-    const serialized = serializeQuery(query, search);
+    const serialized = querySerializer(query, search);
 
     if (!serialized) {
         return path;
