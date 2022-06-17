@@ -2,7 +2,7 @@ import fetchJsonp from 'fetch-jsonp';
 
 import type { Plugin } from '@tinkoff/request-core';
 import { Status } from '@tinkoff/request-core';
-import type { Query } from '@tinkoff/request-url-utils';
+import type { Query, QuerySerializer } from '@tinkoff/request-url-utils';
 import { addQuery } from '@tinkoff/request-url-utils';
 
 declare module '@tinkoff/request-core/lib/types.h' {
@@ -30,21 +30,34 @@ window.addEventListener('beforeunload', () => {
  *      queryNoCache {object} - query which wont be used in generating cache key
  *      jsonp {object} - configuration for `fetch-jsonp`
  *
+ * @param {object} jsonOptions configuration for `fetch-jsonp`
+ * @param {QuerySerializer} querySerializer function that will be used instead of default value to serialize query strings in url
  * @return {{init: init}}
  */
-export default (options: fetchJsonp.Options = {}): Plugin => {
+export default (
+    jsonpOptions: fetchJsonp.Options = {},
+    {
+        querySerializer,
+    }: {
+        querySerializer?: QuerySerializer;
+    } = {}
+): Plugin => {
     return {
         init: (context, next) => {
             const { url, query, queryNoCache, jsonp } = context.getRequest();
             let ended = false;
 
             fetchJsonp(
-                addQuery(url, {
-                    ...queryNoCache,
-                    ...query,
-                }),
+                addQuery(
+                    url,
+                    {
+                        ...queryNoCache,
+                        ...query,
+                    },
+                    querySerializer
+                ),
                 {
-                    ...options,
+                    ...jsonpOptions,
                     ...jsonp,
                 }
             )

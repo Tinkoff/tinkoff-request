@@ -5,7 +5,12 @@ import { Context } from '@tinkoff/request-core';
 import jsonp from './jsonp';
 
 const mockJsonp = jest.fn((...args) => Promise.resolve());
-jest.mock('fetch-jsonp', () => (...args) => mockJsonp(...args));
+jest.mock(
+    'fetch-jsonp',
+    () =>
+        (...args) =>
+            mockJsonp(...args)
+);
 
 const plugin = jsonp();
 const next = jest.fn();
@@ -19,7 +24,7 @@ describe('plugins/jsonp', () => {
     it('test jsonp option', async () => {
         const jsonpObject = {};
 
-        plugin.init(
+        plugin.init!(
             new Context({
                 request: {
                     url: 'test',
@@ -27,7 +32,7 @@ describe('plugins/jsonp', () => {
                 },
             }),
             next,
-            null
+            null as any
         );
 
         await new Promise((res) => {
@@ -35,5 +40,23 @@ describe('plugins/jsonp', () => {
         });
 
         expect(mockJsonp).toBeCalledWith('test', jsonpObject);
+    });
+
+    it('test with custom querySerializer', async () => {
+        const mockQuerySerializer = jest.fn(() => 'query-string');
+
+        const plugin = jsonp({}, { querySerializer: mockQuerySerializer });
+
+        plugin.init!(
+            new Context({ request: { url: 'http://test.com/api?test=123', query: { a: '1' } } }),
+            next,
+            null as any
+        );
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
+        expect(mockQuerySerializer).toHaveBeenCalledWith({ a: '1' }, 'test=123');
     });
 });
