@@ -37,7 +37,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(new Context({ request: { url: 'test' } }), next, null);
+        plugin.init!(new Context({ request: { url: 'test' } }), next, null as any);
 
         jest.runAllTimers();
 
@@ -79,7 +79,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(
+        plugin.init!(
             new Context({
                 request: {
                     payload,
@@ -89,9 +89,9 @@ describe('plugins/http', () => {
                 },
             }),
             next,
-            null
+            null as any
         );
-        plugin.init(
+        plugin.init!(
             new Context({
                 request: {
                     payload,
@@ -102,7 +102,7 @@ describe('plugins/http', () => {
                 },
             }),
             next,
-            null
+            null as any
         );
 
         await new Promise((res) => {
@@ -128,7 +128,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(new Context({ request: { url: 'test' } }), next, null);
+        plugin.init!(new Context({ request: { url: 'test' } }), next, null as any);
 
         await new Promise((res) => {
             next.mockImplementation(res);
@@ -152,7 +152,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(new Context({ request: { url: 'test' } }), next, null);
+        plugin.init!(new Context({ request: { url: 'test' } }), next, null as any);
 
         await new Promise((res) => {
             next.mockImplementation(res);
@@ -185,10 +185,10 @@ describe('plugins/http', () => {
             destroy() {}
         }
 
-        http({ agent: { http: new MockedAgent() as any, https: new MockedAgent() as any } }).init(
+        http({ agent: { http: new MockedAgent() as any, https: new MockedAgent() as any } }).init?.(
             new Context({ request: { url: 'http://test.com/api' } }),
             next,
-            null
+            null as any
         );
 
         await new Promise((res) => {
@@ -202,6 +202,38 @@ describe('plugins/http', () => {
         });
     });
 
+    it('request with custom querySerializer', async () => {
+        const response = { a: 3 };
+        const mockResponse = jest.fn(() =>
+            Promise.resolve({
+                body: JSON.stringify(response),
+                init: {
+                    headers: {
+                        'Content-type': 'application/json;',
+                    },
+                },
+            })
+        );
+
+        fetch.mockResponse(mockResponse);
+
+        const mockQuerySerializer = jest.fn(() => 'query-string');
+
+        http({ querySerializer: mockQuerySerializer }).init?.(
+            new Context({ request: { url: 'http://test.com/api?test=123', query: { a: '1' } } }),
+            next,
+            null as any
+        );
+
+        await new Promise((res) => {
+            next.mockImplementation(res);
+        });
+
+        expect(mockResponse).toBeCalled();
+
+        expect(mockQuerySerializer).toHaveBeenCalledWith({ a: '1' }, 'test=123');
+    });
+
     it('plugin should call next function once after aborting', async () => {
         const response = { a: 3 };
         const mockResponse = jest.fn(() => Promise.resolve({ body: JSON.stringify(response) }));
@@ -209,7 +241,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(
+        plugin.init!(
             new Context({
                 request: {
                     url: 'http://test.com/api',
@@ -219,7 +251,7 @@ describe('plugins/http', () => {
                 },
             }),
             next,
-            null
+            null as any
         );
 
         abort('abort test');
@@ -246,7 +278,7 @@ describe('plugins/http', () => {
 
         const abortController = new AbortController();
 
-        plugin.init(
+        plugin.init!(
             new Context({
                 request: {
                     url: 'http://test.com/api',
@@ -254,7 +286,7 @@ describe('plugins/http', () => {
                 },
             }),
             next,
-            null
+            null as any
         );
         const promise = new Promise((res) => {
             next.mockImplementation(res);
@@ -289,7 +321,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(
+        plugin.init!(
             new Context({
                 request: {
                     url: 'http://test.com/api',
@@ -299,7 +331,7 @@ describe('plugins/http', () => {
                 },
             }),
             next,
-            null
+            null as any
         );
 
         await new Promise((res) => {
@@ -330,7 +362,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(new Context({ request: { url: 'method-patch', httpMethod: 'patch' } }), next, null);
+        plugin.init!(new Context({ request: { url: 'method-patch', httpMethod: 'patch' } }), next, null as any);
 
         jest.runAllTimers();
 
@@ -365,9 +397,9 @@ describe('plugins/http', () => {
             });
         });
 
-        fetch.mockResponse(mockResponse);
+        fetch.mockResponse(mockResponse as any);
 
-        plugin.init(new Context({ request: { url: 'timeout', timeout: 500 } }), next, null);
+        plugin.init!(new Context({ request: { url: 'timeout', timeout: 500 } }), next, null as any);
 
         jest.runAllTimers();
 
@@ -393,7 +425,7 @@ describe('plugins/http', () => {
 
         fetch.mockResponse(mockResponse);
 
-        plugin.init(new Context({ request: { url: 'timeout' } }), next, null);
+        plugin.init!(new Context({ request: { url: 'timeout' } }), next, null as any);
 
         jest.runAllTimers();
 
