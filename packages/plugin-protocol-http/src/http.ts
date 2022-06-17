@@ -3,7 +3,7 @@ import AbortController from 'abort-controller';
 
 import propOr from '@tinkoff/utils/object/propOr';
 import { Plugin, Status } from '@tinkoff/request-core';
-import type { Query } from '@tinkoff/request-url-utils';
+import { Query, QuerySerializer } from '@tinkoff/request-url-utils';
 import { addQuery, normalizeUrl } from '@tinkoff/request-url-utils';
 
 import { fetch } from './fetch';
@@ -74,9 +74,16 @@ if (isBrowser) {
  *      signal {AbortSignal}
  *
  * @param {agent} [agent = Agent] set custom http in node js. The browser ignores this parameter.
+ * @param {QuerySerializer} querySerializer function that will be used instead of default value to serialize query strings in url
  * @return {{init: init}}
  */
-export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plugin => {
+export default ({
+    agent,
+    querySerializer,
+}: {
+    agent?: { http: Agent; https: Agent };
+    querySerializer?: QuerySerializer;
+} = {}): Plugin => {
     let customAgent;
 
     if (!isBrowser && agent) {
@@ -125,7 +132,7 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
                 formHeaders = contentType ? { 'Content-type': contentType } : {};
 
                 if (!noBody) {
-                    body = serialize(type, payload);
+                    body = serialize(type, payload, querySerializer);
                 }
             }
 
@@ -195,11 +202,15 @@ export default ({ agent }: { agent?: { http: Agent; https: Agent } } = {}): Plug
             let responseBody;
 
             fetch(
-                addQuery(normalizeUrl(url), {
-                    ...(noBody ? payload : {}),
-                    ...queryNoCache,
-                    ...query,
-                }),
+                addQuery(
+                    normalizeUrl(url),
+                    {
+                        ...(noBody ? payload : {}),
+                        ...queryNoCache,
+                        ...query,
+                    },
+                    querySerializer
+                ),
                 {
                     signal,
                     method,

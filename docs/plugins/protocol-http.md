@@ -13,6 +13,7 @@ Uses `node-fetch` library.
 
 ### Create options
 - `agent`: { http: Agent; https: Agent } - optional agent parameter used for nodejs
+- `querySerializer`: Function function that will be used instead of default value to serialize query strings in url
 
 ### Request params
 - `httpMethod`: string [='get'] - http method of the request
@@ -83,3 +84,42 @@ const req = makeRequest({
 ```
 
 
+### Provide custom serializer for query and form-data
+
+You can provide your own custom serializer with option `querySerializer` passed to plugin
+
+```ts
+import request from '@tinkoff/request-core';
+import http from '@tinkoff/request-plugin-protocol-http';
+import type { QuerySerializer } from '@tinkoff/request-plugin-protocol-http';
+
+// this is roughly a default implementation for a serializer
+const querySerializer: QuerySerializer = (obj, init = '') => {
+    const searchParams = new URLSearchParams(init);
+
+    const setParams = (params: object, keys: string[] = []) => {
+        eachObj((v, k) => {
+            if (isNil(v)) return;
+
+            const arr = keys.length ? [...keys, k] : [k];
+
+            if (isObject(v)) {
+                setParams(v, arr);
+            } else {
+                searchParams.set(
+                    reduceArr((acc, curr, i) => (i ? `${acc}[${curr}]` : curr), '', arr),
+                    v
+                );
+            }
+        }, params);
+    };
+
+    setParams(obj);
+
+    return searchParams.toString();
+};
+
+const makeRequest = request([
+    http({ querySerializer }),
+]);
+```

@@ -1,11 +1,11 @@
 import { serializeQuery } from '@tinkoff/request-url-utils';
 
-export const serialize = (type: string, payload) => {
+export const serialize = (type: string, payload, querySerializer = serializeQuery) => {
     switch (type) {
         case 'form':
         case 'urlencoded':
         case 'form-data':
-            return serializeQuery(payload);
+            return querySerializer(payload);
         case 'json':
             return JSON.stringify(payload);
         default:
