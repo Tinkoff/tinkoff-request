@@ -3,6 +3,8 @@ Modular lightweight request library extendable by plugins.
 
 [Documentation](https://tinkoff.github.io/tinkoff-request/)
 
+[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/tinkoff-request-playground-0t1wrs?file=/src/index.ts)
+
 ## Example of usage
 ```javascript
 import request from '@tinkoff/request-core';
