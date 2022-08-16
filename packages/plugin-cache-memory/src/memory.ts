@@ -108,6 +108,13 @@ export default ({
                             }),
                             memoryCacheForce: true,
                             memoryCacheBackground: true,
+                            // ignore any abort properties to the request in the background
+                            // as if abortSignal aborts background request we won't update cache
+                            // and will try to update it in next requests over and over again.
+                            // Also we are not blocking main execution anyway
+                            // to care about execution timings in that case
+                            signal: undefined,
+                            abortPromise: undefined
                         }).catch(() => {
                             // do nothing here because sub request have all logging stuff
                         }),
