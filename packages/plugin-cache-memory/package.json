@@ -1,6 +1,6 @@
 {
   "name": "@tinkoff/request-plugin-cache-memory",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "Memory cache for tinkoff request",
   "main": "lib/memory.js",
   "typings": "lib/memory.d.ts",
