@@ -47,13 +47,6 @@ declare module '@tinkoff/request-core/lib/types.h' {
 }
 
 const isBrowser = typeof window !== 'undefined';
-let isPageUnloaded = false;
-
-if (isBrowser) {
-    window.addEventListener('beforeunload', () => {
-        isPageUnloaded = true;
-    });
-}
 
 /**
  * Makes http/https request.
@@ -251,7 +244,7 @@ export default ({
                     });
                 })
                 .catch((err) => {
-                    if (ended || (err && isPageUnloaded)) {
+                    if (ended) {
                         return;
                     }
 
