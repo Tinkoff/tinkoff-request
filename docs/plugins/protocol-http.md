@@ -26,7 +26,7 @@ Uses `node-fetch` library.
 - `payload`: object - request payload, sends as body
 - `attaches`: array - attached files
 - `timeout`: number - timeout in ms
-- `withCredentials`: boolean - configure credentials type, [see](#request-credentials)
+- `credentials`: string - configure credentials type, [see](#request-credentials)
 - `abortPromise`: Promise - if passed promise resolves, request get aborted with the result of promise
 - `signal`: AbortSignal - signal used to abort current request
 
@@ -42,7 +42,18 @@ Might be one of:
 For any different value payload will be passed as is.
 
 ## Request credentials
-If `withCredentials` set to true, then `credentials` option for fetch will be set to 'include' otherwise to 'same-origin'
+
+[`credentials`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#sending_a_request_with_credentials_included
+) option will be passed to fetch parameters directly. This option has priority over `withCredentials` option. 
+
+Might be one of:
+- `include`
+- `same-origin`
+- `omit`
+
+If **deprecated** option `withCredentials` set to true, then `credentials` option for fetch will be set to `include` otherwise to `same-origin`.
+
+Summary, default `credentials` fetch option is `same-origin`.
 
 ## Validators
 

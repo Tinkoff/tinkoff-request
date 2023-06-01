@@ -32,6 +32,10 @@ declare module '@tinkoff/request-core/lib/types.h' {
         payload?: any;
         attaches?: any[];
         timeout?: number;
+        credentials?: RequestCredentials;
+        /**
+         * @deprecated use `credentials` instead
+         */
         withCredentials?: boolean;
         abortPromise?: Promise<any>;
         signal?: AbortSignal;
@@ -62,7 +66,7 @@ const isBrowser = typeof window !== 'undefined';
  *      payload {object}
  *      attaches {array}
  *      timeout {number}
- *      withCredentials {boolean}
+ *      credentials {string}
  *      abortPromise {Promise}
  *      signal {AbortSignal}
  *
@@ -101,6 +105,7 @@ export default ({
                 payload,
                 attaches = [],
                 timeout,
+                credentials,
                 withCredentials,
                 abortPromise,
                 responseType,
@@ -209,7 +214,7 @@ export default ({
                     method,
                     headers: { ...formHeaders, ...headers },
                     agent: customAgent,
-                    credentials: withCredentials ? 'include' : 'same-origin',
+                    credentials: credentials ?? (withCredentials ? 'include' : 'same-origin'),
                     body,
                     timeout,
                 }
