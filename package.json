@@ -13,7 +13,7 @@
     "bootstrap": "yarn --frozen-lockfile",
     "build": "lerna run prepack",
     "watch": "lerna run watch --parallel",
-    "publish": "lerna publish",
+    "publish": "lerna publish --conventional-commits --yes --create-release github",
     "clean": "git clean -Xdf .",
     "docs:build": "yarn --cwd ./website build",
     "docs:start": "yarn --cwd ./website start",
