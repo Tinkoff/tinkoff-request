@@ -134,3 +134,23 @@ const makeRequest = request([
     http({ querySerializer }),
 ]);
 ```
+
+### Send files with form-data
+```typescript
+import request from '@tinkoff/request-core';
+import http from '@tinkoff/request-plugin-protocol-http';
+
+const makeRequest = request([
+    // ... other plugins
+    // should be set last as this plugin makes actual reqest
+    http(),
+]);
+
+makeRequest({
+  url: 'https://example.com/uploadFile',
+  method: 'POST',
+  payload: {},
+  // put your files here, no need to add them to the FormData it will be done internally
+  attaches: [fileBlob],
+})
+```
