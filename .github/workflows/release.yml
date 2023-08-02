@@ -1,42 +1,1 @@
-name: release
-
-on:
-  push:
-    branches:
-      - master
-
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-  GH_TOKEN: ${{ secrets.TINKOFF_BOT_PAT }}
-
-jobs:
-  release:
-    if: "!contains(github.event.head_commit.message, 'chore(release)')"
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Initialize Git user
-        run: |
-          git config --global user.name 'tinkoff-bot'
-          git config --global user.email 'tinkoff-bot@users.noreply.github.com'
-
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.TINKOFF_BOT_PAT }}
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: yarn bootstrap
-
-      - name: Build
-        run: yarn build
-
-      - name: Release
-        run: yarn publish
+name: releaseon:  push:    branches:      - masterenv:  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}  GH_TOKEN: ${{ secrets.TINKOFF_BOT_PAT }}jobs:  release:    if: "!contains(github.event.head_commit.message, 'chore(release)')"    runs-on: ubuntu-latest    steps:      - name: Initialize Git user        run: |          git config --global user.name 'tinkoff-bot'          git config --global user.email 'tinkoff-bot@users.noreply.github.com'      - uses: actions/checkout@v3        with:          fetch-depth: 0          token: ${{ secrets.TINKOFF_BOT_PAT }}      - uses: actions/setup-node@v3        with:          node-version: 18.x          registry-url: 'https://registry.npmjs.org'      - name: Install dependencies        run: yarn bootstrap      - name: Build packages        run: yarn build      - name: Release packages        run: yarn release      - name: Build docs        run: yarn docs:build      - name: Publish docs        run: yarn docs:publish

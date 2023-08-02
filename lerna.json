@@ -2,10 +2,12 @@
   "packages": [
     "packages/*"
   ],
+  "useWorkspaces": true,
   "version": "independent",
   "command": {
     "version": {
-      "message": "chore(release): version %s"
+      "allowBranch": "master",
+      "message": "chore(release): publish packages"
     }
   }
 }
