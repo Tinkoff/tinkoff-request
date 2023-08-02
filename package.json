@@ -16,8 +16,7 @@
     "release": "lerna publish --no-private --conventional-commits --yes --create-release github",
     "clean": "git clean -Xdf .",
     "docs:build": "yarn --cwd ./website build",
-    "docs:start": "yarn --cwd ./website start",
-    "docs:publish": "yarn --cwd ./website publish-gh-pages"
+    "docs:start": "yarn --cwd ./website start"
   },
   "author": {
     "name": "Tinkoff Team",
